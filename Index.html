@@ -1,2285 +1,1548 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>تطبيق النخبة PRO - تحت إشراف صفوان</title>
-<!-- تحسين الروابط الخارجية -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<!-- Tailwind CSS محسن -->
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        fontFamily: {
-          'tajawal': ['Tajawal', 'sans-serif']
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>تطبيق النخبة PRO - تحت إشراف صفوان</title>
+    
+    <!-- Fonts with better fallback -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ========== RESET & BASE ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
-      }
-    }
-  }
-</script>
-<style>
-/* ========== CSS Variables & Base ========== */
-:root {
-  --primary: #3b82f6;
-  --secondary: #8b5cf6;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --bg-dark: #020617;
-  --glass: rgba(255, 255, 255, 0.03);
-  --glass-strong: rgba(255, 255, 255, 0.07);
-  --border: rgba(255, 255, 255, 0.1);
-  --motion: 1;
-  --accent: #3b82f6;
-  --card-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  --focus-ring: rgba(59, 130, 246, 0.4);
-  --transition-speed: 0.3s;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-  -webkit-user-drag: none;
-}
-
-body {
-  font-family: 'Tajawal', sans-serif;
-  background-color: var(--bg-dark);
-  color: #f8fafc;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  touch-action: manipulation;
-  transition: background-color var(--transition-speed) ease;
-}
-
-body.light-theme {
-  --bg-dark: #f8fafc;
-  --glass: rgba(0, 0, 0, 0.03);
-  --glass-strong: rgba(0, 0, 0, 0.07);
-  --border: rgba(0, 0, 0, 0.1);
-  color: #0f172a;
-}
-
-/* ========== Background Effects ========== */
-.bg-canvas {
-  position: fixed;
-  inset: 0;
-  z-index: -3;
-  background: radial-gradient(circle at 50% 10%, #0f172a 0%, #020617 100%);
-  transition: transform 0.15s linear;
-  will-change: transform;
-}
-
-.light-theme .bg-canvas {
-  background: radial-gradient(circle at 50% 10%, #e2e8f0 0%, #f8fafc 100%);
-}
-
-.grid-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  background-image: 
-    linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
-  background-size: 35px 35px;
-  opacity: 0.2;
-  pointer-events: none;
-  transition: background-position 0.15s linear;
-}
-
-#glow-frame {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  transition: box-shadow 0.45s cubic-bezier(0.2, 0.9, 0.25, 1);
-  z-index: 99;
-  border-radius: 0;
-}
-
-/* ========== Glass Effects ========== */
-.glass-panel {
-  background: var(--glass);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
-  border: 1px solid var(--border);
-  transition: all var(--transition-speed) ease;
-}
-
-.glass-strong {
-  background: var(--glass-strong);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
-  border: 1px solid var(--border);
-}
-
-/* ========== Header & Navigation ========== */
-header {
-  position: relative;
-  overflow: hidden;
-  background: rgba(2, 6, 23, 0.8);
-  backdrop-filter: blur(20px);
-}
-
-header::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--primary), transparent);
-  opacity: 0.5;
-}
-
-.supervisor-badge {
-  position: absolute;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 11px;
-  color: #cbd5e1;
-  direction: ltr;
-  font-weight: 600;
-  opacity: 0.8;
-}
-
-.light-theme .supervisor-badge {
-  color: #475569;
-}
-
-/* ========== Card System ========== */
-.card-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-  width: 100%;
-  padding: 0 20px;
-  transform: translateZ(0);
-  min-height: 400px;
-}
-
-.card-wrapper {
-  perspective: 2500px;
-  width: 100%;
-  max-width: 750px;
-  height: 380px;
-  z-index: 10;
-  cursor: pointer;
-  transition: transform var(--transition-speed) ease;
-}
-
-.card-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transition: transform calc(var(--motion) * 0.6s) cubic-bezier(0.34, 1.56, 0.64, 1);
-  transform-style: preserve-3d;
-  will-change: transform;
-  outline: none;
-  border-radius: 2.5rem;
-}
-
-.card-inner.is-flipped {
-  transform: rotateY(180deg);
-}
-
-.card-face {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  border-radius: 2.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 3rem;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: var(--card-shadow);
-  overflow: hidden;
-}
-
-.light-theme .card-face {
-  border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.card-front {
-  background: linear-gradient(165deg, #0f172a 0%, #020617 100%);
-}
-
-.light-theme .card-front {
-  background: linear-gradient(165deg, #ffffff 0%, #f1f5f9 100%);
-}
-
-.card-back {
-  background: linear-gradient(165deg, #1e3a8a 0%, #171717 100%);
-  transform: rotateY(180deg);
-}
-
-.light-theme .card-back {
-  background: linear-gradient(165deg, #dbeafe 0%, #e2e8f0 100%);
-}
-
-/* Card Content */
-.card-badge {
-  position: absolute;
-  top: 1.5rem;
-  left: 2rem;
-  font-size: 11px;
-  font-weight: 900;
-  color: var(--primary);
-  opacity: 0.7;
-  letter-spacing: 2px;
-  transition: color var(--transition-speed) ease;
-}
-
-.term-title {
-  font-size: 2rem;
-  font-weight: 900;
-  color: #fff;
-  margin-bottom: 1.5rem;
-  text-align: center;
-  text-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
-  transition: all var(--transition-speed) ease;
-  line-height: 1.3;
-  padding: 0 1rem;
-}
-
-.light-theme .term-title {
-  color: #0f172a;
-  text-shadow: 0 2px 10px rgba(59, 130, 246, 0.1);
-}
-
-.term-description {
-  font-size: 1.1rem;
-  line-height: 1.8;
-  color: #cbd5e1;
-  text-align: center;
-  font-weight: 500;
-  max-width: 90%;
-  transition: color var(--transition-speed) ease;
-}
-
-.light-theme .term-description {
-  color: #475569;
-}
-
-/* ========== Navigation & Buttons ========== */
-.nav-btn {
-  width: 50px;
-  height: 50px;
-  border-radius: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all var(--transition-speed) ease;
-  flex-shrink: 0;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-
-.light-theme .nav-btn {
-  background: rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.nav-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: var(--primary);
-  transform: translateY(-2px);
-}
-
-.nav-btn:active {
-  transform: translateY(0);
-}
-
-/* ========== Frequency Chips ========== */
-.freq-chip {
-  padding: 8px 16px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 900;
-  background: rgba(0, 0, 0, 0.3);
-  color: #64748b;
-  transition: all var(--transition-speed) ease;
-  border: 1px solid transparent;
-  cursor: pointer;
-  min-width: 70px;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-
-.freq-chip i {
-  font-size: 11px;
-}
-
-.freq-chip.active {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: #fff;
-  box-shadow: 0 0 25px rgba(59, 130, 246, 0.5);
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-/* ========== Rating Buttons ========== */
-.rating-box {
-  padding: 1.5rem;
-  border-radius: 1.5rem;
-  font-size: 13px;
-  font-weight: 900;
-  transition: all var(--transition-speed) ease;
-  text-align: center;
-  border: 1px solid transparent;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  position: relative;
-  overflow: hidden;
-}
-
-.rating-box:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-}
-
-.rating-box:active {
-  transform: translateY(0);
-}
-
-/* ========== Stats Dashboard ========== */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
-  width: 100%;
-  max-width: 800px;
-  padding: 0 1rem;
-}
-
-.stat-card {
-  border-radius: 1.5rem;
-  padding: 1.2rem;
-  text-align: center;
-  transition: all var(--transition-speed) ease;
-  min-height: 80px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.stat-card:hover {
-  transform: translateY(-3px);
-}
-
-.stat-label {
-  font-size: 10px;
-  color: #64748b;
-  font-weight: 900;
-  margin-bottom: 6px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: color var(--transition-speed) ease;
-}
-
-.stat-value {
-  font-size: 1.4rem;
-  font-weight: 900;
-  transition: color var(--transition-speed) ease;
-}
-
-/* ========== Theme Toggle ========== */
-#theme-toggle {
-  position: fixed;
-  bottom: 25px;
-  left: 25px;
-  z-index: 120;
-  width: 50px;
-  height: 50px;
-  border-radius: 12px;
-  display: grid;
-  place-items: center;
-  backdrop-filter: blur(10px);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  cursor: pointer;
-  transition: all var(--transition-speed) ease;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-}
-
-#theme-toggle:hover {
-  transform: rotate(15deg) scale(1.1);
-}
-
-#theme-toggle:active {
-  transform: rotate(15deg) scale(0.95);
-}
-
-.light-theme #theme-toggle {
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.02));
-  border: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-/* ========== Progress Ring ========== */
-.progress-ring {
-  position: relative;
-  width: 180px;
-  height: 180px;
-  margin: 20px auto;
-}
-
-.progress-ring circle {
-  fill: none;
-  stroke-width: 8;
-  stroke-linecap: round;
-  transform: rotate(-90deg);
-  transform-origin: 50% 50%;
-  transition: stroke-dashoffset 0.5s ease;
-}
-
-.progress-ring-bg {
-  stroke: rgba(255, 255, 255, 0.1);
-}
-
-.light-theme .progress-ring-bg {
-  stroke: rgba(0, 0, 0, 0.1);
-}
-
-.progress-ring-fill {
-  stroke: var(--primary);
-  stroke-dasharray: 440;
-  stroke-dashoffset: 440;
-}
-
-.progress-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 2.5rem;
-  font-weight: 900;
-  color: #fff;
-  transition: color var(--transition-speed) ease;
-}
-
-.light-theme .progress-text {
-  color: #0f172a;
-}
-
-/* ========== Ripple Effect ========== */
-.ripple {
-  position: relative;
-  overflow: hidden;
-}
-
-.ripple-circle {
-  position: absolute;
-  border-radius: 50%;
-  transform: scale(0);
-  pointer-events: none;
-  opacity: 0.6;
-  animation: ripple-anim 0.6s ease-out;
-  background: rgba(255, 255, 255, 0.2);
-  z-index: 1;
-}
-
-@keyframes ripple-anim {
-  to {
-    transform: scale(6);
-    opacity: 0;
-  }
-}
-
-.light-theme .ripple-circle {
-  background: rgba(0, 0, 0, 0.1);
-}
-  /* ========== Skeleton Loading ========== */
-.skeleton {
-  display: inline-block;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.2s linear infinite;
-  border-radius: 8px;
-}
-
-@keyframes skeleton-shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
-.light-theme .skeleton {
-  background: linear-gradient(90deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05));
-}
-
-/* ========== Achievements ========== */
-.achievement-badge {
-  width: 50px;
-  height: 50px;
-  border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all var(--transition-speed) ease;
-  cursor: default;
-}
-
-.achievement-badge.unlocked {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
-  border-color: rgba(255, 255, 255, 0.2);
-  transform: scale(1.05);
-}
-
-.achievement-badge i {
-  font-size: 18px;
-  margin-bottom: 4px;
-  transition: all var(--transition-speed) ease;
-}
-
-.achievement-badge span {
-  font-size: 9px;
-  font-weight: 900;
-  transition: all var(--transition-speed) ease;
-}
 
-.light-theme .achievement-badge {
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05));
-  border: 1px solid rgba(0, 0, 0, 0.1);
+        html {
+            font-size: 16px;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Tajawal', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+            color: #f8fafc;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            touch-action: manipulation;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        /* ========== LOADING SCREEN ========== */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #020617;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-content {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ========== HEADER ========== */
+        header {
+            background: rgba(2, 6, 23, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 16px;
+            text-align: center;
+            position: relative;
+            z-index: 100;
+            flex-shrink: 0;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .supervisor {
+            font-size: 11px;
+            color: #94a3b8;
+            white-space: nowrap;
+        }
+
+        .app-title {
+            font-size: 13px;
+            font-weight: 900;
+            color: #3b82f6;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .icon-btn:active {
+            transform: scale(0.95);
+            background: rgba(59, 130, 246, 0.2);
+        }
+
+        /* ========== STATS GRID ========== */
+        .stats-container {
+            padding: 16px;
+            flex-shrink: 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 16px;
+            padding: 14px 10px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: #94a3b8;
+            font-weight: 700;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 900;
+            line-height: 1.2;
+        }
+
+        .stat-value.blue { color: #60a5fa; }
+        .stat-value.green { color: #34d399; }
+        .stat-value.yellow { color: #fbbf24; }
+        .stat-value.red { color: #f87171; }
+
+        /* ========== CARD CONTAINER ========== */
+        .card-section {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 16px;
+            position: relative;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .card-wrapper {
+            width: 100%;
+            max-width: 500px;
+            height: 320px;
+            perspective: 1000px;
+        }
+
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-radius: 24px;
+            cursor: pointer;
+        }
+
+        .card-inner.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 24px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .card-front {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-back {
+            background: linear-gradient(145deg, rgba(30, 58, 138, 0.8), rgba(23, 23, 23, 0.9));
+            transform: rotateY(180deg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-number {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #60a5fa;
+            opacity: 0.7;
+        }
+
+        .term-title {
+            font-size: 24px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 16px;
+            color: #f8fafc;
+            line-height: 1.3;
+            padding: 0 20px;
+        }
+
+        .term-description {
+            font-size: 16px;
+            line-height: 1.6;
+            text-align: center;
+            color: #cbd5e1;
+            padding: 0 20px;
+            max-height: 180px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .hint-text {
+            position: absolute;
+            bottom: 20px;
+            color: #94a3b8;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ========== NAVIGATION CONTROLS ========== */
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px 16px;
+            flex-shrink: 0;
+        }
+
+        .nav-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #f8fafc;
+            font-size: 18px;
+            transition: all 0.2s ease;
+            touch-action: manipulation;
+        }
+
+        .nav-btn:active {
+            background: rgba(59, 130, 246, 0.2);
+            transform: scale(0.95);
+        }
+/* ========== RATING BUTTONS ========== */
+.rating-container {
+    padding: 0 16px 20px;
+    flex-shrink: 0;
+}
+
+.rating-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.rating-btn {
+    height: 80px;
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    touch-action: manipulation;
+    padding: 12px;
+}
+
+.rating-btn:active {
+    transform: scale(0.98);
+}
+
+.rating-btn.hard {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+}
+
+.rating-btn.mid {
+    background: rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.2);
+    color: #fbbf24;
+}
+
+.rating-btn.easy {
+    background: rgba(34, 197, 94, 0.1);
+    border-color: rgba(34, 197, 94, 0.2);
+    color: #34d399;
+}
+
+.rating-icon {
+    font-size: 20px;
+}
+
+.rating-text {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.rating-points {
+    font-size: 11px;
+    opacity: 0.7;
+}
+
+/* ========== FOCUS CONTROLS ========== */
+.focus-controls {
+    display: flex;
+    gap: 10px;
+    padding: 12px 16px;
+    background: rgba(0, 0, 0, 0.3);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+}
+
+.frequency-buttons {
+    display: flex;
+    gap: 8px;
+    flex: 1;
+}
+
+.freq-btn {
+    flex: 1;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.freq-btn.active {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: #3b82f6;
+    color: #60a5fa;
+}
+
+.pomodoro-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 0 12px;
+    min-width: 140px;
+}
+
+.pomodoro-timer {
+    font-family: monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: #60a5fa;
+}
+
+.pomodoro-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: #3b82f6;
+    border: none;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    transition: all 0.2s ease;
+}
+
+.pomodoro-btn:active {
+    transform: scale(0.95);
+}
+
+/* ========== TOAST NOTIFICATIONS ========== */
+.toast-container {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 90%;
+    max-width: 400px;
+    pointer-events: none;
 }
 
-/* ========== Toast Notifications ========== */
 .toast {
-  position: fixed;
-  bottom: 100px;
-  right: 50%;
-  transform: translateX(50%) translateY(20px);
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(30, 30, 30, 0.9));
-  backdrop-filter: blur(20px);
-  color: white;
-  padding: 16px 24px;
-  border-radius: 14px;
-  font-size: 14px;
-  font-weight: 600;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-  z-index: 1000;
-  opacity: 0;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  max-width: 90%;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    pointer-events: auto;
 }
 
 .toast.show {
-  opacity: 1;
-  transform: translateX(50%) translateY(0);
-}
-
-.light-theme .toast {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(245, 245, 245, 0.95));
-  color: #0f172a;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-/* ========== Focus Mode ========== */
-body.dim-ui header,
-body.dim-ui nav,
-body.dim-ui .stats-grid,
-body.dim-ui .rating-container {
-  opacity: 0.3;
-  transition: opacity 0.5s ease;
-  pointer-events: none;
-}
-
-body.dim-ui .card-container,
-body.dim-ui #theme-toggle {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* ========== Responsive Design ========== */
-@media (max-width: 768px) {
-  .card-wrapper {
-    height: 340px !important;
-    max-width: 90%;
-  }
-  
-  .card-face {
-    padding: 2rem !important;
-  }
-  
-  .term-title {
-    font-size: 1.7rem !important;
-    padding: 0 0.5rem !important;
-  }
-  
-  .term-description {
-    font-size: 1rem !important;
-    max-width: 95% !important;
-  }
-  
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 12px !important;
-    max-width: 500px !important;
-  }
-  
-  .card-container {
-    gap: 10px !important;
-    padding: 0 10px !important;
-  }
-  
-  .nav-btn {
-    width: 45px !important;
-    height: 45px !important;
-  }
-  
-  .rating-box {
-    padding: 1.2rem !important;
-    font-size: 12px !important;
-  }
-  
-  .progress-ring {
-    width: 150px !important;
-    height: 150px !important;
-  }
-  
-  .progress-text {
-    font-size: 2rem !important;
-  }
-  
-  .supervisor-badge {
-    position: relative !important;
-    left: 0 !important;
-    top: 0 !important;
-    transform: none !important;
-    text-align: center !important;
-    margin-bottom: 5px !important;
-    width: 100% !important;
-  }
-  
-  header {
-    padding-top: 10px !important;
-    padding-bottom: 10px !important;
-  }
-}
-
-@media (max-width: 480px) {
-  .card-wrapper {
-    height: 300px !important;
-  }
-  
-  .term-title {
-    font-size: 1.5rem !important;
-    margin-bottom: 1rem !important;
-  }
-  
-  .rating-box {
-    padding: 1rem !important;
-    font-size: 11px !important;
-  }
-  
-  .freq-chip {
-    padding: 6px 12px !important;
-    min-width: 60px !important;
-    font-size: 11px !important;
-  }
-  
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 8px !important;
-  }
-  
-  .stat-card {
-    padding: 1rem !important;
-    border-radius: 1rem !important;
-  }
-  
-  .stat-value {
-    font-size: 1.2rem !important;
-  }
-  
-  #theme-toggle {
-    width: 45px !important;
-    height: 45px !important;
-    bottom: 20px !important;
-    left: 20px !important;
-  }
-  
-  .progress-ring {
-    width: 130px !important;
-    height: 130px !important;
-  }
-  
-  .progress-text {
-    font-size: 1.8rem !important;
-  }
-}
-
-@media (max-width: 360px) {
-  .card-wrapper {
-    height: 280px !important;
-  }
-  
-  .term-title {
-    font-size: 1.3rem !important;
-  }
-  
-  .rating-box {
-    padding: 0.8rem !important;
-    font-size: 10px !important;
-  }
-  
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 6px !important;
-  }
-  
-  .stat-card {
-    padding: 0.8rem !important;
-  }
-}
-
-/* ========== Accessibility ========== */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-  
-  .card-inner {
-    transition: none !important;
-  }
-  
-  .ripple-circle {
-    animation: none !important;
-  }
-  
-  .skeleton {
-    animation: none !important;
-  }
-}
-
-/* ========== Focus States ========== */
-:focus {
-  outline: none;
-}
-
-button:focus-visible,
-[tabindex]:focus-visible {
-  box-shadow: 0 0 0 3px var(--focus-ring) !important;
-  border-radius: 12px;
-  outline: none;
-}
-
-/* ========== Halo Effect ========== */
-.halo-effect {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  box-shadow: inset 0 0 150px rgba(59, 130, 246, 0.1);
-  z-index: -1;
-  transition: box-shadow var(--transition-speed) ease;
-}
-
-.light-theme .halo-effect {
-  box-shadow: inset 0 0 150px rgba(59, 130, 246, 0.05);
-}
-
-/* ========== Custom Scrollbar ========== */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--secondary);
-}
-
-/* ========== Selection Color ========== */
-::selection {
-  background-color: rgba(59, 130, 246, 0.3);
-  color: white;
-}
-
-.light-theme ::selection {
-  background-color: rgba(59, 130, 246, 0.2);
-}
-
-/* ========== Print Styles ========== */
-@media print {
-  .no-print {
-    display: none !important;
-  }
-  
-  body {
-    background: white !important;
-    color: black !important;
-  }
-  
-  .card-face {
-    box-shadow: none !important;
-    border: 1px solid #ddd !important;
-  }
-}
-
-/* ========== Loading Animation ========== */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-.fade-in {
-  animation: fadeIn 0.5s ease forwards;
-}
-
-.pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-/* ========== Card Entrance Animation ========== */
-.card-entrance {
-  animation: cardEntrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  opacity: 0;
-  transform: translateY(20px) scale(0.95);
-}
-
-@keyframes cardEntrance {
-  to {
     opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+    transform: translateY(0);
 }
 
-/* ========== Shake Animation ========== */
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-  20%, 40%, 60%, 80% { transform: translateX(5px); }
+.toast-icon {
+    font-size: 18px;
 }
 
-.shake {
-  animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+.toast.success .toast-icon { color: #34d399; }
+.toast.error .toast-icon { color: #f87171; }
+.toast.warning .toast-icon { color: #fbbf24; }
+.toast.info .toast-icon { color: #60a5fa; }
+
+.toast-message {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
 }
 
-/* ========== Bounce Animation ========== */
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+/* ========== MODALS ========== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 2000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
 }
 
-.bounce {
-  animation: bounce 0.5s ease;
+.modal-overlay.show {
+    opacity: 1;
+    pointer-events: all;
 }
-</style>
+
+.modal {
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    width: 100%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.show .modal {
+    transform: scale(1);
+}
+
+.modal-header {
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #f8fafc;
+}
+
+.modal-close {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    font-size: 16px;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+@media (max-width: 480px) {
+    html { font-size: 15px; }
+    
+    .card-wrapper {
+        height: 300px;
+    }
+    
+    .term-title {
+        font-size: 22px;
+    }
+    
+    .term-description {
+        font-size: 15px;
+    }
+    
+    .rating-btn {
+        height: 70px;
+    }
+    
+    .stats-grid {
+        gap: 8px;
+    }
+    
+    .stat-card {
+        padding: 12px 8px;
+    }
+    
+    .stat-value {
+        font-size: 16px;
+    }
+}
+        @media (max-width: 360px) {
+            html { font-size: 14px; }
+            
+            .card-wrapper {
+                height: 280px;
+            }
+            
+            .term-title {
+                font-size: 20px;
+            }
+            
+            .rating-grid {
+                gap: 8px;
+            }
+            
+            .rating-btn {
+                height: 65px;
+            }
+            
+            .nav-btn {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .pomodoro-container {
+                min-width: 120px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .card-wrapper {
+                height: 350px;
+            }
+            
+            .term-title {
+                font-size: 28px;
+            }
+        }
+
+        /* ========== UTILITY CLASSES ========== */
+        .hidden {
+            display: none !important;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .slide-up {
+            animation: slideUp 0.3s ease forwards;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* ========== CUSTOM SCROLLBAR ========== */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+        }
+
+        /* ========== REDUCED MOTION ========== */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* ========== PROGRESS BAR ========== */
+        .progress-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* ========== ACHIEVEMENTS ========== */
+        .achievements-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 16px;
+            flex-wrap: wrap;
+        }
+
+        .achievement-badge {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .achievement-badge.unlocked {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(139, 92, 246, 0.3));
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+
+        .achievement-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .achievement-name {
+            font-size: 9px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        /* ========== VIBRATION SAFETY ========== */
+        .vibration-safe {
+            /* Ensure elements don't cause layout shifts on vibration */
+            contain: layout style paint;
+        }
+    </style>
 </head>
 <body>
-<!-- Background Elements -->
-<div class="bg-canvas" id="bgCanvas"></div>
-<div class="grid-overlay" id="gridOverlay"></div>
-<div id="glow-frame"></div>
-<div class="halo-effect"></div>
-
-<!-- Loading Screen -->
-<div id="loading-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-950 transition-opacity duration-500">
-  <div class="relative w-32 h-32 mb-8">
-    <div class="absolute inset-0 rounded-full border-4 border-blue-500/30 animate-ping"></div>
-    <div class="absolute inset-4 rounded-full border-4 border-blue-500 animate-spin"></div>
-    <div class="absolute inset-8 rounded-full bg-blue-500/20 flex items-center justify-center">
-      <i class="fas fa-graduation-cap text-2xl text-blue-400"></i>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h2 style="color: #3b82f6; margin-bottom: 10px;">تطبيق النخبة PRO</h2>
+            <p style="color: #94a3b8; font-size: 14px;">تحت إشراف: صفوان</p>
+            <div class="progress-container" style="margin-top: 20px; width: 200px;">
+                <div id="loading-progress" class="progress-bar" style="width: 0%"></div>
+            </div>
+        </div>
     </div>
-  </div>
-  <h2 class="text-xl font-bold text-blue-400 mb-2">تطبيق النخبة PRO</h2>
-  <p class="text-slate-400 text-sm mb-6">تحت إشراف: صفوان</p>
-  <div class="w-64 h-1 bg-slate-800 rounded-full overflow-hidden">
-    <div id="loading-bar" class="h-full bg-blue-500 transition-all duration-300" style="width: 0%"></div>
-  </div>
-  <p id="loading-text" class="text-slate-500 text-xs mt-3">جاري التهيئة...</p>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="supervisor">تحت إشراف: صفوان</div>
+            <div class="app-title">النخبة PRO</div>
+            <div class="header-actions">
+                <button class="icon-btn" id="stats-btn" title="الإحصائيات">
+                    <i class="fas fa-chart-bar"></i>
+                </button>
+                <button class="icon-btn" id="export-btn" title="تصدير البيانات">
+                    <i class="fas fa-download"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Stats Grid -->
+    <div class="stats-container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">الاستيعاب</div>
+                <div id="p-val" class="stat-value blue">0%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">المستوى</div>
+                <div id="level-val" class="stat-value green">مبتدئ</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">النقاط</div>
+                <div id="s-val" class="stat-value yellow">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">المتبقي</div>
+                <div id="r-val" class="stat-value red">15</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Section -->
+    <div class="card-section">
+        <div class="card-wrapper" id="cardWrapper">
+            <div class="card-inner" id="main-card" onclick="flipCard()">
+                <div class="card-face card-front">
+                    <div class="card-number">CARD #<span id="c-id">1</span></div>
+                    <h2 id="c-title" class="term-title">تحميل البطاقة...</h2>
+                    <div class="hint-text">
+                        <i class="fas fa-hand-point-up"></i>
+                        انقر لعرض التعريف
+                    </div>
+                </div>
+                <div class="card-face card-back">
+                    <p id="c-desc" class="term-description"></p>
+                    <div class="hint-text">
+                        <i class="fas fa-star"></i>
+                        قيّم صعوبة المصطلح
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- Navigation Controls -->
+<div class="nav-controls">
+    <button class="nav-btn" onclick="prevCard()">
+        <i class="fas fa-chevron-right"></i>
+    </button>
+    <div style="width: 20px;"></div>
+    <button class="nav-btn" onclick="nextCard()">
+        <i class="fas fa-chevron-left"></i>
+    </button>
 </div>
 
-<!-- Header -->
-<header class="w-full text-center py-4 glass-strong border-b border-white/5 backdrop-blur-3xl relative">
-  <div class="supervisor-badge">تحت إشراف: صفوان</div>
-  <span class="text-[13px] font-black text-blue-500 tracking-[0.8em] uppercase">تطبيق النخبة PRO</span>
-  <div class="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
-    <button id="export-btn" class="text-xs text-slate-400 hover:text-blue-400 transition-colors" title="تصدير البيانات">
-      <i class="fas fa-download"></i>
-    </button>
-    <button id="stats-btn" class="text-xs text-slate-400 hover:text-blue-400 transition-colors" title="الإحصائيات">
-      <i class="fas fa-chart-bar"></i>
-    </button>
-  </div>
-</header>
+<!-- Rating Buttons -->
+<div class="rating-container">
+    <div class="rating-grid">
+        <button class="rating-btn hard" onclick="rateCard('hard')">
+            <i class="fas fa-fire rating-icon"></i>
+            <span class="rating-text">صعب</span>
+            <span class="rating-points">+5 نقاط</span>
+        </button>
+        <button class="rating-btn mid" onclick="rateCard('mid')">
+            <i class="fas fa-balance-scale rating-icon"></i>
+            <span class="rating-text">متوسط</span>
+            <span class="rating-points">+15 نقطة</span>
+        </button>
+        <button class="rating-btn easy" onclick="rateCard('easy')">
+            <i class="fas fa-check-circle rating-icon"></i>
+            <span class="rating-text">سهل</span>
+            <span class="rating-points">+40 نقطة</span>
+        </button>
+    </div>
+</div>
 
-<!-- Navigation -->
-<nav class="w-full px-6 py-5 flex items-center justify-between">
-  <div class="flex items-center gap-2 glass-panel p-2 rounded-2xl border border-white/10 shadow-inner">
-    <button onclick="toggleFreq(45, this)" class="freq-chip">
-      <i class="fas fa-brain mr-1"></i> 45Hz
-    </button>
-    <button onclick="toggleFreq(8, this)" class="freq-chip">
-      <i class="fas fa-moon mr-1"></i> 8Hz
-    </button>
-    <button onclick="toggleFreq(432, this)" class="freq-chip">
-      <i class="fas fa-music mr-1"></i> 432Hz
-    </button>
-  </div>
-  
-  <div class="flex items-center gap-3 glass-panel px-5 py-3 rounded-2xl border border-blue-500/20 shadow-lg">
-    <div id="pomo-clock" class="font-mono text-blue-400 font-black text-base tracking-tighter">25:00</div>
-    <button id="pomo-btn" onclick="togglePomo()" class="bg-gradient-to-r from-blue-600 to-blue-500 text-[11px] px-4 py-2 rounded-xl font-black shadow-lg transition-all hover:shadow-blue-500/30 active:scale-95">
-      <i class="fas fa-play mr-1"></i> ابدأ
-    </button>
-    <button onclick="resetPomo()" class="text-[10px] text-slate-400 hover:text-slate-300 transition-colors" title="إعادة التعيين">
-      <i class="fas fa-redo"></i>
-    </button>
-  </div>
-</nav>
-
-<!-- Main Content -->
-<main class="flex-1 flex flex-col items-center justify-center space-y-8 px-4">
-  <!-- Stats Dashboard -->
-  <div class="stats-grid">
-    <div class="stat-card glass-panel border-b-2 border-blue-500/30">
-      <div class="stat-label">الاستيعاب</div>
-      <p id="p-val" class="stat-value text-blue-400">0%</p>
+<!-- Focus Controls -->
+<div class="focus-controls">
+    <div class="frequency-buttons">
+        <button class="freq-btn" onclick="toggleFrequency(45, this)">
+            <i class="fas fa-brain"></i>
+            <span>45Hz</span>
+        </button>
+        <button class="freq-btn" onclick="toggleFrequency(8, this)">
+            <i class="fas fa-moon"></i>
+            <span>8Hz</span>
+        </button>
+        <button class="freq-btn" onclick="toggleFrequency(432, this)">
+            <i class="fas fa-music"></i>
+            <span>432Hz</span>
+        </button>
     </div>
-    
-    <div class="stat-card glass-panel border-b-2 border-emerald-500/30">
-      <div class="stat-label">المستوى</div>
-      <p id="level-val" class="stat-value text-emerald-400">مبتدئ</p>
+    <div class="pomodoro-container">
+        <div id="pomo-clock" class="pomodoro-timer">25:00</div>
+        <button id="pomo-btn" class="pomodoro-btn" onclick="togglePomodoro()">
+            <i class="fas fa-play"></i>
+        </button>
     </div>
-    
-    <div class="stat-card glass-panel border-b-2 border-yellow-500/30">
-      <div class="stat-label">النقاط</div>
-      <p id="s-val" class="stat-value text-yellow-400">0</p>
-    </div>
-    
-    <div class="stat-card glass-panel border-b-2 border-red-500/30">
-      <div class="stat-label">المتبقي</div>
-      <p id="r-val" class="stat-value text-red-400">58</p>
-    </div>
-  </div>
-
-  <!-- Card Container -->
-  <div class="card-container">
-    <button onclick="stepCard(-1)" class="nav-btn" aria-label="البطاقة السابقة">
-      <i class="fas fa-chevron-right text-lg"></i>
-    </button>
-    
-    <div class="card-wrapper" id="cardWrapper">
-      <div id="main-card" class="card-inner" onclick="flip()" tabindex="0" aria-live="polite" role="button">
-        <div class="card-face card-front">
-          <div class="card-badge">CARD #<span id="c-id">01</span></div>
-          <h2 id="c-title" class="term-title">تحميل المحتوى...</h2>
-          <div id="progress-ring" class="progress-ring">
-            <svg width="180" height="180">
-              <circle class="progress-ring-bg" cx="90" cy="90" r="70"></circle>
-              <circle class="progress-ring-fill" cx="90" cy="90" r="70" id="progress-circle"></circle>
-            </svg>
-            <div class="progress-text" id="progress-text">0%</div>
-          </div>
-          <div class="mt-10 flex items-center gap-3 opacity-30">
-            <div class="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
-            <span class="text-[10px] font-bold">انقر لقلب البطاقة</span>
-          </div>
-        </div>
-        
-        <div class="card-face card-back">
-          <p id="c-desc" class="term-description px-6"></p>
-          <div class="mt-10 text-xs text-slate-400 flex items-center justify-center gap-2">
-            <i class="fas fa-lightbulb"></i>
-            <span>قيّم مدى صعوبة المصطلح</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <button onclick="stepCard(1)" class="nav-btn" aria-label="البطاقة التالية">
-      <i class="fas fa-chevron-left text-lg"></i>
-    </button>
-  </div>
-
-  <!-- Rating Buttons -->
-  <div class="rating-container w-full max-w-md grid grid-cols-3 gap-6 px-6 pb-6">
-    <button onclick="mark('hard')" class="rating-box bg-red-600/10 border border-red-500/20 text-red-500 hover:bg-red-600/20 ripple">
-      <i class="fas fa-fire text-xl"></i>
-      <span>صعب</span>
-      <div class="text-[10px] text-red-500/60 mt-1">+5 نقاط</div>
-    </button>
-    
-    <button onclick="mark('mid')" class="rating-box bg-orange-600/10 border border-orange-500/20 text-orange-400 hover:bg-orange-600/20 ripple">
-      <i class="fas fa-balance-scale text-xl"></i>
-      <span>متوسط</span>
-      <div class="text-[10px] text-orange-500/60 mt-1">+15 نقطة</div>
-    </button>
-    
-    <button onclick="mark('easy')" class="rating-box bg-emerald-600/10 border border-emerald-500/20 text-emerald-400 hover:bg-emerald-600/20 ripple">
-      <i class="fas fa-check-circle text-xl"></i>
-      <span>سهل</span>
-      <div class="text-[10px] text-emerald-500/60 mt-1">+40 نقطة</div>
-    </button>
-  </div>
-        <!-- Achievements Section -->
-  <div id="achievements-container" class="w-full max-w-lg mt-4 px-6 hidden">
-    <h3 class="text-sm font-bold mb-4 text-slate-300 text-center">الإنجازات</h3>
-    <div class="flex justify-center gap-4">
-      <div class="achievement-badge" id="achievement-1" title="أكمل أول بطاقة">
-        <i class="fas fa-star"></i>
-        <span>البداية</span>
-      </div>
-      <div class="achievement-badge" id="achievement-2" title="أكمل 5 بطاقات في أقل من دقيقتين">
-        <i class="fas fa-bolt"></i>
-        <span>متسارع</span>
-      </div>
-      <div class="achievement-badge" id="achievement-3" title="جلسة تركيز لمدة 25 دقيقة">
-        <i class="fas fa-brain"></i>
-        <span>مركز</span>
-      </div>
-      <div class="achievement-badge" id="achievement-4" title="وصل إلى 500 نقطة">
-        <i class="fas fa-trophy"></i>
-        <span>نخبة</span>
-      </div>
-      <div class="achievement-badge" id="achievement-5" title="3 جلسات في يوم واحد">
-        <i class="fas fa-calendar-check"></i>
-        <span>منتظم</span>
-      </div>
-    </div>
-  </div>
-</main>
-
-<!-- Theme Toggle -->
-<button id="theme-toggle" aria-label="تبديل السمة" class="no-print">
-  <i class="fas fa-moon" id="theme-icon"></i>
-</button>
+</div>
 
 <!-- Toast Container -->
-<div id="toast-container"></div>
+<div class="toast-container" id="toast-container"></div>
 
 <!-- Stats Modal -->
-<div id="stats-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
-  <div class="glass-strong rounded-2xl p-6 max-w-md w-full max-h-[80vh] overflow-y-auto transform scale-95 transition-transform duration-300">
-    <div class="flex justify-between items-center mb-6">
-      <h3 class="text-lg font-bold text-blue-400">الإحصائيات المتقدمة</h3>
-      <button onclick="closeStats()" class="text-slate-400 hover:text-white transition-colors">
-        <i class="fas fa-times"></i>
-      </button>
+<div class="modal-overlay" id="stats-modal">
+    <div class="modal">
+        <div class="modal-header">
+            <div class="modal-title">الإحصائيات المتقدمة</div>
+            <button class="modal-close" onclick="closeModal('stats-modal')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div style="margin-bottom: 20px;">
+                <div style="font-size: 12px; color: #94a3b8; margin-bottom: 8px;">إجمالي وقت الدراسة</div>
+                <div id="total-study-time" style="font-size: 24px; font-weight: 700; color: #3b82f6;">0 دقيقة</div>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <div style="font-size: 12px; color: #94a3b8; margin-bottom: 8px;">توزيع الصعوبة</div>
+                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <div style="flex: 1; text-align: center;">
+                        <div style="font-size: 20px; font-weight: 700; color: #f87171;" id="hard-count">0</div>
+                        <div style="font-size: 11px; color: #94a3b8;">صعب</div>
+                    </div>
+                    <div style="flex: 1; text-align: center;">
+                        <div style="font-size: 20px; font-weight: 700; color: #fbbf24;" id="mid-count">0</div>
+                        <div style="font-size: 11px; color: #94a3b8;">متوسط</div>
+                    </div>
+                    <div style="flex: 1; text-align: center;">
+                        <div style="font-size: 20px; font-weight: 700; color: #34d399;" id="easy-count">0</div>
+                        <div style="font-size: 11px; color: #94a3b8;">سهل</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <div style="font-size: 12px; color: #94a3b8; margin-bottom: 8px;">الإنجازات</div>
+                <div class="achievements-container" id="achievements-list">
+                    <!-- سيتم ملؤها ديناميكياً -->
+                </div>
+            </div>
+            
+            <button onclick="exportData()" style="width: 100%; height: 48px; border-radius: 12px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); color: #60a5fa; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <i class="fas fa-download"></i>
+                تصدير البيانات
+            </button>
+            
+            <button onclick="resetData()" style="width: 100%; height: 48px; border-radius: 12px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <i class="fas fa-trash-alt"></i>
+                إعادة تعيين البيانات
+            </button>
+        </div>
     </div>
-    
-    <div class="space-y-4">
-      <div class="grid grid-cols-2 gap-4">
-        <div class="glass-panel p-4 rounded-xl">
-          <div class="text-xs text-slate-400 mb-1">إجمالي الوقت</div>
-          <div id="total-time" class="text-xl font-bold text-blue-400">0 دقيقة</div>
-        </div>
-        <div class="glass-panel p-4 rounded-xl">
-          <div class="text-xs text-slate-400 mb-1">متوسط السرعة</div>
-          <div id="avg-speed" class="text-xl font-bold text-emerald-400">0/دقيقة</div>
-        </div>
-      </div>
-      
-      <div class="glass-panel p-4 rounded-xl">
-        <div class="text-xs text-slate-400 mb-2">التوزيع حسب الصعوبة</div>
-        <div class="space-y-2">
-          <div class="flex items-center justify-between">
-            <span class="text-sm text-red-400">صعب</span>
-            <span id="hard-count" class="font-bold">0</span>
-          </div>
-          <div class="flex items-center justify-between">
-            <span class="text-sm text-orange-400">متوسط</span>
-            <span id="mid-count" class="font-bold">0</span>
-          </div>
-          <div class="flex items-center justify-between">
-            <span class="text-sm text-emerald-400">سهل</span>
-            <span id="easy-count" class="font-bold">0</span>
-          </div>
-        </div>
-      </div>
-      
-      <div class="glass-panel p-4 rounded-xl">
-        <div class="text-xs text-slate-400 mb-2">الإنجازات المفتوحة</div>
-        <div id="achievements-list" class="text-sm">
-          <!-- سيتم ملؤها ديناميكياً -->
-        </div>
-      </div>
-      
-      <button onclick="exportData()" class="w-full glass-panel py-3 rounded-xl text-blue-400 hover:bg-blue-500/10 transition-colors">
-        <i class="fas fa-download mr-2"></i>
-        تصدير البيانات
-      </button>
-      
-      <button onclick="resetData()" class="w-full glass-panel py-3 rounded-xl text-red-400 hover:bg-red-500/10 transition-colors">
-        <i class="fas fa-trash-alt mr-2"></i>
-        إعادة تعيين كل البيانات
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- Tutorial Overlay -->
-<div id="tutorial-overlay" class="fixed inset-0 z-40 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center p-4 transition-opacity duration-500">
-  <div class="glass-strong rounded-2xl p-8 max-w-md w-full text-center">
-    <h3 class="text-xl font-bold text-blue-400 mb-4">مرحباً بك في تطبيق النخبة PRO</h3>
-    <p class="text-slate-300 mb-6">تعلم المصطلحات التاريخية بطريقة تفاعلية وممتعة</p>
-    
-    <div class="space-y-4 text-right mb-8">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
-          <i class="fas fa-mouse-pointer text-blue-400"></i>
-        </div>
-        <div>
-          <div class="font-bold">انقر على البطاقة</div>
-          <div class="text-xs text-slate-400">لقلبها ورؤية التعريف</div>
-        </div>
-      </div>
-      
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
-          <i class="fas fa-star text-emerald-400"></i>
-        </div>
-        <div>
-          <div class="font-bold">قيّم الصعوبة</div>
-          <div class="text-xs text-slate-400">لتحسين تجربة التعلم</div>
-        </div>
-      </div>
-      
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center">
-          <i class="fas fa-brain text-purple-400"></i>
-        </div>
-        <div>
-          <div class="font-bold">استخدم ترددات التركيز</div>
-          <div class="text-xs text-slate-400">لتحسين الاستيعاب</div>
-        </div>
-      </div>
-    </div>
-    
-    <button onclick="closeTutorial()" class="bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-blue-500/30 transition-all">
-      <i class="fas fa-play mr-2"></i>
-      بدء التعلم
-    </button>
-    
-    <div class="text-xs text-slate-500 mt-4">تحت إشراف: صفوان</div>
-  </div>
 </div>
 
 <script>
-/* =========================================================
-   تطبيق النخبة PRO - النسخة الاحترافية الكاملة
-   تحت إشراف: صفوان
-   الإصدار: 4.0.0
-========================================================= */
-
-// قاعدة البيانات الأساسية للمصطلحات
-const ALL_CARDS = [
-    { t: "الثنائية القطبية", d: "نظام دولي ساد بعد الحرب العالمية الثانية، يعتمد على وجود قطبين متصارعين هما المعسكر الشرقي والغربي." },
-    { t: "الحرب الباردة", d: "صراع إيديولوجي ومصلحي بين المعسكرين استُخدمت فيه جميع الوسائل عدا المواجهة العسكرية المباشرة." },
-    { t: "سياسة الاحتواء", d: "خطة أمريكية تعتمد على محاصرة الاتحاد السوفياتي بسلسلة من الأحلاف والقواعد العسكرية ومنع انتشار الشيوعية." },
-    { t: "مشروع مارشال", d: "مساعدات اقتصادية أمريكية لإعادة بناء أوروبا 1947 بهدف ربط اقتصادها بالمعسكر الغربي." },
-    { t: "مبدأ ترومان", d: "مساعدات مالية وعسكرية قدمتها أمريكا للدول المهددة من الزحف الشيوعي عام 1947." },
-    { t: "الكوميكون", d: "منظمة اقتصادية للمعسكر الشرقي تأسست في 1949 بهدف التعاون الاقتصادي بين دول الكتلة." },
-    { t: "التعايش السلمي", d: "سياسة دعا إليها خروشوف عام 1956 تقوم على قبول فكرة تعدد الأنظمة وتجنب الصدام النووي." },
-    { t: "مؤتمر الصومام", d: "لقاء تنظيمي في 20 أوت 1956 هيكل الثورة عسكرياً وسياسياً وأقر مبدأ أولوية الداخل." },
-    { t: "سياسة الإغراء", d: "مشاريع اقتصادية فرنسية تهدف لعزل الشعب عن الثورة عبر تحسين الظروف المعيشية." },
-    { t: "القوة الثالثة", d: "فئة من الجزائريين الموالين لفرنسا حاولت فرنسا استخدامهم كبديل لجبهة التحرير." },
-    { t: "مشروع قسنطينة", d: "مشروع إغرائي استعماري أعلنه ديغول عام 1958 لإفراغ الثورة من محتواها الاجتماعي." },
-    { t: "سلم الشجعان", d: "مناورة سياسية أطلقها ديغول عام 1958 يطالب فيها الثوار بتسليم أسلحتهم مقابل العفو." },
-    { t: "حق تقرير المصير", d: "مبدأ ينص على حق الشعوب الخاضعة للاستعمار في اختيار نظامها السياسي ومصيرها." },
-    { t: "منظمة الوحدة الإفريقية", d: "منظمة تأسست عام 1963 لتعزيز التعاون بين دول القارة ومحاربة الاستعمار." },
-    { t: "حركة عدم الانحياز", d: "تجمع دولي تأسس عام 1961 تبنى الحياد الإيجابي تجاه صراع الحرب الباردة." },
-    { t: "الاستعمار", d: "سياسة توسعية تقوم بها دولة للسيطرة على شعب آخر وثرواته وفرض ثقافتها عليه." },
-    { t: "الكفاح المسلح", d: "استخدام القوة العسكرية لتحرير الأرض والوطن من الاستعمار." },
-    { t: "الثورة التحريرية", d: "عمل جماعي مسلح منظم يهدف إلى تحرير الأرض واستعادة السيادة الوطنية." },
-    { t: "الاستعمار الاستيطاني", d: "نوع من الاستعمار يقوم على إحلال مستوطنين أجانب محل السكان الأصليين." },
-    { t: "مبدأ فصل السلطات", d: "توزيع وظائف الدولة على هيئات مستقلة عن بعضها لضمان الحريات ومنع الاستبداد." },
-    { t: "الدبلوماسية", d: "فن إدارة العلاقات الدولية والتفاوض بين الدول لحل النزاعات سلمياً." },
-    { t: "العولمة", d: "عملية تعزيز الترابط العالمي في المجالات الاقتصادية والثقافية والتقنية." },
-    { t: "الأمم المتحدة", d: "منظمة دولية تأسست عام 1945 بهدف حفظ السلام والأمن الدوليين." },
-    { t: "حقوق الإنسان", d: "الحقوق الأساسية التي يتمتع بها كل فرد بصفته إنساناً، بغض النظر عن العرق أو الجنسية." },
-    { t: "الديمقراطية", d: "نظام حكم يقوم على مبدأ سيادة الشعب واختيار الحكام عبر انتخابات حرة." }
-];
-
-// حالة التطبيق المركزية المتقدمة
-window.state = {
-    c: 0,                    // الفهرس الحالي
-    score: 0,                // النقاط الإجمالية
-    count: 0,                // عدد البطاقات المكتملة
-    pTime: 1500,             // وقت البومودورو (ثانية)
-    pOn: false,              // حالة تشغيل البومودورو
-    pInterval: null,         // مؤقت البومودورو
-    ctx: null,               // سياق الصوت
-    osc: null,               // مولد الترددات
-    freq: null,              // التردد النشط
-    analytics: [],           // التحليلات
-    version: "pro-4.0",      // إصدار التطبيق
-    user: null,              // بيانات المستخدم
-    velocity: 0,             // سرعة التعلم
-    focusScore: 0,           // درجة التركيز
-    achievements: [],        // الإنجازات
-    heatmap: [],             // خريطة التفاعل
-    lastCardTime: Date.now(),// وقت آخر بطاقة
-    spacedRepetition: true,  // التعلم المتباعد
-    theme: 'dark',           // السمة الحالية
-    sessionStart: Date.now(),// بداية الجلسة
-    totalStudyTime: 0,       // إجمالي وقت الدراسة (ثانية)
-    difficultyStats: {       // إحصائيات الصعوبة
-        hard: 0,
-        mid: 0,
-        easy: 0
-    },
-    streaks: {               // سلاسل النجاح
-        daily: 0,
-        weekly: 0,
-        current: 0
-    },
-    settings: {              // الإعدادات
-        sound: true,
-        vibration: true,
-        animations: true,
-        autoFlip: false,
-        showHints: true
-    }
-};
-
-/* ---------- نظام التخزين المحسن ---------- */
-function savePro() {
-    const saveData = {
-        c: state.c,
-        score: state.score,
-        count: state.count,
-        analytics: state.analytics,
-        user: state.user,
-        achievements: state.achievements,
-        theme: state.theme,
-        lastSession: Date.now(),
-        totalStudyTime: state.totalStudyTime,
-        difficultyStats: state.difficultyStats,
-        streaks: state.streaks,
-        settings: state.settings
+    // ========== GLOBAL STATE ==========
+    const APP_STATE = {
+        // Card Data
+        cards: [
+            { term: "الثنائية القطبية", definition: "نظام دولي ساد بعد الحرب العالمية الثانية، يعتمد على وجود قطبين متصارعين هما المعسكر الشرقي والغربي." },
+            { term: "الحرب الباردة", definition: "صراع إيديولوجي ومصلحي بين المعسكرين استُخدمت فيه جميع الوسائل عدا المواجهة العسكرية المباشرة." },
+            { term: "سياسة الاحتواء", definition: "خطة أمريكية تعتمد على محاصرة الاتحاد السوفياتي بسلسلة من الأحلاف والقواعد العسكرية ومنع انتشار الشيوعية." },
+            { term: "مشروع مارشال", definition: "مساعدات اقتصادية أمريكية لإعادة بناء أوروبا 1947 بهدف ربط اقتصادها بالمعسكر الغربي." },
+            { term: "مبدأ ترومان", definition: "مساعدات مالية وعسكرية قدمتها أمريكا للدول المهددة من الزحف الشيوعي عام 1947." },
+            { term: "الكوميكون", definition: "منظمة اقتصادية للمعسكر الشرقي تأسست في 1949 بهدف التعاون الاقتصادي بين دول الكتلة." },
+            { term: "التعايش السلمي", definition: "سياسة دعا إليها خروشوف عام 1956 تقوم على قبول فكرة تعدد الأنظمة وتجنب الصدام النووي." },
+            { term: "مؤتمر الصومام", definition: "لقاء تنظيمي في 20 أوت 1956 هيكل الثورة عسكرياً وسياسياً وأقر مبدأ أولوية الداخل." },
+            { term: "سياسة الإغراء", definition: "مشاريع اقتصادية فرنسية تهدف لعزل الشعب عن الثورة عبر تحسين الظروف المعيشية." },
+            { term: "القوة الثالثة", definition: "فئة من الجزائريين الموالين لفرنسا حاولت فرنسا استخدامهم كبديل لجبهة التحرير." },
+            { term: "مشروع قسنطينة", definition: "مشروع إغرائي استعماري أعلنه ديغول عام 1958 لإفراغ الثورة من محتواها الاجتماعي." },
+            { term: "سلم الشجعان", definition: "مناورة سياسية أطلقها ديغول عام 1958 يطالب فيها الثوار بتسليم أسلحتهم مقابل العفو." },
+            { term: "حق تقرير المصير", definition: "مبدأ ينص على حق الشعوب الخاضعة للاستعمار في اختيار نظامها السياسي ومصيرها." },
+            { term: "منظمة الوحدة الإفريقية", definition: "منظمة تأسست عام 1963 لتعزيز التعاون بين دول القارة ومحاربة الاستعمار." },
+            { term: "حركة عدم الانحياز", definition: "تجمع دولي تأسس عام 1961 تبنى الحياد الإيجابي تجاه صراع الحرب الباردة." }
+        ],
+        
+        // User Progress
+        currentCardIndex: 0,
+        score: 0,
+        reviewedCards: 0,
+        totalStudyTime: 0, // in minutes
+        
+        // Difficulty Stats
+        difficultyStats: {
+            hard: 0,
+            mid: 0,
+            easy: 0
+        },
+        
+        // Achievements
+        achievements: [
+            { id: 'first_card', name: 'البداية', icon: 'fa-star', unlocked: false },
+            { id: 'fast_learner', name: 'متسارع', icon: 'fa-bolt', unlocked: false },
+            { id: 'focus_master', name: 'مركز', icon: 'fa-brain', unlocked: false },
+            { id: 'elite', name: 'نخبة', icon: 'fa-trophy', unlocked: false },
+            { id: 'consistency', name: 'منتظم', icon: 'fa-calendar-check', unlocked: false }
+        ],
+        
+        // Settings
+        activeFrequency: null,
+        pomodoroTime: 1500, // 25 minutes in seconds
+        pomodoroRunning: false,
+        pomodoroInterval: null,
+        
+        // Session Data
+        sessionStartTime: Date.now(),
+        lastCardTime: Date.now(),
+        
+        // Audio Context
+        audioContext: null,
+        oscillator: null
     };
+// ========== INITIALIZATION ==========
+async function initApp() {
+    console.log('🔧 تهيئة التطبيق...');
     
-    try {
-        localStorage.setItem("study-pro-v4", JSON.stringify(saveData));
-        console.log("تم حفظ البيانات بنجاح");
-    } catch (e) {
-        console.error("خطأ في حفظ البيانات:", e);
-        showToast("خطأ في حفظ البيانات", "error");
-    }
+    // محاكاة شريط التحميل
+    simulateLoading();
+    
+    // تحميل البيانات المحفوظة
+    loadSavedData();
+    
+    // تهيئة الصوت
+    initAudio();
+    
+    // إعداد الأحداث
+    setupEventListeners();
+    
+    // تحديث الواجهة
+    updateUI();
+    
+    // إخفاء شاشة التحميل
+    setTimeout(() => {
+        document.getElementById('loading-screen').style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('loading-screen').style.display = 'none';
+            showToast('مرحباً بك في تطبيق النخبة PRO!', 'info');
+        }, 500);
+    }, 1500);
+    
+    console.log('✅ التطبيق جاهز!');
 }
 
-function loadPro() {
-    try {
-        const saved = JSON.parse(localStorage.getItem("study-pro-v4") || "null");
+function simulateLoading() {
+    let progress = 0;
+    const interval = setInterval(() => {
+        progress += 10;
+        document.getElementById('loading-progress').style.width = progress + '%';
         
+        if (progress >= 100) {
+            clearInterval(interval);
+        }
+    }, 100);
+}
+
+function loadSavedData() {
+    try {
+        const saved = localStorage.getItem('elite_pro_app_data');
         if (saved) {
-            // دمج البيانات المحفوظة مع الحالة الافتراضية
-            Object.keys(saved).forEach(key => {
-                if (state[key] !== undefined) {
-                    if (typeof state[key] === 'object' && state[key] !== null && !Array.isArray(state[key])) {
-                        Object.assign(state[key], saved[key]);
+            const data = JSON.parse(saved);
+            
+            // دمج البيانات مع الحالة الافتراضية
+            Object.keys(data).forEach(key => {
+                if (APP_STATE[key] !== undefined) {
+                    if (typeof APP_STATE[key] === 'object' && APP_STATE[key] !== null) {
+                        Object.assign(APP_STATE[key], data[key]);
                     } else {
-                        state[key] = saved[key];
+                        APP_STATE[key] = data[key];
                     }
                 }
             });
             
-            // تطبيق السمة المحفوظة
-            if (saved.theme) {
-                document.body.classList.toggle('light-theme', saved.theme === 'light');
-                document.getElementById('theme-icon').className = saved.theme === 'light' ? 'fas fa-sun' : 'fas fa-moon';
-            }
-            
-            console.log("تم تحميل البيانات المحفوظة");
+            console.log('📁 تم تحميل البيانات المحفوظة');
         }
-        
-        // تهيئة بيانات المستخدم إذا لم تكن موجودة
-        if (!state.user) {
-            state.user = {
-                id: 'user_' + Date.now().toString(36) + Math.random().toString(36).substr(2),
-                created: Date.now(),
-                sessions: 1,
-                cardsMastered: 0,
-                lastActive: Date.now()
-            };
-        } else {
-            state.user.sessions = (state.user.sessions || 0) + 1;
-            state.user.lastActive = Date.now();
-        }
-        
-        // تهيئة الإحصائيات إذا لم تكن موجودة
-        if (!state.difficultyStats) {
-            state.difficultyStats = {
-                hard: 0,
-                mid: 0,
-                easy: 0
-            };
-        }
-        
-        if (!state.streaks) {
-            state.streaks = {
-                daily: 0,
-                weekly: 0,
-                current: 0
-            };
-        }
-        
-        if (!state.settings) {
-            state.settings = {
-                sound: true,
-                vibration: true,
-                animations: true,
-                autoFlip: false,
-                showHints: true
-            };
-        }
-        
-    } catch (e) {
-        console.error("خطأ في تحميل البيانات:", e);
-        showToast("خطأ في تحميل البيانات المحفوظة", "error");
+    } catch (error) {
+        console.error('❌ خطأ في تحميل البيانات:', error);
     }
 }
 
-/* ---------- نظام الصوت المتقدم مع دعم متصفحات متنوعة ---------- */
-const AudioPro = (function() {
-    let ctx = null;
-    let oscillators = new Map();
-    
-    function getContext() {
-        if (!ctx) {
-            try {
-                ctx = new (window.AudioContext || window.webkitAudioContext)();
-                console.log("تم إنشاء سياق الصوت بنجاح");
-            } catch (e) {
-                console.warn("سياق الصوت غير مدعوم:", e);
-                return null;
-            }
-        }
-        
-        if (ctx.state === "suspended") {
-            ctx.resume().then(() => {
-                console.log("تم استئناف سياق الصوت");
-            }).catch(e => {
-                console.warn("فشل في استئناف سياق الصوت:", e);
-            });
-        }
-        
-        return ctx;
-    }
-    
-    function play(freq = 300, dur = 150, type = 'sine', id = 'default') {
-        if (!state.settings.sound) return;
-        
-        try {
-            const audioCtx = getContext();
-            if (!audioCtx) return;
-            
-            // إيقاف الصوت السابق بنفس المعرف
-            stop(id);
-            
-            const oscillator = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-            
-            oscillator.type = type;
-            oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime);
-            
-            gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (dur / 1000));
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-            
-            oscillators.set(id, { oscillator, gainNode });
-            
-            oscillator.start();
-            
-            if (dur < 10000) {
-                setTimeout(() => {
-                    stop(id);
-                }, dur);
-            }
-            
-        } catch (e) {
-            console.warn("خطأ في تشغيل الصوت:", e);
-        }
-    }
-    
-    function stop(id = 'default') {
-        const sound = oscillators.get(id);
-        if (sound) {
-            try {
-                sound.oscillator.stop();
-                sound.oscillator.disconnect();
-                sound.gainNode.disconnect();
-            } catch (e) {
-                // تجاهل الأخطاء عند إيقاف الصوت
-            }
-            oscillators.delete(id);
-        }
-    }
-    
-    function stopAll() {
-        oscillators.forEach((sound, id) => {
-            stop(id);
-        });
-    }
-    
-    // إيقاف الصوت عند ترك الصفحة
-    document.addEventListener("visibilitychange", () => {
-        if (document.hidden) {
-            stopAll();
-        }
-    });
-    
-    // إيقاف الصوت عند فقدان التركيز
-    window.addEventListener('blur', () => {
-        if (state.freq) {
-            stop('frequency');
-        }
-    });
-    
-    window.addEventListener('focus', () => {
-        if (state.freq && document.visibilityState === 'visible') {
-            play(state.freq, 999999, 'sine', 'frequency');
-        }
-    });
-    
-    return { play, stop, stopAll, getContext };
-})();
-
-// دالة مساعدة لتشغيل الأصوات
-window.playSound = (f, d = 200, t = 'sine') => {
-    if (state.settings.sound) {
-        AudioPro.play(f, d, t, 'effect');
-    }
-};
-
-// دالة الاهتزاز
-function vibrate(pattern = [50]) {
-    if (state.settings.vibration && navigator.vibrate) {
-        try {
-            navigator.vibrate(pattern);
-        } catch (e) {
-            console.warn("الاهتزاز غير مدعوم:", e);
-        }
+function saveData() {
+    try {
+        localStorage.setItem('elite_pro_app_data', JSON.stringify({
+            currentCardIndex: APP_STATE.currentCardIndex,
+            score: APP_STATE.score,
+            reviewedCards: APP_STATE.reviewedCards,
+            totalStudyTime: APP_STATE.totalStudyTime,
+            difficultyStats: APP_STATE.difficultyStats,
+            achievements: APP_STATE.achievements
+        }));
+    } catch (error) {
+        console.error('❌ خطأ في حفظ البيانات:', error);
     }
 }
-/* ---------- نظام الإشعارات (Toast) المحسن ---------- */
-function showToast(message, type = 'info', duration = 3000) {
-    if (!state.settings.animations && type !== 'error') return;
-    
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    
-    let icon = 'ℹ️';
-    let bgClass = 'bg-blue-500';
-    
-    if (type === 'success') {
-        icon = '✅';
-        bgClass = 'bg-emerald-500';
-    } else if (type === 'warning') {
-        icon = '⚠️';
-        bgClass = 'bg-yellow-500';
-    } else if (type === 'error') {
-        icon = '❌';
-        bgClass = 'bg-red-500';
-    } else if (type === 'achievement') {
-        icon = '🏆';
-        bgClass = 'bg-purple-500';
-    }
-    
-    toast.innerHTML = `
-        <span class="text-base">${icon}</span>
-        <span class="flex-1 text-right">${message}</span>
-    `;
-    
-    document.getElementById('toast-container').appendChild(toast);
-    
-    // إظهار الإشعار بسلاسة
-    requestAnimationFrame(() => {
-        toast.classList.add('show');
-    });
-    
-    // إخفاء الإشعار بعد المدة المحددة
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => {
-            if (toast.parentNode) {
-                toast.parentNode.removeChild(toast);
-            }
-        }, 400);
-    }, duration);
-    
-    // اهتزاز خفيف للإشعارات المهمة
-    if (type === 'achievement' || type === 'success') {
-        vibrate([100, 50, 100]);
-    }
-    
-    return toast;
-}
 
-/* ---------- نظام الإنجازات المتقدم ---------- */
-const ACHIEVEMENTS = {
-    firstCard: { 
-        name: 'البداية', 
-        desc: 'أكمل أول بطاقة', 
-        icon: 'fa-star', 
-        points: 10,
-        condition: (state) => state.count >= 1
-    },
-    fastLearner: { 
-        name: 'متسارع', 
-        desc: 'أكمل 5 بطاقات في أقل من دقيقتين', 
-        icon: 'fa-bolt', 
-        points: 25,
-        condition: (state) => {
-            const recent = state.analytics
-                .filter(a => a.type === 'rate')
-                .slice(-5);
-            if (recent.length < 5) return false;
-            const timeDiff = (recent[4].time - recent[0].time) / 1000;
-            return timeDiff < 120; // أقل من دقيقتين
-        }
-    },
-    focusMaster: { 
-        name: 'مركز', 
-        desc: 'جلسة تركيز لمدة 25 دقيقة', 
-        icon: 'fa-brain', 
-        points: 50,
-        condition: (state) => {
-            const focusSessions = state.analytics.filter(a => a.type === 'focus');
-            return focusSessions.some(session => session.minutes >= 25);
-        }
-    },
-    eliteLevel: { 
-        name: 'نخبة', 
-        desc: 'وصل إلى 500 نقطة', 
-        icon: 'fa-trophy', 
-        points: 100,
-        condition: (state) => state.score >= 500
-    },
-    consistency: { 
-        name: 'منتظم', 
-        desc: '3 جلسات في يوم واحد', 
-        icon: 'fa-calendar-check', 
-        points: 75,
-        condition: (state) => {
-            const sessions = state.analytics.filter(a => a.type === 'session_start');
-            if (sessions.length < 3) return false;
-            
-            const today = new Date().toDateString();
-            const todaySessions = sessions.filter(s => {
-                const sessionDate = new Date(s.time).toDateString();
-                return sessionDate === today;
-            });
-            
-            return todaySessions.length >= 3;
-        }
-    },
-    masterOfAll: {
-        name: 'سيد الجميع',
-        desc: 'أكمل جميع البطاقات',
-        icon: 'fa-crown',
-        points: 200,
-        condition: (state) => state.count >= ALL_CARDS.length
-    },
-    speedDemon: {
-        name: 'سريع جداً',
-        desc: 'سرعة تعلم تزيد عن 2 بطاقة/دقيقة',
-        icon: 'fa-rocket',
-        points: 75,
-        condition: (state) => state.velocity > 2
-    }
-};
-
-function checkAchievements() {
-    const now = Date.now();
-    let unlockedNew = false;
+// ========== UI UPDATES ==========
+function updateUI() {
+    const card = APP_STATE.cards[APP_STATE.currentCardIndex];
     
-    Object.entries(ACHIEVEMENTS).forEach(([id, achievement]) => {
-        if (!state.achievements.includes(id) && achievement.condition(state)) {
-            unlockAchievement(id);
-            unlockedNew = true;
-        }
-    });
+    // تحديث البطاقة
+    document.getElementById('c-title').textContent = card.term;
+    document.getElementById('c-desc').textContent = card.definition;
+    document.getElementById('c-id').textContent = APP_STATE.currentCardIndex + 1;
     
-    return unlockedNew;
-}
-
-function unlockAchievement(id) {
-    if (state.achievements.includes(id)) return;
+    // تحديث الإحصائيات
+    const percentage = Math.round((APP_STATE.reviewedCards / APP_STATE.cards.length) * 100);
+    document.getElementById('p-val').textContent = percentage + '%';
+    document.getElementById('s-val').textContent = APP_STATE.score;
+    document.getElementById('r-val').textContent = APP_STATE.cards.length - APP_STATE.reviewedCards;
     
-    state.achievements.push(id);
-    const achievement = ACHIEVEMENTS[id];
+    // تحديث المستوى
+    updateLevel();
     
-    // تحديث واجهة الإنجازات
+    // تحديث قائمة الإنجازات
     updateAchievementsUI();
     
-    // إظهار إشعار الإنجاز
-    showToast(`إنجاز مفتوح: ${achievement.name}! (+${achievement.points} نقطة)`, 'achievement', 5000);
-    
-    // إضافة النقاط
-    state.score += achievement.points;
-    
-    // تشغيل صوت الإنجاز
-    playSound(800, 1000, 'sine');
-    playSound(1000, 800, 'sine');
-    
-    // تأثير بصرية للإنجاز
-    const glowFrame = document.getElementById('glow-frame');
-    glowFrame.style.boxShadow = 'inset 0 0 200px rgba(168, 85, 247, 0.5)';
-    setTimeout(() => {
-        glowFrame.style.boxShadow = '';
-    }, 2000);
-    
-    // حفظ البيانات
-    savePro();
-    updateUI();
-}
-
-function updateAchievementsUI() {
-    const container = document.getElementById('achievements-container');
-    if (!container) return;
-    
-    if (state.achievements.length > 0) {
-        container.classList.remove('hidden');
-        
-        // تحديث شارات الإنجازات
-        state.achievements.forEach((id, index) => {
-            const badge = document.getElementById(`achievement-${index + 1}`);
-            if (badge) {
-                const achievement = ACHIEVEMENTS[id];
-                badge.classList.add('unlocked');
-                badge.innerHTML = `
-                    <i class="fas ${achievement.icon}"></i>
-                    <span>${achievement.name}</span>
-                `;
-                badge.title = achievement.desc;
-            }
-        });
-        
-        // إخفاء الشارات غير المفتوحة
-        for (let i = state.achievements.length; i < 5; i++) {
-            const badge = document.getElementById(`achievement-${i + 1}`);
-            if (badge) {
-                badge.classList.remove('unlocked');
-                badge.innerHTML = `
-                    <i class="fas fa-lock"></i>
-                    <span>مقفل</span>
-                `;
-                badge.title = 'إنجاز غير مفتوح بعد';
-            }
-        }
-    }
-}
-
-/* ---------- واجهة المستخدم المحسنة ---------- */
-function updateUI() {
-    const card = ALL_CARDS[state.c] || ALL_CARDS[0];
-    const inner = document.getElementById('main-card');
-    
-    requestAnimationFrame(() => {
-        // تحديث النصوص
-        document.getElementById('c-title').textContent = card.t;
-        document.getElementById('c-desc').textContent = card.d;
-        document.getElementById('c-id').textContent = (state.c + 1).toString().padStart(2, '0');
-        document.getElementById('s-val').textContent = state.score;
-        
-        // حساب النسبة المئوية
-        const percentage = Math.round((state.count / ALL_CARDS.length) * 100);
-        document.getElementById('p-val').textContent = percentage + "%";
-        
-        // تحديث حلقة التقدم
-        updateProgressRing(percentage);
-        
-        // تحديث البطاقات المتبقية
-        document.getElementById('r-val').textContent = ALL_CARDS.length - state.count;
-        
-        // تحديث المستوى
-        updateLevel();
-        
-        // إعادة تعيين حالة القلب
-        inner.classList.remove('is-flipped');
-        
-        // تحديث سرعة التعلم
-        state.velocity = calculateVelocity();
-        
-        // تحديث درجة التركيز
-        updateFocusScore();
-        
-        // إضافة تأثير الدخول
-        if (state.settings.animations) {
-            inner.classList.add('card-entrance');
-            setTimeout(() => {
-                inner.classList.remove('card-entrance');
-            }, 600);
-        }
-    });
-}
-
-function updateProgressRing(percentage) {
-    const progressCircle = document.getElementById('progress-circle');
-    const progressText = document.getElementById('progress-text');
-    
-    if (!progressCircle || !progressText) return;
-    
-    const circumference = 2 * Math.PI * 70;
-    const offset = circumference - (percentage / 100) * circumference;
-    
-    progressCircle.style.strokeDasharray = `${circumference} ${circumference}`;
-    progressCircle.style.strokeDashoffset = offset;
-    progressText.textContent = percentage + "%";
-    
-    // تحديث لون الحلقة بناءً على النسبة
-    let color = '#ef4444'; // أحمر
-    if (percentage >= 25) color = '#f59e0b'; // برتقالي
-    if (percentage >= 50) color = '#3b82f6'; // أزرق
-    if (percentage >= 75) color = '#10b981'; // أخضر
-    
-    progressCircle.style.stroke = color;
+    // تحديث الإحصائيات في المودال
+    updateStatsModal();
 }
 
 function updateLevel() {
     let level = "مبتدئ";
-    let color = "#ef4444";
+    let color = "#f87171";
     
-    if (state.score >= 1000) {
+    if (APP_STATE.score >= 1000) {
         level = "خبير";
         color = "#8b5cf6";
-    } else if (state.score >= 500) {
+    } else if (APP_STATE.score >= 500) {
         level = "متقدم";
         color = "#3b82f6";
-    } else if (state.score >= 200) {
+    } else if (APP_STATE.score >= 200) {
         level = "متوسط";
-        color = "#10b981";
-    } else if (state.score >= 50) {
+        color = "#34d399";
+    } else if (APP_STATE.score >= 50) {
         level = "مبتدئ";
-        color = "#f59e0b";
+        color = "#fbbf24";
     }
     
     document.getElementById('level-val').textContent = level;
     document.getElementById('level-val').style.color = color;
 }
 
-function calculateVelocity() {
-    if (state.analytics.length < 2) return 0;
+function updateAchievementsUI() {
+    const container = document.getElementById('achievements-list');
+    if (!container) return;
     
-    const recentMarks = state.analytics
-        .filter(a => a.type === 'rate')
-        .slice(-10);
-    
-    if (recentMarks.length < 2) return 0;
-    
-    const timeDiff = (recentMarks[recentMarks.length - 1].time - recentMarks[0].time) / 1000;
-    if (timeDiff === 0) return 0;
-    
-    const cardsPerMinute = (recentMarks.length / timeDiff) * 60;
-    return Math.min(cardsPerMinute, 5); // تطبيع بين 0 و5
+    container.innerHTML = APP_STATE.achievements.map(achievement => `
+        <div class="achievement-badge ${achievement.unlocked ? 'unlocked' : ''}" 
+             title="${achievement.unlocked ? achievement.name : 'مقفل'}">
+            <i class="fas ${achievement.icon} achievement-icon"></i>
+            <div class="achievement-name">${achievement.name}</div>
+        </div>
+    `).join('');
 }
 
-function updateFocusScore() {
-    if (state.analytics.length < 5) {
-        state.focusScore = 0;
-        return;
-    }
-    
-    const recentActivity = state.analytics.slice(-10);
-    const flipCount = recentActivity.filter(a => a.type === 'flip').length;
-    const rateCount = recentActivity.filter(a => a.type === 'rate').length;
-    
-    // حساب درجة التركيز بناءً على النشاط
-    state.focusScore = Math.min(100, (flipCount * 10) + (rateCount * 15) + (state.velocity * 20));
+function updateStatsModal() {
+    document.getElementById('total-study-time').textContent = 
+        Math.floor(APP_STATE.totalStudyTime / 60) + ' دقيقة';
+    document.getElementById('hard-count').textContent = APP_STATE.difficultyStats.hard;
+    document.getElementById('mid-count').textContent = APP_STATE.difficultyStats.mid;
+    document.getElementById('easy-count').textContent = APP_STATE.difficultyStats.easy;
 }
 
-/* ---------- نظام البطاقات التفاعلي المحسن ---------- */
-function flip() {
-    const inner = document.getElementById('main-card');
-    const isFlipped = inner.classList.contains('is-flipped');
+// ========== CARD OPERATIONS ==========
+function flipCard() {
+    const card = document.getElementById('main-card');
+    card.classList.toggle('flipped');
     
-    // تأثير الرفع إذا كانت الرسوميات مفعلة
-    if (state.settings.animations) {
-        inner.style.transform += ' translateZ(20px)';
-        setTimeout(() => {
-            inner.style.transform = inner.style.transform.replace(' translateZ(20px)', '');
-        }, 200);
-    }
+    // تشغيل صوت القلب
+    playSound(300, 150);
     
-    // تشغيل صوت
-    playSound(isFlipped ? 320 : 280, 150);
-    
-    // اهتزاز خفيف
-    vibrate([30]);
-    
-    // قلب البطاقة
-    inner.classList.toggle('is-flipped');
-    
-    // تتبع التحليلات
-    state.analytics.push({
-        type: "flip",
-        card: state.c,
-        cardTitle: ALL_CARDS[state.c].t,
-        time: Date.now(),
-        wasFlipped: isFlipped
-    });
-    
-    // إذا كان الوضع التلقائي مفعلاً، الانتقال تلقائياً بعد قلـب البطاقة
-    if (state.settings.autoFlip && !isFlipped) {
-        setTimeout(() => {
-            const rating = getAutoRating();
-            if (rating) {
-                mark(rating);
-            }
-        }, 2000);
-    }
+    // اهتزاز خفيف على الهواتف
+    vibrate(30);
 }
 
-// دالة لتقدير التقييم التلقائي بناءً على الوقت
-function getAutoRating() {
-    const lastFlip = state.analytics
-        .filter(a => a.type === 'flip' && a.card === state.c)
-        .pop();
-    
-    if (!lastFlip) return null;
-    
-    const timeSpent = (Date.now() - lastFlip.time) / 1000;
-    
-    if (timeSpent < 5) return 'easy';
-    if (timeSpent < 15) return 'mid';
-    return 'hard';
-}
-
-function stepCard(direction) {
-    // تأثير انتقال إذا كانت الرسوميات مفعلة
-    if (state.settings.animations) {
-        document.body.style.filter = 'blur(3px)';
-        setTimeout(() => {
-            document.body.style.filter = '';
-        }, 200);
+function prevCard() {
+    APP_STATE.currentCardIndex--;
+    if (APP_STATE.currentCardIndex < 0) {
+        APP_STATE.currentCardIndex = APP_STATE.cards.length - 1;
     }
     
-    // تحديث الفهرس
-    state.c = (state.c + direction + ALL_CARDS.length) % ALL_CARDS.length;
-    
-    // تشغيل صوت التنقل
-    playSound(direction > 0 ? 350 : 300, 100);
-    
-    // اهتزاز خفيف
-    vibrate([20]);
+    // إعادة ضبط حالة القلب
+    document.getElementById('main-card').classList.remove('flipped');
     
     // تحديث الواجهة
     updateUI();
     
-    // تتبع التحليلات
-    state.analytics.push({
-        type: "navigate",
-        direction: direction > 0 ? "next" : "prev",
-        card: state.c,
-        cardTitle: ALL_CARDS[state.c].t,
-        time: Date.now()
-    });
-    
-    // حفظ الحالة
-    savePro();
+    // تشغيل صوت التنقل
+    playSound(200, 100);
+    vibrate(20);
 }
 
-/* ---------- نظام التقييم الذكي المحسن ---------- */
-function mark(difficulty) {
-    const now = Date.now();
-    const card = ALL_CARDS[state.c];
+function nextCard() {
+    APP_STATE.currentCardIndex++;
+    if (APP_STATE.currentCardIndex >= APP_STATE.cards.length) {
+        APP_STATE.currentCardIndex = 0;
+    }
     
-    // تسجيل التقييم في الإحصائيات
-    state.difficultyStats[difficulty] = (state.difficultyStats[difficulty] || 0) + 1;
+    // إعادة ضبط حالة القلب
+    document.getElementById('main-card').classList.remove('flipped');
     
-    // تسجيل التقييم في التحليلات
-    state.analytics.push({
-        type: "rate",
-        difficulty: difficulty,
-        card: state.c,
-        cardTitle: card.t,
-        time: now,
-        responseTime: now - state.lastCardTime
-    });
+    // تحديث الواجهة
+    updateUI();
     
-    // تحديث وقت البطاقة الأخير
-    state.lastCardTime = now;
+    // تشغيل صوت التنقل
+    playSound(250, 100);
+    vibrate(20);
+}
+function rateCard(difficulty) {
+    // تحديث الإحصائيات
+    APP_STATE.difficultyStats[difficulty]++;
     
-    // تأثيرات بصرية حسب الصعوبة
-    const glowFrame = document.getElementById('glow-frame');
-    let color, points, soundFreq, icon;
+    // إضافة النقاط
+    let points = 0;
+    let message = '';
+    let type = 'info';
     
-    switch (difficulty) {
-        case 'easy':
-            color = 'rgba(16, 185, 129, 0.4)';
-            points = 40;
-            soundFreq = 600;
-            icon = '✅';
-            state.count++;
-            state.score += points;
-            showToast(`${icon} ممتاز! +40 نقطة`, 'success', 1500);
-            
-            // زيادة سلسلة النجاح
-            state.streaks.current++;
-            if (state.streaks.current > state.streaks.daily) {
-                state.streaks.daily = state.streaks.current;
-            }
-            break;
-            
-        case 'mid':
-            color = 'rgba(245, 158, 11, 0.3)';
-            points = 15;
-            soundFreq = 450;
-            icon = '⚠️';
-            state.score += points;
-            showToast(`${icon} جيد! +15 نقطة`, 'warning', 1500);
-            
-            // إعادة تعيين سلسلة النجاح
-            state.streaks.current = 0;
-            break;
-            
+    switch(difficulty) {
         case 'hard':
-            color = 'rgba(239, 68, 68, 0.3)';
             points = 5;
-            soundFreq = 300;
-            icon = '❌';
-            state.score += points;
-            showToast(`${icon} صعب! +5 نقاط`, 'error', 1500);
-            
-            // إعادة تعيين سلسلة النجاح
-            state.streaks.current = 0;
+            message = 'صعب! +5 نقاط';
+            type = 'error';
+            break;
+        case 'mid':
+            points = 15;
+            message = 'متوسط! +15 نقطة';
+            type = 'warning';
+            break;
+        case 'easy':
+            points = 40;
+            message = 'سهل! +40 نقطة 🎉';
+            type = 'success';
+            APP_STATE.reviewedCards++;
             break;
     }
     
-    // تطبيق التأثير البصري
-    if (state.settings.animations) {
-        glowFrame.style.boxShadow = `inset 0 0 180px ${color}`;
-        setTimeout(() => {
-            glowFrame.style.boxShadow = '';
-        }, 600);
-    }
+    APP_STATE.score += points;
     
-    // تشغيل الصوت
-    playSound(soundFreq, 300);
+    // إظهار إشعار
+    showToast(message, type);
     
-    // تأثير الاهتزاز
-    vibrate([50]);
+    // تشغيل صوت التقييم
+    playSound(difficulty === 'easy' ? 600 : 400, 300);
+    vibrate(50);
     
     // التحقق من الإنجازات
     checkAchievements();
     
-    // الانتقال للبطاقة التالية بعد تأخير
+    // الانتقال للبطاقة التالية
     setTimeout(() => {
-        stepCard(1);
-        savePro();
+        nextCard();
+        saveData();
     }, 300);
 }
 
-/* ---------- أدوات التركيز المتقدمة المحسنة ---------- */
-function toggleFreq(hz, btn) {
-    const chips = document.querySelectorAll('.freq-chip');
-    
-    if (state.freq === hz) {
-        // إيقاف التردد الحالي
-        AudioPro.stop('frequency');
-        state.freq = null;
-        chips.forEach(b => b.classList.remove('active'));
-        showToast(`تم إيقاف تردد ${hz}Hz`, 'info');
-    } else {
-        // إيقاف أي ترددات أخرى
-        AudioPro.stop('frequency');
-        
-        // تشغيل التردد الجديد
-        AudioPro.play(hz, 999999, 'sine', 'frequency');
-        state.freq = hz;
-        
-        // تحديث الأزرار
-        chips.forEach(b => b.classList.toggle('active', b === btn));
-        
-        // إظهار رسالة
-        let freqName = '';
-        switch(hz) {
-            case 45: freqName = 'غاما (إبداع)'; break;
-            case 8: freqName = 'ثيتا (استرخاء)'; break;
-            case 432: freqName = 'موسيقي (تناغم)'; break;
-            default: freqName = `${hz}Hz`;
-        }
-        
-        showToast(`تفعيل تردد ${freqName} للتركيز`, 'success');
+// ========== ACHIEVEMENTS ==========
+function checkAchievements() {
+    // إنجاز أول بطاقة
+    if (APP_STATE.reviewedCards >= 1 && !APP_STATE.achievements[0].unlocked) {
+        unlockAchievement(0);
     }
     
-    savePro();
+    // إنجاز النخبة (500 نقطة)
+    if (APP_STATE.score >= 500 && !APP_STATE.achievements[3].unlocked) {
+        unlockAchievement(3);
+    }
+    
+    // إنجاز التركيز (25 دقيقة دراسة)
+    if (APP_STATE.totalStudyTime >= 1500 && !APP_STATE.achievements[2].unlocked) {
+        unlockAchievement(2);
+    }
 }
 
-let pomoStart = null;
-let pomoTotalSeconds = 0;
-let pomoBreak = false;
-
-function togglePomo() {
-    const btn = document.getElementById('pomo-btn');
-    const clock = document.getElementById('pomo-clock');
+function unlockAchievement(index) {
+    if (APP_STATE.achievements[index].unlocked) return;
     
-    if (state.pOn) {
-        // إيقاف المؤقت
-        clearInterval(state.pInterval);
-        state.pOn = false;
-        btn.innerHTML = '<i class="fas fa-play mr-1"></i> ابدأ';
-        btn.classList.remove('bg-red-600');
-        btn.classList.add('bg-gradient-to-r', 'from-blue-600', 'to-blue-500');
+    APP_STATE.achievements[index].unlocked = true;
+    
+    // إظهار إشعار الإنجاز
+    showToast(`🏆 إنجاز مفتوح: ${APP_STATE.achievements[index].name}!`, 'success');
+    
+    // إضافة نقاط مكافأة
+    APP_STATE.score += 100;
+    
+    // تشغيل صوت الإنجاز
+    playSound(800, 1000);
+    playSound(1000, 800);
+    
+    // تحديث الواجهة
+    updateAchievementsUI();
+    updateUI();
+    
+    // حفظ البيانات
+    saveData();
+}
+
+// ========== AUDIO SYSTEM ==========
+function initAudio() {
+    try {
+        APP_STATE.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    } catch (error) {
+        console.warn('⚠️ الصوت غير مدعوم في هذا المتصفح');
+    }
+}
+
+function playSound(frequency, duration) {
+    if (!APP_STATE.audioContext) return;
+    
+    try {
+        const oscillator = APP_STATE.audioContext.createOscillator();
+        const gainNode = APP_STATE.audioContext.createGain();
         
-        // حساب وقت الجلسة
-        if (pomoStart) {
-            const sessionSeconds = Math.floor((Date.now() - pomoStart) / 1000);
-            pomoTotalSeconds += sessionSeconds;
-            state.totalStudyTime += sessionSeconds;
-            
-            state.analytics.push({
-                type: "focus",
-                minutes: Math.floor(sessionSeconds / 60),
-                totalSeconds: sessionSeconds,
-                time: Date.now(),
-                wasBreak: pomoBreak
-            });
-            
-            pomoStart = null;
+        oscillator.connect(gainNode);
+        gainNode.connect(APP_STATE.audioContext.destination);
+        
+        oscillator.frequency.value = frequency;
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.05, APP_STATE.audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, APP_STATE.audioContext.currentTime + (duration / 1000));
+        
+        oscillator.start();
+        oscillator.stop(APP_STATE.audioContext.currentTime + (duration / 1000));
+    } catch (error) {
+        console.warn('⚠️ خطأ في تشغيل الصوت:', error);
+    }
+}
+
+function toggleFrequency(freq, button) {
+    const buttons = document.querySelectorAll('.freq-btn');
+    
+    if (APP_STATE.activeFrequency === freq) {
+        // إيقاف الصوت
+        if (APP_STATE.oscillator) {
+            APP_STATE.oscillator.stop();
+            APP_STATE.oscillator = null;
         }
         
+        APP_STATE.activeFrequency = null;
+        buttons.forEach(btn => btn.classList.remove('active'));
+        showToast(`تم إيقاف تردد ${freq}Hz`, 'info');
+    } else {
+        // إيقاف أي صوت سابق
+        if (APP_STATE.oscillator) {
+            APP_STATE.oscillator.stop();
+        }
+        
+        // تشغيل التردد الجديد
+        if (APP_STATE.audioContext) {
+            try {
+                APP_STATE.oscillator = APP_STATE.audioContext.createOscillator();
+                const gainNode = APP_STATE.audioContext.createGain();
+                
+                APP_STATE.oscillator.connect(gainNode);
+                gainNode.connect(APP_STATE.audioContext.destination);
+                
+                APP_STATE.oscillator.frequency.value = freq;
+                APP_STATE.oscillator.type = 'sine';
+                gainNode.gain.value = 0.02;
+                
+                APP_STATE.oscillator.start();
+                
+                APP_STATE.activeFrequency = freq;
+                buttons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                let freqName = '';
+                switch(freq) {
+                    case 45: freqName = 'غاما (إبداع)'; break;
+                    case 8: freqName = 'ثيتا (استرخاء)'; break;
+                    case 432: freqName = 'موسيقي (تناغم)'; break;
+                    default: freqName = `${freq}Hz`;
+                }
+                
+                showToast(`تفعيل تردد ${freqName}`, 'success');
+            } catch (error) {
+                console.warn('⚠️ خطأ في تشغيل التردد:', error);
+            }
+        }
+    }
+}
+
+// ========== POMODORO TIMER ==========
+function togglePomodoro() {
+    const btn = document.getElementById('pomo-btn');
+    const icon = btn.querySelector('i');
+    
+    if (APP_STATE.pomodoroRunning) {
+        // إيقاف المؤقت
+        clearInterval(APP_STATE.pomodoroInterval);
+        APP_STATE.pomodoroRunning = false;
+        icon.className = 'fas fa-play';
+        btn.style.background = '#3b82f6';
         showToast('تم إيقاف جلسة التركيز', 'info');
+        
+        // تحديث وقت الدراسة
+        const sessionTime = Math.floor((Date.now() - APP_STATE.sessionStartTime) / 1000);
+        APP_STATE.totalStudyTime += sessionTime;
+        saveData();
     } else {
         // بدء المؤقت
-        state.pOn = true;
-        pomoStart = Date.now();
-        btn.innerHTML = '<i class="fas fa-pause mr-1"></i> إيقاف';
-        btn.classList.remove('bg-gradient-to-r', 'from-blue-600', 'to-blue-500');
-        btn.classList.add('bg-red-600');
+        APP_STATE.pomodoroRunning = true;
+        APP_STATE.sessionStartTime = Date.now();
+        icon.className = 'fas fa-pause';
+        btn.style.background = '#ef4444';
         
-        state.pInterval = setInterval(() => {
-            state.pTime--;
+        APP_STATE.pomodoroInterval = setInterval(() => {
+            APP_STATE.pomodoroTime--;
             
-            const minutes = Math.floor(state.pTime / 60);
-            const seconds = state.pTime % 60;
-            clock.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            const minutes = Math.floor(APP_STATE.pomodoroTime / 60);
+            const seconds = APP_STATE.pomodoroTime % 60;
             
-            // تغيير اللون حسب الحالة
-            if (pomoBreak) {
-                // وقت الاستراحة
-                clock.classList.remove('text-red-400', 'text-blue-400');
-                clock.classList.add('text-emerald-400');
-                
-                if (state.pTime <= 0) {
-                    // انتهاء الاستراحة
-                    clearInterval(state.pInterval);
-                    playSound(600, 1000);
-                    showToast('انتهت الاستراحة! عد للعمل', 'success', 4000);
-                    pomoBreak = false;
-                    state.pTime = 1500; // 25 دقيقة
-                    clock.textContent = '25:00';
-                    state.pOn = false;
-                    btn.innerHTML = '<i class="fas fa-play mr-1"></i> ابدأ';
-                    btn.classList.remove('bg-red-600');
-                    btn.classList.add('bg-gradient-to-r', 'from-blue-600', 'to-blue-500');
-                }
-            } else {
-                // وقت العمل
-                if (state.pTime <= 0) {
-                    // انتهاء وقت العمل
-                    clearInterval(state.pInterval);
-                    playSound(800, 1000);
-                    showToast('انتهت جلسة التركيز! خذ استراحة', 'achievement', 5000);
-                    pomoBreak = true;
-                    state.pTime = 300; // 5 دقائق استراحة
-                    clock.textContent = '05:00';
-                    clock.classList.remove('text-blue-400');
-                    clock.classList.add('text-emerald-400');
-                } else if (state.pTime <= 60) {
-                    // آخر دقيقة
-                    clock.classList.add('text-red-400');
-                    clock.classList.remove('text-blue-400');
-                } else {
-                    clock.classList.remove('text-red-400');
-                    clock.classList.add('text-blue-400');
-                }
+            document.getElementById('pomo-clock').textContent = 
+                `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            
+            // تغيير اللوع عند اقتراب النهاية
+            if (APP_STATE.pomodoroTime <= 60) {
+                document.getElementById('pomo-clock').style.color = '#f87171';
+            }
+            
+            if (APP_STATE.pomodoroTime <= 0) {
+                clearInterval(APP_STATE.pomodoroInterval);
+                playSound(800, 1000);
+                showToast('انتهت جلسة التركيز! خذ استراحة', 'success');
+                APP_STATE.pomodoroTime = 1500;
+                document.getElementById('pomo-clock').textContent = '25:00';
+                document.getElementById('pomo-clock').style.color = '#60a5fa';
+                APP_STATE.pomodoroRunning = false;
+                icon.className = 'fas fa-play';
+                btn.style.background = '#3b82f6';
             }
         }, 1000);
         
-        showToast(pomoBreak ? 'بدء استراحة (5 دقائق)' : 'بدء جلسة تركيز (25 دقيقة)', 'success');
+        showToast('بدء جلسة تركيز (25 دقيقة)', 'success');
     }
-    
-    savePro();
 }
-
-function resetPomo() {
-    state.pTime = 1500;
-    pomoBreak = false;
-    document.getElementById('pomo-clock').textContent = '25:00';
-    document.getElementById('pomo-clock').classList.remove('text-red-400', 'text-emerald-400');
-    document.getElem
-/* ---------- نظام السمة (الوضع المظلم/الفاتح) المحسن ---------- */
-function toggleTheme() {
-    const isLight = document.body.classList.toggle('light-theme');
-    const icon = document.getElementById('theme-icon');
+// ========== TOAST NOTIFICATIONS ==========
+function showToast(message, type = 'info') {
+    const container = document.getElementById('toast-container');
     
-    state.theme = isLight ? 'light' : 'dark';
-    icon.className = isLight ? 'fas fa-sun' : 'fas fa-moon';
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `
+        <div class="toast-icon">
+            ${type === 'success' ? '✅' : 
+              type === 'error' ? '❌' : 
+              type === 'warning' ? '⚠️' : 'ℹ️'}
+        </div>
+        <div class="toast-message">${message}</div>
+    `;
     
-    // تأثير دوران إذا كانت الرسوميات مفعلة
-    if (state.settings.animations) {
-        icon.style.transform = 'rotate(360deg)';
+    container.appendChild(toast);
+    
+    // إظهار الإشعار
+    setTimeout(() => toast.classList.add('show'), 10);
+    
+    // إخفاء الإشعار بعد 3 ثواني
+    setTimeout(() => {
+        toast.classList.remove('show');
         setTimeout(() => {
-            icon.style.transform = '';
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
         }, 300);
-    }
-    
-    showToast(`تم التبديل إلى الوضع ${isLight ? 'الفاتح' : 'المظلم'}`, 'info');
-    savePro();
+    }, 3000);
 }
 
-/* ---------- نظام التفاعل مع الخلفية (Parallax) المحسن ---------- */
-function initParallax() {
-    const bgCanvas = document.getElementById('bgCanvas');
-    const gridOverlay = document.getElementById('gridOverlay');
-    
-    if (!bgCanvas || !gridOverlay || !state.settings.animations) return;
-    
-    let rafId = null;
-    let mouseX = 0;
-    let mouseY = 0;
-    let targetX = 0;
-    let targetY = 0;
-    
-    function onMouseMove(e) {
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        
-        targetX = (e.clientX / window.innerWidth - 0.5) * 20;
-        targetY = (e.clientY / window.innerHeight - 0.5) * 20;
-        
-        if (!rafId) {
-            rafId = requestAnimationFrame(updateParallax);
+// ========== VIBRATION ==========
+function vibrate(duration) {
+    if (navigator.vibrate) {
+        try {
+            navigator.vibrate(duration);
+        } catch (error) {
+            // تجاهل أخطاء الاهتزاز
         }
     }
+}
+
+// ========== MODAL CONTROLS ==========
+function showModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.classList.add('show');
     
-    function updateParallax() {
-        // تتبع سلس للماوس
-        mouseX += (targetX - mouseX) * 0.1;
-        mouseY += (targetY - mouseY) * 0.1;
-        
-        bgCanvas.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
-        gridOverlay.style.backgroundPosition = `${50 - mouseX / 10}% ${50 - mouseY / 10}%`;
-        
-        if (Math.abs(targetX - mouseX) > 0.1 || Math.abs(targetY - mouseY) > 0.1) {
-            rafId = requestAnimationFrame(updateParallax);
-        } else {
-            rafId = null;
-        }
-    }
+    // منع التمرير خلف المودال
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.classList.remove('show');
     
-    // إضافة تأثير للهواتف أيضاً
-    function onTouchMove(e) {
-        if (e.touches.length === 1) {
-            onMouseMove(e.touches[0]);
-        }
-    }
-    
-    // إضافة أحداث الماوس واللمس
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('touchmove', onTouchMove, { passive: true });
-    
-    // تنظيف عند إلغاء التفعيل
-    return () => {
-        window.removeEventListener('mousemove', onMouseMove);
-        window.removeEventListener('touchmove', onTouchMove);
-        if (rafId) cancelAnimationFrame(rafId);
+    // إعادة التمرير
+    document.body.style.overflow = '';
+}
+
+// ========== DATA EXPORT/IMPORT ==========
+function exportData() {
+    const exportData = {
+        appState: APP_STATE,
+        exportDate: new Date().toISOString(),
+        version: '1.0.0'
     };
+    
+    const dataStr = JSON.stringify(exportData, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    
+    // إنشاء رابط تحميل
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(dataBlob);
+    link.download = `elite_pro_backup_${new Date().toISOString().split('T')[0]}.json`;
+    link.click();
+    
+    showToast('تم تصدير البيانات بنجاح', 'success');
 }
 
-/* ---------- نظام تأثيرات اللمس (Ripple) المحسن ---------- */
-function initRippleEffects() {
-    if (!state.settings.animations) return;
+function resetData() {
+    if (confirm('هل تريد فعلاً إعادة تعيين كل البيانات؟ هذا الإجراء لا يمكن التراجع عنه.')) {
+        localStorage.clear();
+        location.reload();
+    }
+}
+
+// ========== EVENT LISTENERS ==========
+function setupEventListeners() {
+    // زر الإحصائيات
+    document.getElementById('stats-btn').addEventListener('click', () => {
+        showModal('stats-modal');
+    });
     
-    document.querySelectorAll('.ripple').forEach(button => {
-        button.addEventListener('click', function(e) {
-            // التأكد من أن العنصر قابل للنقر
-            if (this.disabled) return;
-            
-            const rect = this.getBoundingClientRect();
-            const circle = document.createElement('span');
-            circle.className = 'ripple-circle';
-            
-            const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            circle.style.width = circle.style.height = size + 'px';
-            circle.style.left = x - size / 2 + 'px';
-            circle.style.top = y - size / 2 + 'px';
-            
-            this.appendChild(circle);
-            
-            // إزالة العنصر بعد انتهاء التحريك
-            circle.addEventListener('animationend', () => {
-                if (circle.parentNode === this) {
-                    this.removeChild(circle);
-                }
-            }, { once: true });
+    // زر التصدير
+    document.getElementById('export-btn').addEventListener('click', exportData);
+    
+    // إغلاق المودال عند النقر خارجها
+    document.querySelectorAll('.modal-overlay').forEach(modal => {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('show');
+                document.body.style.overflow = '';
+            }
         });
     });
+    
+    // أحداث اللمس للبطاقة (سحب)
+    setupSwipeGestures();
+    
+    // اختصارات لوحة المفاتيح
+    setupKeyboardShortcuts();
 }
 
-/* ---------- نظام التوجيه بالأصابع (Swipe) المحسن ---------- */
-function initSwipeGestures() {
+function setupSwipeGestures() {
+    const card = document.getElementById('cardWrapper');
     let startX = 0;
     let startY = 0;
-    let startTime = 0;
     let isSwiping = false;
     
-    function onTouchStart(e) {
-        if (e.touches.length !== 1) return;
-        
+    card.addEventListener('touchstart', (e) => {
         startX = e.touches[0].clientX;
         startY = e.touches[0].clientY;
-        startTime = Date.now();
         isSwiping = true;
-    }
+    }, { passive: true });
     
-    function onTouchMove(e) {
-        if (!isSwiping || e.touches.length !== 1) return;
+    card.addEventListener('touchmove', (e) => {
+        if (!isSwiping) return;
         
         const currentX = e.touches[0].clientX;
         const currentY = e.touches[0].clientY;
@@ -2291,1041 +1554,115 @@ function initSwipeGestures() {
         if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 30) {
             isSwiping = false;
         }
-    }
+    }, { passive: true });
     
-    function onTouchEnd(e) {
+    card.addEventListener('touchend', (e) => {
         if (!isSwiping) return;
         
         const endX = e.changedTouches[0].clientX;
-        const endY = e.changedTouches[0].clientY;
-        const endTime = Date.now();
-        
         const diffX = startX - endX;
-        const diffY = startY - endY;
-        const timeDiff = endTime - startTime;
-        
-        // سرعة السحب
-        const velocity = Math.abs(diffX) / timeDiff;
-        
-        // تجاهل الحركات البطيئة جداً
-        if (velocity < 0.3) {
-            isSwiping = false;
-            return;
-        }
-        
-        // تجاهل الحركات الرأسية الكبيرة
-        if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 50) {
-            isSwiping = false;
-            return;
-        }
         
         if (Math.abs(diffX) > 50) {
             if (diffX > 0) {
-                stepCard(1); // سحب لليسار = التالي
+                nextCard(); // سحب لليسار = التالي
             } else {
-                stepCard(-1); // سحب لليمين = السابق
+                prevCard(); // سحب لليمين = السابق
             }
-            
-            // اهتزاز خفيف للتأكيد
-            vibrate([30]);
+            vibrate(30);
         }
         
         isSwiping = false;
-    }
-    
-    // إضافة أحداث اللمس
-    document.addEventListener('touchstart', onTouchStart, { passive: true });
-    document.addEventListener('touchmove', onTouchMove, { passive: true });
-    document.addEventListener('touchend', onTouchEnd, { passive: true });
-    
-    // تنظيف عند إلغاء التفعيل
-    return () => {
-        document.removeEventListener('touchstart', onTouchStart);
-        document.removeEventListener('touchmove', onTouchMove);
-        document.removeEventListener('touchend', onTouchEnd);
-    };
+    }, { passive: true });
 }
 
-/* ---------- نظام التلميحات (Hints) المحسن ---------- */
-function showHints() {
-    if (!state.settings.showHints || localStorage.getItem('hintShown') === 'true') return;
-    
-    // تأخير عرض التلميحات
-    setTimeout(() => {
-        showToast('💡 تلميح: اسحب البطاقة لليمين أو لليسار للتنقل', 'info', 5000);
-    }, 3000);
-    
-    setTimeout(() => {
-        showToast('🎯 اضغط على البطاقة لقلبها ورؤية التعريف', 'info', 5000);
-    }, 10000);
-    
-    setTimeout(() => {
-        showToast('⭐ قيّم صعوبة كل بطاقة لتحسين تجربة التعلم', 'info', 5000);
-    }, 15000);
-    
-    localStorage.setItem('hintShown', 'true');
-}
-
-/* ---------- نظام التصدير والاستيراد المحسن ---------- */
-function exportData() {
-    try {
-        const exportData = {
-            state: {
-                score: state.score,
-                count: state.count,
-                achievements: state.achievements,
-                totalStudyTime: state.totalStudyTime,
-                difficultyStats: state.difficultyStats,
-                streaks: state.streaks,
-                analytics: state.analytics.slice(-100) // آخر 100 سجل فقط
-            },
-            cards: ALL_CARDS.map((card, index) => ({
-                id: index + 1,
-                term: card.t,
-                description: card.d,
-                reviewed: index < state.count
-            })),
-            version: state.version,
-            exportDate: new Date().toISOString(),
-            exportTimestamp: Date.now(),
-            user: state.user
-        };
-        
-        const dataStr = JSON.stringify(exportData, null, 2);
-        const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
-        const exportFileName = `study-progress-${state.user.id}-${new Date().toISOString().split('T')[0]}.json`;
-        
-        const linkElement = document.createElement('a');
-        linkElement.setAttribute('href', dataUri);
-        linkElement.setAttribute('download', exportFileName);
-        linkElement.style.display = 'none';
-        document.body.appendChild(linkElement);
-        linkElement.click();
-        document.body.removeChild(linkElement);
-        
-        showToast('تم تصدير بيانات التقدم بنجاح', 'success');
-        
-    } catch (err) {
-        console.error('خطأ في تصدير البيانات:', err);
-        showToast('خطأ في تصدير البيانات', 'error');
-    }
-}
-
-function importData() {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'application/json';
-    input.style.display = 'none';
-    
-    input.onchange = e => {
-        const file = e.target.files[0];
-        if (!file) return;
-        
-        const reader = new FileReader();
-        
-        reader.onload = event => {
-            try {
-                const importedData = JSON.parse(event.target.result);
-                
-                // التحقق من التوافق
-                if (!importedData.version || !importedData.version.startsWith('pro-')) {
-                    showToast('ملف غير متوافق مع هذا الإصدار', 'error');
-                    return;
-                }
-                
-                // طلب التأكيد
-                if (!confirm('هل تريد استيراد البيانات؟ سيتم استبدال بياناتك الحالية.')) {
-                    return;
-                }
-                
-                // استيراد البيانات
-                if (importedData.state) {
-                    Object.assign(state, importedData.state);
-                }
-                
-                // إعادة تعيين بعض البيانات
-                state.c = 0;
-                state.pTime = 1500;
-                state.pOn = false;
-                state.freq = null;
-                state.lastCardTime = Date.now();
-                state.sessionStart = Date.now();
-                
-                // حفظ وتحديث الواجهة
-                savePro();
-                updateUI();
-                updateAchievementsUI();
-                showToast('تم استيراد البيانات بنجاح', 'success');
-                
-                // إعادة تحميل الصفحة بعد تأخير
-                setTimeout(() => {
-                    location.reload();
-                }, 1500);
-                
-            } catch (err) {
-                console.error('خطأ في قراءة الملف:', err);
-                showToast('خطأ في قراءة الملف', 'error');
-            }
-        };
-        
-        reader.readAsText(file);
-    };
-    
-    document.body.appendChild(input);
-    input.click();
-    document.body.removeChild(input);
-}
-
-/* ---------- نظام المفاتيح السريعة المحسن ---------- */
-function initKeyboardShortcuts() {
-    document.addEventListener("keydown", e => {
+function setupKeyboardShortcuts() {
+    document.addEventListener('keydown', (e) => {
         // تجاهل إذا كان المستخدم يكتب في حقل نصي
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
             return;
         }
         
-        // منع السلوك الافتراضي للمفاتيح المستخدمة
-        if ([" ", "ArrowRight", "ArrowLeft", "1", "2", "3", "t", "T", "Escape", "r", "R"].includes(e.key)) {
-            e.preventDefault();
-        }
-        
-        // المفاتيح السريعة
         switch(e.key) {
-            case " ":
-            case "Enter":
-                flip();
+            case 'ArrowRight':
+                nextCard();
+                e.preventDefault();
                 break;
-            case "ArrowRight":
-                stepCard(1);
+            case 'ArrowLeft':
+                prevCard();
+                e.preventDefault();
                 break;
-            case "ArrowLeft":
-                stepCard(-1);
+            case ' ':
+            case 'Enter':
+                flipCard();
+                e.preventDefault();
                 break;
-            case "1":
-            case "ن": // للوحة المفاتيح العربية
-                mark('hard');
+            case '1':
+                rateCard('hard');
+                e.preventDefault();
                 break;
-            case "2":
-            case "ت": // للوحة المفاتيح العربية
-                mark('mid');
+            case '2':
+                rateCard('mid');
+                e.preventDefault();
                 break;
-            case "3":
-            case "ث": // للوحة المفاتيح العربية
-                mark('easy');
+            case '3':
+                rateCard('easy');
+                e.preventDefault();
                 break;
-            case "t":
-            case "T":
-            case "ط": // للوحة المفاتيح العربية
-                toggleTheme();
-                break;
-            case "Escape":
-                if (state.pOn) togglePomo();
-                break;
-            case "r":
-            case "R":
-            case "ر": // للوحة المفاتيح العربية
-                if (e.ctrlKey || e.metaKey) resetPomo();
-                break;
-            case "h":
-            case "H":
-            case "ح": // للوحة المفاتيح العربية
-                if (e.ctrlKey) showTutorial();
-                break;
-            case "s":
-            case "S":
-            case "س": // للوحة المفاتيح العربية
-                if (e.ctrlKey) showStatsModal();
-                break;
-        }
-    });
-}
-
-/* ---------- نظام التركيز التلقائي المحسن ---------- */
-function initAutoFocus() {
-    let idleTimer;
-    let isDimmed = false;
-    
-    function resetIdleTimer() {
-        if (isDimmed) {
-            document.body.classList.remove('dim-ui');
-            isDimmed = false;
-        }
-        
-        clearTimeout(idleTimer);
-        idleTimer = setTimeout(() => {
-            if (!state.pOn && document.visibilityState === 'visible') {
-                document.body.classList.add('dim-ui');
-                isDimmed = true;
-            }
-        }, 30000); // 30 ثانية من عدم النشاط
-    }
-    
-    // أحداث لإعادة تعيين المؤقت
-    const events = ['mousemove', 'mousedown', 'keypress', 'touchstart', 'touchmove', 'scroll'];
-    events.forEach(event => {
-        document.addEventListener(event, resetIdleTimer, { passive: true });
-    });
-    
-    // التعامل مع تغيير رؤية الصفحة
-    document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-            clearTimeout(idleTimer);
-        } else {
-            resetIdleTimer();
-        }
-    });
-    
-    // تهيئة المؤقت
-    resetIdleTimer();
-}
-
-/* ---------- نظام تحميل التطبيق المحسن ---------- */
-function initApp() {
-    console.log("جاري تهيئة تطبيق النخبة PRO...");
-    
-    // إخفاء شاشة التحميل بعد التأخير
-    setTimeout(() => {
-        const loadingScreen = document.getElementById('loading-screen');
-        const loadingBar = document.getElementById('loading-bar');
-        const loadingText = document.getElementById('loading-text');
-        
-        // محاكاة تقدم التحميل
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += 10;
-            loadingBar.style.width = progress + '%';
-            
-            if (progress <= 30) loadingText.textContent = 'جاري تحميل البيانات...';
-            else if (progress <= 60) loadingText.textContent = 'جاري تحميل الواجهة...';
-            else if (progress <= 90) loadingText.textContent = 'جاري التهيئة النهائية...';
-            else loadingText.textContent = 'جاهز!';
-            
-            if (progress >= 100) {
-                clearInterval(interval);
-                
-                // إخفاء شاشة التحميل بسلاسة
-                loadingScreen.style.opacity = '0';
-                setTimeout(() => {
-                    loadingScreen.style.display = 'none';
-                    
-                    // عرض التطبيق
-                    document.body.style.visibility = 'visible';
-                    
-                    // عرض التوجيهات إذا كان أول استخدام
-                    if (!localStorage.getItem('appInitialized')) {
-                        setTimeout(() => {
-                            showTutorial();
-                            localStorage.setItem('appInitialized', 'true');
-                        }, 500);
-                    }
-                    
-                    // رسالة ترحيب
-                    showToast(`مرحباً بك في تطبيق النخبة PRO! ${state.score > 0 ? `لديك ${state.score} نقطة` : 'ابدأ رحلة التعلم الآن!'}`, 'success', 4000);
-                    
-                }, 500);
-            }
-        }, 100);
-    }, 500);
-    
-    // تحميل البيانات
-    loadPro();
-    
-    // إعداد الأحداث
-    setupEventListeners();
-    
-    // تهيئة الأنظمة
-    initSystems();
-    
-    // تحديث الواجهة
-    updateUI();
-    updateAchievementsUI();
-    
-    // تسجيل بداية الجلسة
-    state.sessionStart = Date.now();
-    state.analytics.push({
-        type: "session_start",
-        time: state.sessionStart,
-        user: state.user.id,
-        version: state.version
-    });
-    
-    // حفظ تلقائي كل دقيقة
-    setInterval(savePro, 60000);
-    
-    // نسخ احتياطي كل 5 دقائق
-    setInterval(() => {
-        localStorage.setItem(`study-backup-${Date.now()}`, JSON.stringify(state));
-        
-        // الحفاظ على 5 نسخ احتياطية فقط
-        const backups = Object.keys(localStorage)
-            .filter(key => key.startsWith('study-backup-'))
-            .sort()
-            .reverse()
-            .slice(5);
-        
-        backups.forEach(key => localStorage.removeItem(key));
-    }, 300000);
-    
-    console.log("تم تهيئة التطبيق بنجاح!");
-}
-
-function setupEventListeners() {
-    // زر تبديل السمة
-    document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
-    
-    // زر التصدير
-    document.getElementById('export-btn').addEventListener('click', exportData);
-    
-    // زر الإحصائيات
-    document.getElementById('stats-btn').addEventListener('click', showStatsModal);
-    
-    // تحديث حجم الشاشة
-    window.addEventListener('resize', () => {
-        updateUI();
-    });
-    
-    // التعامل مع انقطاع الإنترنت
-    window.addEventListener('online', () => {
-        showToast('تم استعادة الاتصال بالإنترنت', 'success');
-    });
-    
-    window.addEventListener('offline', () => {
-        showToast('فقدان الاتصال بالإنترنت', 'warning');
-    });
-}
-
-function initSystems() {
-    // تهيئة أنظمة التفاعل
-    initParallax();
-    initRippleEffects();
-    initSwipeGestures();
-    initKeyboardShortcuts();
-    initAutoFocus();
-    
-    // عرض التلميحات
-    if (state.settings.showHints) {
-        showHints();
-    }
-}
-
-/* ---------- نظام النافذة المنبثقة للإحصائيات ---------- */
-function showStatsModal() {
-    const modal = document.getElementById('stats-modal');
-    modal.style.opacity = '1';
-    modal.style.pointerEvents = 'auto';
-    
-    // حساب الإحصائيات
-    calculateAndDisplayStats();
-    
-    // تأثير الظهور
-    requestAnimationFrame(() => {
-        modal.querySelector('.glass-strong').style.transform = 'scale(1)';
-    });
-}
-
-function closeStats() {
-    const modal = document.getElementById('stats-modal');
-    modal.style.opacity = '0';
-    modal.style.pointerEvents = 'none';
-    modal.querySelector('.glass-strong').style.transform = 'scale(0.95)';
-}
-
-function calculateAndDisplayStats() {
-    // إجمالي وقت الدراسة
-    const totalMinutes = Math.floor(state.totalStudyTime / 60);
-    document.getElementById('total-time').textContent = `${totalMinutes} دقيقة`;
-    
-    // متوسط السرعة
-    const avgSpeed = state.velocity.toFixed(1);
-    document.getElementById('avg-speed').textContent = `${avgSpeed} بطاقة/دقيقة`;
-    
-    // توزيع الصعوبة
-    document.getElementById('hard-count').textContent = state.difficultyStats.hard || 0;
-    document.getElementById('mid-count').textContent = state.difficultyStats.mid || 0;
-    document.getElementById('easy-count').textContent = state.difficultyStats.easy || 0;
-    
-    // قائمة الإنجازات
-    const achievementsList = document.getElementById('achievements-list');
-    if (achievementsList) {
-        if (state.achievements.length > 0) {
-            achievementsList.innerHTML = state.achievements.map(id => {
-                const achievement = ACHIEVEMENTS[id];
-                return `
-                    <div class="flex items-center gap-2 mb-2">
-                        <i class="fas ${achievement.icon} text-yellow-400"></i>
-                        <span>${achievement.name}</span>
-                        <span class="text-xs text-slate-400 flex-1 text-left">${achievement.desc}</span>
-                    </div>
-                `;
-            }).join('');
-        } else {
-            achievementsList.innerHTML = '<div class="text-slate-400 text-center py-2">لا توجد إنجازات مفتوحة بعد</div>';
-        }
-    }
-}
-
-function resetData() {
-    if (confirm('هل تريد فعلاً إعادة تعيين 
-  /* ---------- تهيئة التطبيق عند تحميل الصفحة ---------- */
-window.addEventListener('DOMContentLoaded', () => {
-    // إخفاء الجسم حتى يكتمل التحميل
-    document.body.style.visibility = 'hidden';
-    
-    // التحقق من دعم المتصفح
-    if (!('localStorage' in window)) {
-        alert('عذراً، متصفحك لا يدعم خاصية التخزين المحلي. يرجى استخدام متصفح حديث.');
-        return;
-    }
-    
-    // تهيئة التطبيق
-    initApp();
-    
-    // تسجيل زيارة الصفحة
-    console.log(`
-╔══════════════════════════════════════════════════╗
-║        تطبيق النخبة PRO - النسخة الاحترافية       ║
-║              تحت إشراف: صفوان                    ║
-║              الإصدار: ${state.version}                  ║
-║    تاريخ البناء: ${new Date().toLocaleDateString('ar-SA')}          ║
-╚══════════════════════════════════════════════════╝
-    `);
-});
-
-/* ---------- التنظيف قبل إغلاق الصفحة ---------- */
-window.addEventListener('beforeunload', (e) => {
-    // تسجيل نهاية الجلسة
-    const sessionDuration = Math.floor((Date.now() - state.sessionStart) / 1000);
-    state.totalStudyTime += sessionDuration;
-    
-    state.analytics.push({
-        type: "session_end",
-        time: Date.now(),
-        duration: sessionDuration,
-        cardsReviewed: state.count,
-        finalScore: state.score,
-        user: state.user.id
-    });
-    
-    // إيقاف جميع الأصوات
-    AudioPro.stopAll();
-    
-    // حفظ البيانات النهائية
-    savePro();
-    
-    // تحديث وقت النشاط الأخير
-    if (state.user) {
-        state.user.lastActive = Date.now();
-    }
-    
-    // عرض رسالة تأكيد إذا كانت هناك جلسة تركيز نشطة
-    if (state.pOn) {
-        e.preventDefault();
-        e.returnValue = 'لديك جلسة تركيز نشطة. هل تريد حقاً المغادرة؟';
-        return e.returnValue;
-    }
-});
-
-/* ---------- نظام الاستعادة من النسخ الاحتياطية ---------- */
-function restoreFromBackup() {
-    const backups = Object.keys(localStorage)
-        .filter(key => key.startsWith('study-backup-'))
-        .sort()
-        .reverse();
-    
-    if (backups.length === 0) {
-        showToast('لا توجد نسخ احتياطية متاحة', 'warning');
-        return;
-    }
-    
-    if (confirm(`يوجد ${backups.length} نسخة احتياطية. هل تريد استعادة أحدث نسخة؟`)) {
-        const latestBackup = localStorage.getItem(backups[0]);
-        try {
-            const backupData = JSON.parse(latestBackup);
-            Object.assign(state, backupData);
-            savePro();
-            updateUI();
-            updateAchievementsUI();
-            showToast('تم استعادة النسخة الاحتياطية بنجاح', 'success');
-            setTimeout(() => location.reload(), 1000);
-        } catch (e) {
-            showToast('خطأ في استعادة النسخة الاحتياطية', 'error');
-        }
-    }
-}
-
-/* ---------- نظام المشاركة ---------- */
-function shareProgress() {
-    const shareText = `حصلت على ${state.score} نقطة في تطبيق النخبة PRO! 🚀\nتعلمت ${state.count} مصطلحاً تاريخياً.\nجرب التطبيق الآن!`;
-    
-    if (navigator.share) {
-        navigator.share({
-            title: 'تطبيق النخبة PRO - تحت إشراف صفوان',
-            text: shareText,
-            url: window.location.href
-        }).then(() => {
-            showToast('تم المشاركة بنجاح!', 'success');
-        }).catch(err => {
-            console.log('تم إلغاء المشاركة:', err);
-        });
-    } else if (navigator.clipboard) {
-        navigator.clipboard.writeText(shareText).then(() => {
-            showToast('تم نسخ النتائج إلى الحافظة!', 'success');
-        }).catch(err => {
-            console.error('فشل النسخ إلى الحافظة:', err);
-            fallbackCopy(shareText);
-        });
-    } else {
-        fallbackCopy(shareText);
-    }
-}
-
-function fallbackCopy(text) {
-    const textArea = document.createElement('textarea');
-    textArea.value = text;
-    document.body.appendChild(textArea);
-    textArea.select();
-    try {
-        document.execCommand('copy');
-        showToast('تم نسخ النتائج إلى الحافظة!', 'success');
-    } catch (err) {
-        console.error('فشل النسخ:', err);
-        showToast('تعذر نسخ النتائج', 'error');
-    }
-    document.body.removeChild(textArea);
-}
-
-/* ---------- واجهات التصحيح والتطوير ---------- */
-window.studyApp = {
-    // عرض حالة التطبيق
-    showState: () => {
-        console.table({
-            'البطاقة الحالية': state.c + 1,
-            'النقاط': state.score,
-            'البطاقات المكتملة': state.count,
-            'سرعة التعلم': state.velocity.toFixed(2),
-            'درجة التركيز': state.focusScore,
-            'عدد الإنجازات': state.achievements.length,
-            'طول الجلسة': Math.floor((Date.now() - state.sessionStart) / 60000) + ' دقيقة',
-            'إجمالي وقت الدراسة': Math.floor(state.totalStudyTime / 60) + ' دقيقة',
-            'سلسلة النجاح الحالية': state.streaks.current
-        });
-        return state;
-    },
-    
-    // عرض التحليلات
-    showAnalytics: () => {
-        console.log('التحليلات:', state.analytics);
-        const summary = {
-            totalSessions: state.analytics.filter(a => a.type === 'session_start').length,
-            totalFlips: state.analytics.filter(a => a.type === 'flip').length,
-            totalRatings: state.analytics.filter(a => a.type === 'rate').length,
-            totalFocusSessions: state.analytics.filter(a => a.type === 'focus').length,
-            lastActivity: new Date(state.lastCardTime).toLocaleString('ar-SA')
-        };
-        console.table(summary);
-        return summary;
-    },
-    
-    // إعادة تعيين التقدم
-    resetProgress: () => {
-        if (confirm('هل تريد فعلاً إعادة تعيين كل التقدم؟ هذا الإجراء لا يمكن التراجع عنه.')) {
-            localStorage.removeItem("study-pro-v4");
-            location.reload();
-        }
-    },
-    
-    // اختبار الإنجازات
-    testAchievements: () => {
-        console.log('اختبار جميع الإنجازات:');
-        Object.entries(ACHIEVEMENTS).forEach(([id, achievement]) => {
-            const isUnlocked = state.achievements.includes(id);
-            console.log(`${id}: ${achievement.name} - ${isUnlocked ? 'مفتوح' : 'مقفل'} - ${achievement.condition(state) ? 'الشروط محققة' : 'الشروط غير محققة'}`);
-        });
-    },
-    
-    // محاكاة النشاط
-    simulateActivity: (count = 5) => {
-        console.log(`محاكاة ${count} نشاط...`);
-        for (let i = 0; i < count; i++) {
-            state.count++;
-            state.score += Math.floor(Math.random() * 40) + 5;
-            state.analytics.push({
-                type: "rate",
-                difficulty: ['easy', 'mid', 'hard'][Math.floor(Math.random() * 3)],
-                card: Math.floor(Math.random() * ALL_CARDS.length),
-                time: Date.now() - Math.random() * 3600000,
-                responseTime: Math.random() * 10000
-            });
-        }
-        updateUI();
-        savePro();
-        showToast(`تمت محاكاة ${count} نشاط`, 'info');
-    },
-    
-    // تصدير البيانات المتقدمة
-    exportAdvanced: () => {
-        exportData();
-    },
-    
-    // استيراد البيانات
-    importAdvanced: () => {
-        importData();
-    },
-    
-    // استعادة من النسخ الاحتياطية
-    restoreBackup: () => {
-        restoreFromBackup();
-    },
-    
-    // مشاركة النتائج
-    share: () => {
-        shareProgress();
-    },
-    
-    // عرض الإحصائيات
-    showStats: () => {
-        showStatsModal();
-    },
-    
-    // عرض التوجيهات
-    showTutorial: () => {
-        showTutorial();
-    },
-    
-    // تبديل الإعدادات
-    toggleSetting: (setting) => {
-        if (state.settings[setting] !== undefined) {
-            state.settings[setting] = !state.settings[setting];
-            showToast(`${setting}: ${state.settings[setting] ? 'مفعل' : 'معطل'}`, 'info');
-            savePro();
-        } else {
-            console.log('الإعداد غير موجود:', setting);
-        }
-    },
-    
-    // إضافة نقاط
-    addPoints: (points) => {
-        state.score += parseInt(points) || 100;
-        updateUI();
-        savePro();
-        showToast(`تمت إضافة ${points} نقطة`, 'success');
-    }
-};
-
-// جعل الدوال متاحة عالمياً
-window.exportData = exportData;
-window.importData = importData;
-window.shareProgress = shareProgress;
-window.showStatsModal = showStatsModal;
-window.resetData = resetData;
-window.restoreFromBackup = restoreFromBackup;
-
-// إضافة زر المشاركة في الواجهة إذا كان المستخدم على هاتف
-if ('share' in navigator || 'clipboard' in navigator) {
-    const shareBtn = document.createElement('button');
-    shareBtn.innerHTML = '<i class="fas fa-share-alt"></i>';
-    shareBtn.className = 'fixed bottom-25 left-25 z-120 w-12 h-12 rounded-xl glass-panel flex items-center justify-center text-slate-400 hover:text-blue-400 transition-colors';
-    shareBtn.title = 'مشاركة النتائج';
-    shareBtn.onclick = shareProgress;
-    document.body.appendChild(shareBtn);
-}
-
-// التعامل مع وضع عدم الاتصال
-if (!navigator.onLine) {
-    showToast('أنت تعمل في وضع عدم الاتصال', 'warning');
-}
-
-// دعم PWA (تطبيق الويب التقدمي)
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').then(registration => {
-            console.log('ServiceWorker registered:', registration);
-        }).catch(error => {
-            console.log('ServiceWorker registration failed:', error);
-        });
-    });
-}
-
-// إضافة زر التثبيت للتطبيق
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    
-    const installBtn = document.createElement('button');
-    installBtn.innerHTML = '<i class="fas fa-download"></i>';
-    installBtn.className = 'fixed bottom-25 right-25 z-120 w-12 h-12 rounded-xl glass-panel flex items-center justify-center text-slate-400 hover:text-emerald-400 transition-colors';
-    installBtn.title = 'تثبيت التطبيق';
-    installBtn.onclick = () => {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(choiceResult => {
-            if (choiceResult.outcome === 'accepted') {
-                console.log('User accepted the install prompt');
-                installBtn.remove();
-            }
-            deferredPrompt = null;
-        });
-    };
-    document.body.appendChild(installBtn);
-});
-
-// التحكم في العرض على الشاشات الكبيرة
-function handleLargeScreens() {
-    if (window.innerWidth > 1200) {
-        document.body.classList.add('large-screen');
-        // تعديلات إضافية للشاشات الكبيرة
-        const cardWrapper = document.querySelector('.card-wrapper');
-        if (cardWrapper) {
-            cardWrapper.style.maxWidth = '900px';
-            cardWrapper.style.height = '420px';
-        }
-    } else {
-        document.body.classList.remove('large-screen');
-    }
-}
-
-window.addEventListener('resize', handleLargeScreens);
-handleLargeScreens(); // استدعاء أولي
-
-// تحسين الأداء
-let isTabActive = true;
-window.addEventListener('blur', () => {
-    isTabActive = false;
-    if (state.freq) {
-        AudioPro.stop('frequency');
-    }
-});
-window.addEventListener('focus', () => {
-    isTabActive = true;
-    if (state.freq && document.visibilityState === 'visible') {
-        AudioPro.play(state.freq, 999999, 'sine', 'frequency');
-    }
-});
-
-// تحسين استهلاك الذاكرة
-setInterval(() => {
-    if (!isTabActive) {
-        // تقليل دقة التحليلات عندما تكون الصفحة غير نشطة
-        if (state.analytics.length > 1000) {
-            state.analytics = state.analytics.slice(-500);
-        }
-    }
-}, 60000);
-
-// دعم الطباعة
-function setupPrintSupport() {
-    const style = document.createElement('style');
-    style.textContent = `
-        @media print {
-            .no-print { display: none !important; }
-            body { background: white !important; color: black !important; }
-            .glass-panel { background: white !important; border: 1px solid #ddd !important; }
-            .card-face { box-shadow: none !important; border: 1px solid #ddd !important; }
-            #theme-toggle, #export-btn, #stats-btn { display: none !important; }
-        }
-    `;
-    document.head.appendChild(style);
-}
-
-setupPrintSupport();
-
-// إضافة معلومات الإصدار في ال console
-console.log(`%cتطبيق النخبة PRO v${state.version}`, 'color: #3b82f6; font-size: 16px; font-weight: bold;');
-console.log(`%cتحت إشراف: صفوان`, 'color: #8b5cf6; font-size: 14px;');
-console.log(`%cجميع الحقوق محفوظة © ${new Date().getFullYear()}`, 'color: #64748b; font-size: 12px;');
-
-// رسالة النجاح النهائية
-window.addEventListener('load', () => {
-    console.log('%c✅ التطبيق جاهز للاستخدام!', 'color: #10b981; font-size: 14px; font-weight: bold;');
-});
-
-// كود خدمة Worker الأساسي (PWA)
-if ('serviceWorker' in navigator) {
-    const swCode = `
-        self.addEventListener('install', event => {
-            event.waitUntil(
-                caches.open('study-pro-v1').then(cache => {
-                    return cache.addAll([
-                        '/',
-                        '/index.html',
-                        '/manifest.json'
-                    ]);
-                })
-            );
-        });
-        
-        self.addEventListener('fetch', event => {
-            event.respondWith(
-                caches.match(event.request).then(response => {
-                    return response || fetch(event.request);
-                })
-            );
-        });
-    `;
-    
-    // إنشاء ملف service worker افتراضي
-    const blob = new Blob([swCode], { type: 'application/javascript' });
-    const swUrl = URL.createObjectURL(blob);
-    
-    navigator.serviceWorker.register(swUrl).then(() => {
-        console.log('Service Worker registered successfully');
-    }).catch(error => {
-        console.log('Service Worker registration failed:', error);
-    });
-}
-
-// إنشاء ملف manifest ل PWA
-const manifest = {
-    "name": "تطبيق النخبة PRO",
-    "short_name": "النخبة",
-    "description": "تطبيق لتعلم المصطلحات التاريخية تحت إشراف صفوان",
-    "start_url": "/",
-    "display": "standalone",
-    "background_color": "#020617",
-    "theme_color": "#3b82f6",
-    "icons": [
-        {
-            "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>",
-            "sizes": "any",
-            "type": "image/svg+xml"
-        }
-    ],
-    "lang": "ar",
-    "dir": "rtl"
-};
-
-// إضافة manifest ديناميكياً
-const manifestLink = document.createElement('link');
-manifestLink.rel = 'manifest';
-manifestLink.href = 'data:application/json,' + encodeURIComponent(JSON.stringify(manifest));
-document.head.appendChild(manifestLink);
-
-// إضافة meta tags ل PWA
-const metaTheme = document.createElement('meta');
-metaTheme.name = 'theme-color';
-metaTheme.content = '#020617';
-document.head.appendChild(metaTheme);
-
-const metaApple = document.createElement('meta');
-metaApple.name = 'apple-mobile-web-app-capable';
-metaApple.content = 'yes';
-document.head.appendChild(metaApple);
-
-const metaStatusBar = document.createElement('meta');
-metaStatusBar.name = 'apple-mobile-web-app-status-bar-style';
-metaStatusBar.content = 'black-translucent';
-document.head.appendChild(metaStatusBar);
-
-// تحسين SEO
-const metaDescription = document.createElement('meta');
-metaDescription.name = 'description';
-metaDescription.content = 'تطبيق النخبة PRO لتعلم المصطلحات التاريخية بطريقة تفاعلية واحترافية تحت إشراف صفوان';
-document.head.appendChild(metaDescription);
-
-const metaKeywords = document.createElement('meta');
-metaKeywords.name = 'keywords';
-metaKeywords.content = 'تعلم, تاريخ, مصطلحات, بطاقات, تعليم, تفاعلي, عربي, صفوان';
-document.head.appendChild(metaKeywords);
-
-const metaAuthor = document.createElement('meta');
-metaAuthor.name = 'author';
-metaAuthor.content = 'صفوان';
-document.head.appendChild(metaAuthor);
-
-// إضافة favicon
-const favicon = document.createElement('link');
-favicon.rel = 'icon';
-favicon.href = 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>';
-document.head.appendChild(favicon);
-
-// إضافة دعم للوحة اللمس على أجهزة الكمبيوتر المحمولة
-document.addEventListener('wheel', (e) => {
-    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-        e.preventDefault();
-        if (e.deltaX > 0) {
-            stepCard(1); // تمرير لليسار = التالي
-        } else {
-            stepCard(-1); // تمرير لليمين = السابق
-        }
-    }
-}, { passive: false });
-
-// تحسين الأداء على الهواتف القديمة
-if ('hardwareConcurrency' in navigator && navigator.hardwareConcurrency < 4) {
-    console.log('جهاز منخفض الموارد، تقليل التأثيرات');
-    state.settings.animations = false;
-    document.documentElement.style.setProperty('--motion', '0');
-}
-
-// دعم اللمس المتعدد (لتجنب التصرفات غير المقصودة)
-let touchCount = 0;
-document.addEventListener('touchstart', (e) => {
-    touchCount = e.touches.length;
-    if (touchCount > 2) {
-        // منع التصرفات عند اللمس بأكثر من إصبعين
-        e.preventDefault();
-    }
-}, { passive: false });
-
-// نظام الإشعارات المحلية
-function checkForNotifications() {
-    // إشعار التقدم
-    if (state.count > 0 && state.count % 5 === 0) {
-        if (Notification.permission === 'granted') {
-            new Notification('تطبيق النخبة PRO', {
-                body: `ممتاز! لقد أكملت ${state.count} بطاقة. استمر في التقدم!`,
-                icon: favicon.href
-            });
-        }
-    }
-    
-    // إشعار المكافآت اليومية
-    const lastReward = localStorage.getItem('lastDailyReward');
-    const today = new Date().toDateString();
-    
-    if (lastReward !== today) {
-        state.score += 50;
-        localStorage.setItem('lastDailyReward', today);
-        showToast('🎁 مكافأة يومية: +50 نقطة! عد غداً لمزيد', 'achievement');
-        savePro();
-    }
-}
-
-// طلب إذن الإشعارات
-if ('Notification' in window && Notification.permission === 'default') {
-    setTimeout(() => {
-        if (confirm('هل تريد تفعيل الإشعارات للحصول على تحديثات وتذكيرات؟')) {
-            Notification.requestPermission().then(permission => {
-                if (permission === 'granted') {
-                    checkForNotifications();
+            case 'Escape':
+                if (APP_STATE.pomodoroRunning) {
+                    togglePomodoro();
                 }
-            });
+                break;
         }
-    }, 10000);
+    });
 }
 
-// تحديث الواجهة كل ثانية للعناصر الديناميكية
-setInterval(() => {
-    // تحديث وقت الجلسة إذا كان معروضاً
-    const sessionTime = document.getElementById('session-time');
-    if (sessionTime) {
-        const minutes = Math.floor((Date.now() - state.sessionStart) / 60000);
-        sessionTime.textContent = `${minutes} دقيقة`;
+// ========== INITIALIZE APP ==========
+// بدء التطبيق عند تحميل الصفحة
+window.addEventListener('DOMContentLoaded', initApp);
+
+// حفظ البيانات عند إغلاق الصفحة
+window.addEventListener('beforeunload', () => {
+    // تحديث وقت الدراسة
+    if (APP_STATE.pomodoroRunning) {
+        const sessionTime = Math.floor((Date.now() - APP_STATE.sessionStartTime) / 1000);
+        APP_STATE.totalStudyTime += sessionTime;
     }
     
-    // تحديث درجة التركيز الديناميكية
-    if (state.focusScore > 0) {
-        const focusElement = document.getElementById('focus-score');
-        if (focusElement) {
-            focusElement.textContent = Math.round(state.focusScore) + '%';
-            focusElement.style.color = state.focusScore > 70 ? '#10b981' : 
-                                     state.focusScore > 40 ? '#f59e0b' : '#ef4444';
-        }
+    // حفظ البيانات
+    saveData();
+    
+    // إيقاف الصوت
+    if (APP_STATE.oscillator) {
+        APP_STATE.oscillator.stop();
     }
-}, 1000);
+});
 
-// تهيئة نهائية
-console.log('تهيئة التطبيق اكتملت بنجاح!');
-</script>
+// استئناف سياق الصوت عند التفاعل الأول
+document.addEventListener('click', () => {
+    if (APP_STATE.audioContext && APP_STATE.audioContext.state === 'suspended') {
+        APP_STATE.audioContext.resume();
+    }
+}, { once: true });
+        // ========== DEBUGGING TOOLS ==========
+        // جعل بعض الدوال متاحة عالمياً للتصحيح
+        window.debug = {
+            showState: () => {
+                console.log('حالة التطبيق:', APP_STATE);
+                return APP_STATE;
+            },
+            addPoints: (points = 100) => {
+                APP_STATE.score += points;
+                updateUI();
+                saveData();
+                showToast(`تمت إضافة ${points} نقطة`, 'success');
+            },
+            unlockAll: () => {
+                APP_STATE.achievements.forEach(ach => ach.unlocked = true);
+                updateAchievementsUI();
+                showToast('تم فتح جميع الإنجازات', 'success');
+            }
+        };
+    </script>
 </body>
 </html>
