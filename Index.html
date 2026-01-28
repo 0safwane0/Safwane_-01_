@@ -4,9 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>تطبيق النخبة PRO - تحت إشراف صفوان</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<!-- تحسين الروابط الخارجية -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Tailwind CSS محسن -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          'tajawal': ['Tajawal', 'sans-serif']
+        }
+      }
+    }
+  }
+</script>
 <style>
 /* ========== CSS Variables & Base ========== */
 :root {
@@ -23,6 +38,7 @@
   --accent: #3b82f6;
   --card-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
   --focus-ring: rgba(59, 130, 246, 0.4);
+  --transition-speed: 0.3s;
 }
 
 * {
@@ -44,7 +60,7 @@ body {
   display: flex;
   flex-direction: column;
   touch-action: manipulation;
-  transition: background-color 0.5s ease;
+  transition: background-color var(--transition-speed) ease;
 }
 
 body.light-theme {
@@ -62,6 +78,7 @@ body.light-theme {
   z-index: -3;
   background: radial-gradient(circle at 50% 10%, #0f172a 0%, #020617 100%);
   transition: transform 0.15s linear;
+  will-change: transform;
 }
 
 .light-theme .bg-canvas {
@@ -78,6 +95,7 @@ body.light-theme {
   background-size: 35px 35px;
   opacity: 0.2;
   pointer-events: none;
+  transition: background-position 0.15s linear;
 }
 
 #glow-frame {
@@ -86,6 +104,7 @@ body.light-theme {
   pointer-events: none;
   transition: box-shadow 0.45s cubic-bezier(0.2, 0.9, 0.25, 1);
   z-index: 99;
+  border-radius: 0;
 }
 
 /* ========== Glass Effects ========== */
@@ -94,7 +113,7 @@ body.light-theme {
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
   border: 1px solid var(--border);
-  transition: all 0.3s ease;
+  transition: all var(--transition-speed) ease;
 }
 
 .glass-strong {
@@ -108,6 +127,8 @@ body.light-theme {
 header {
   position: relative;
   overflow: hidden;
+  background: rgba(2, 6, 23, 0.8);
+  backdrop-filter: blur(20px);
 }
 
 header::after {
@@ -118,6 +139,7 @@ header::after {
   right: 0;
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  opacity: 0.5;
 }
 
 .supervisor-badge {
@@ -128,6 +150,12 @@ header::after {
   font-size: 11px;
   color: #cbd5e1;
   direction: ltr;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+.light-theme .supervisor-badge {
+  color: #475569;
 }
 
 /* ========== Card System ========== */
@@ -140,6 +168,7 @@ header::after {
   width: 100%;
   padding: 0 20px;
   transform: translateZ(0);
+  min-height: 400px;
 }
 
 .card-wrapper {
@@ -149,6 +178,7 @@ header::after {
   height: 380px;
   z-index: 10;
   cursor: pointer;
+  transition: transform var(--transition-speed) ease;
 }
 
 .card-inner {
@@ -214,6 +244,7 @@ header::after {
   color: var(--primary);
   opacity: 0.7;
   letter-spacing: 2px;
+  transition: color var(--transition-speed) ease;
 }
 
 .term-title {
@@ -223,7 +254,9 @@ header::after {
   margin-bottom: 1.5rem;
   text-align: center;
   text-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
-  transition: letter-spacing 0.3s ease;
+  transition: all var(--transition-speed) ease;
+  line-height: 1.3;
+  padding: 0 1rem;
 }
 
 .light-theme .term-title {
@@ -238,12 +271,14 @@ header::after {
   text-align: center;
   font-weight: 500;
   max-width: 90%;
+  transition: color var(--transition-speed) ease;
 }
 
 .light-theme .term-description {
   color: #475569;
 }
-  /* ========== Navigation & Buttons ========== */
+
+/* ========== Navigation & Buttons ========== */
 .nav-btn {
   width: 50px;
   height: 50px;
@@ -253,7 +288,7 @@ header::after {
   justify-content: center;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
+  transition: all var(--transition-speed) ease;
   flex-shrink: 0;
   cursor: pointer;
   position: relative;
@@ -283,11 +318,19 @@ header::after {
   font-weight: 900;
   background: rgba(0, 0, 0, 0.3);
   color: #64748b;
-  transition: all 0.3s ease;
+  transition: all var(--transition-speed) ease;
   border: 1px solid transparent;
   cursor: pointer;
   min-width: 70px;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.freq-chip i {
+  font-size: 11px;
 }
 
 .freq-chip.active {
@@ -303,7 +346,7 @@ header::after {
   border-radius: 1.5rem;
   font-size: 13px;
   font-weight: 900;
-  transition: all 0.3s ease;
+  transition: all var(--transition-speed) ease;
   text-align: center;
   border: 1px solid transparent;
   cursor: pointer;
@@ -317,6 +360,7 @@ header::after {
 
 .rating-box:hover {
   transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
 .rating-box:active {
@@ -330,13 +374,18 @@ header::after {
   gap: 15px;
   width: 100%;
   max-width: 800px;
+  padding: 0 1rem;
 }
 
 .stat-card {
   border-radius: 1.5rem;
   padding: 1.2rem;
   text-align: center;
-  transition: all 0.3s ease;
+  transition: all var(--transition-speed) ease;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .stat-card:hover {
@@ -350,11 +399,13 @@ header::after {
   margin-bottom: 6px;
   text-transform: uppercase;
   letter-spacing: 1px;
+  transition: color var(--transition-speed) ease;
 }
 
 .stat-value {
   font-size: 1.4rem;
   font-weight: 900;
+  transition: color var(--transition-speed) ease;
 }
 
 /* ========== Theme Toggle ========== */
@@ -372,7 +423,7 @@ header::after {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
   border: 1px solid rgba(255, 255, 255, 0.08);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-speed) ease;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
@@ -428,6 +479,7 @@ header::after {
   font-size: 2.5rem;
   font-weight: 900;
   color: #fff;
+  transition: color var(--transition-speed) ease;
 }
 
 .light-theme .progress-text {
@@ -448,6 +500,7 @@ header::after {
   opacity: 0.6;
   animation: ripple-anim 0.6s ease-out;
   background: rgba(255, 255, 255, 0.2);
+  z-index: 1;
 }
 
 @keyframes ripple-anim {
@@ -457,7 +510,10 @@ header::after {
   }
 }
 
-/* ========== Skeleton Loading ========== */
+.light-theme .ripple-circle {
+  background: rgba(0, 0, 0, 0.1);
+}
+  /* ========== Skeleton Loading ========== */
 .skeleton {
   display: inline-block;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
@@ -486,22 +542,32 @@ header::after {
   justify-content: center;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
   border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
+  transition: all var(--transition-speed) ease;
+  cursor: default;
 }
 
 .achievement-badge.unlocked {
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
 }
 
 .achievement-badge i {
   font-size: 18px;
   margin-bottom: 4px;
+  transition: all var(--transition-speed) ease;
 }
 
 .achievement-badge span {
   font-size: 9px;
   font-weight: 900;
+  transition: all var(--transition-speed) ease;
+}
+
+.light-theme .achievement-badge {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05));
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 /* ========== Toast Notifications ========== */
@@ -509,7 +575,7 @@ header::after {
   position: fixed;
   bottom: 100px;
   right: 50%;
-  transform: translateX(50%);
+  transform: translateX(50%) translateY(20px);
   background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(30, 30, 30, 0.9));
   backdrop-filter: blur(20px);
   color: white;
@@ -524,11 +590,20 @@ header::after {
   border: 1px solid rgba(255, 255, 255, 0.1);
   max-width: 90%;
   text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .toast.show {
   opacity: 1;
   transform: translateX(50%) translateY(0);
+}
+
+.light-theme .toast {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(245, 245, 245, 0.95));
+  color: #0f172a;
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 /* ========== Focus Mode ========== */
@@ -538,65 +613,155 @@ body.dim-ui .stats-grid,
 body.dim-ui .rating-container {
   opacity: 0.3;
   transition: opacity 0.5s ease;
-  }
-  /* ========== Responsive Design ========== */
+  pointer-events: none;
+}
+
+body.dim-ui .card-container,
+body.dim-ui #theme-toggle {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ========== Responsive Design ========== */
 @media (max-width: 768px) {
   .card-wrapper {
-    height: 340px;
+    height: 340px !important;
     max-width: 90%;
   }
   
   .card-face {
-    padding: 2rem;
+    padding: 2rem !important;
   }
   
   .term-title {
-    font-size: 1.7rem;
+    font-size: 1.7rem !important;
+    padding: 0 0.5rem !important;
   }
   
   .term-description {
-    font-size: 1rem;
+    font-size: 1rem !important;
+    max-width: 95% !important;
   }
   
   .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+    max-width: 500px !important;
   }
   
   .card-container {
-    gap: 10px;
-    padding: 0 10px;
+    gap: 10px !important;
+    padding: 0 10px !important;
   }
   
   .nav-btn {
-    width: 45px;
-    height: 45px;
+    width: 45px !important;
+    height: 45px !important;
   }
   
   .rating-box {
-    padding: 1.2rem;
-    font-size: 12px;
+    padding: 1.2rem !important;
+    font-size: 12px !important;
+  }
+  
+  .progress-ring {
+    width: 150px !important;
+    height: 150px !important;
+  }
+  
+  .progress-text {
+    font-size: 2rem !important;
+  }
+  
+  .supervisor-badge {
+    position: relative !important;
+    left: 0 !important;
+    top: 0 !important;
+    transform: none !important;
+    text-align: center !important;
+    margin-bottom: 5px !important;
+    width: 100% !important;
+  }
+  
+  header {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
   }
 }
 
 @media (max-width: 480px) {
   .card-wrapper {
-    height: 300px;
+    height: 300px !important;
   }
   
   .term-title {
-    font-size: 1.5rem;
+    font-size: 1.5rem !important;
+    margin-bottom: 1rem !important;
   }
   
   .rating-box {
-    padding: 1rem;
-    font-size: 11px;
+    padding: 1rem !important;
+    font-size: 11px !important;
   }
   
   .freq-chip {
-    padding: 6px 12px;
-    min-width: 60px;
-    font-size: 11px;
+    padding: 6px 12px !important;
+    min-width: 60px !important;
+    font-size: 11px !important;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+  
+  .stat-card {
+    padding: 1rem !important;
+    border-radius: 1rem !important;
+  }
+  
+  .stat-value {
+    font-size: 1.2rem !important;
+  }
+  
+  #theme-toggle {
+    width: 45px !important;
+    height: 45px !important;
+    bottom: 20px !important;
+    left: 20px !important;
+  }
+  
+  .progress-ring {
+    width: 130px !important;
+    height: 130px !important;
+  }
+  
+  .progress-text {
+    font-size: 1.8rem !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .card-wrapper {
+    height: 280px !important;
+  }
+  
+  .term-title {
+    font-size: 1.3rem !important;
+  }
+  
+  .rating-box {
+    padding: 0.8rem !important;
+    font-size: 10px !important;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px !important;
+  }
+  
+  .stat-card {
+    padding: 0.8rem !important;
   }
 }
 
@@ -609,7 +774,15 @@ body.dim-ui .rating-container {
   }
   
   .card-inner {
-    transition: none;
+    transition: none !important;
+  }
+  
+  .ripple-circle {
+    animation: none !important;
+  }
+  
+  .skeleton {
+    animation: none !important;
   }
 }
 
@@ -620,8 +793,9 @@ body.dim-ui .rating-container {
 
 button:focus-visible,
 [tabindex]:focus-visible {
-  box-shadow: 0 0 0 3px var(--focus-ring);
+  box-shadow: 0 0 0 3px var(--focus-ring) !important;
   border-radius: 12px;
+  outline: none;
 }
 
 /* ========== Halo Effect ========== */
@@ -631,6 +805,111 @@ button:focus-visible,
   pointer-events: none;
   box-shadow: inset 0 0 150px rgba(59, 130, 246, 0.1);
   z-index: -1;
+  transition: box-shadow var(--transition-speed) ease;
+}
+
+.light-theme .halo-effect {
+  box-shadow: inset 0 0 150px rgba(59, 130, 246, 0.05);
+}
+
+/* ========== Custom Scrollbar ========== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary);
+}
+
+/* ========== Selection Color ========== */
+::selection {
+  background-color: rgba(59, 130, 246, 0.3);
+  color: white;
+}
+
+.light-theme ::selection {
+  background-color: rgba(59, 130, 246, 0.2);
+}
+
+/* ========== Print Styles ========== */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .card-face {
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+  }
+}
+
+/* ========== Loading Animation ========== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ========== Card Entrance Animation ========== */
+.card-entrance {
+  animation: cardEntrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+}
+
+@keyframes cardEntrance {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ========== Shake Animation ========== */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.shake {
+  animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* ========== Bounce Animation ========== */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.bounce {
+  animation: bounce 0.5s ease;
 }
 </style>
 </head>
@@ -641,10 +920,35 @@ button:focus-visible,
 <div id="glow-frame"></div>
 <div class="halo-effect"></div>
 
+<!-- Loading Screen -->
+<div id="loading-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-950 transition-opacity duration-500">
+  <div class="relative w-32 h-32 mb-8">
+    <div class="absolute inset-0 rounded-full border-4 border-blue-500/30 animate-ping"></div>
+    <div class="absolute inset-4 rounded-full border-4 border-blue-500 animate-spin"></div>
+    <div class="absolute inset-8 rounded-full bg-blue-500/20 flex items-center justify-center">
+      <i class="fas fa-graduation-cap text-2xl text-blue-400"></i>
+    </div>
+  </div>
+  <h2 class="text-xl font-bold text-blue-400 mb-2">تطبيق النخبة PRO</h2>
+  <p class="text-slate-400 text-sm mb-6">تحت إشراف: صفوان</p>
+  <div class="w-64 h-1 bg-slate-800 rounded-full overflow-hidden">
+    <div id="loading-bar" class="h-full bg-blue-500 transition-all duration-300" style="width: 0%"></div>
+  </div>
+  <p id="loading-text" class="text-slate-500 text-xs mt-3">جاري التهيئة...</p>
+</div>
+
 <!-- Header -->
 <header class="w-full text-center py-4 glass-strong border-b border-white/5 backdrop-blur-3xl relative">
   <div class="supervisor-badge">تحت إشراف: صفوان</div>
   <span class="text-[13px] font-black text-blue-500 tracking-[0.8em] uppercase">تطبيق النخبة PRO</span>
+  <div class="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
+    <button id="export-btn" class="text-xs text-slate-400 hover:text-blue-400 transition-colors" title="تصدير البيانات">
+      <i class="fas fa-download"></i>
+    </button>
+    <button id="stats-btn" class="text-xs text-slate-400 hover:text-blue-400 transition-colors" title="الإحصائيات">
+      <i class="fas fa-chart-bar"></i>
+    </button>
+  </div>
 </header>
 
 <!-- Navigation -->
@@ -663,10 +967,10 @@ button:focus-visible,
   
   <div class="flex items-center gap-3 glass-panel px-5 py-3 rounded-2xl border border-blue-500/20 shadow-lg">
     <div id="pomo-clock" class="font-mono text-blue-400 font-black text-base tracking-tighter">25:00</div>
-    <button id="pomo-btn" onclick="togglePomo()" class="bg-gradient-to-r from-blue-600 to-blue-500 text-[11px] px-4 py-2 rounded-xl font-black shadow-lg transition-all hover:shadow-blue-500/30">
+    <button id="pomo-btn" onclick="togglePomo()" class="bg-gradient-to-r from-blue-600 to-blue-500 text-[11px] px-4 py-2 rounded-xl font-black shadow-lg transition-all hover:shadow-blue-500/30 active:scale-95">
       <i class="fas fa-play mr-1"></i> ابدأ
     </button>
-    <button onclick="resetPomo()" class="text-[10px] text-slate-400 hover:text-slate-300">
+    <button onclick="resetPomo()" class="text-[10px] text-slate-400 hover:text-slate-300 transition-colors" title="إعادة التعيين">
       <i class="fas fa-redo"></i>
     </button>
   </div>
@@ -723,8 +1027,9 @@ button:focus-visible,
         
         <div class="card-face card-back">
           <p id="c-desc" class="term-description px-6"></p>
-          <div class="mt-10 text-xs text-slate-400">
-            <i class="fas fa-lightbulb mr-1"></i> قيّم مدى صعوبة المصطلح
+          <div class="mt-10 text-xs text-slate-400 flex items-center justify-center gap-2">
+            <i class="fas fa-lightbulb"></i>
+            <span>قيّم مدى صعوبة المصطلح</span>
           </div>
         </div>
       </div>
@@ -740,883 +1045,2287 @@ button:focus-visible,
     <button onclick="mark('hard')" class="rating-box bg-red-600/10 border border-red-500/20 text-red-500 hover:bg-red-600/20 ripple">
       <i class="fas fa-fire text-xl"></i>
       <span>صعب</span>
+      <div class="text-[10px] text-red-500/60 mt-1">+5 نقاط</div>
     </button>
     
     <button onclick="mark('mid')" class="rating-box bg-orange-600/10 border border-orange-500/20 text-orange-400 hover:bg-orange-600/20 ripple">
       <i class="fas fa-balance-scale text-xl"></i>
       <span>متوسط</span>
+      <div class="text-[10px] text-orange-500/60 mt-1">+15 نقطة</div>
     </button>
     
     <button onclick="mark('easy')" class="rating-box bg-emerald-600/10 border border-emerald-500/20 text-emerald-400 hover:bg-emerald-600/20 ripple">
       <i class="fas fa-check-circle text-xl"></i>
       <span>سهل</span>
+      <div class="text-[10px] text-emerald-500/60 mt-1">+40 نقطة</div>
     </button>
   </div>
-    <!-- Achievements Section -->
+        <!-- Achievements Section -->
   <div id="achievements-container" class="w-full max-w-lg mt-4 px-6 hidden">
     <h3 class="text-sm font-bold mb-4 text-slate-300 text-center">الإنجازات</h3>
     <div class="flex justify-center gap-4">
-      <div class="achievement-badge" id="achievement-1">
+      <div class="achievement-badge" id="achievement-1" title="أكمل أول بطاقة">
         <i class="fas fa-star"></i>
-        <span>نجمة</span>
+        <span>البداية</span>
       </div>
-      <div class="achievement-badge" id="achievement-2">
+      <div class="achievement-badge" id="achievement-2" title="أكمل 5 بطاقات في أقل من دقيقتين">
+        <i class="fas fa-bolt"></i>
+        <span>متسارع</span>
+      </div>
+      <div class="achievement-badge" id="achievement-3" title="جلسة تركيز لمدة 25 دقيقة">
         <i class="fas fa-brain"></i>
-        <span>تركيز</span>
+        <span>مركز</span>
       </div>
-      <div class="achievement-badge" id="achievement-3">
+      <div class="achievement-badge" id="achievement-4" title="وصل إلى 500 نقطة">
         <i class="fas fa-trophy"></i>
         <span>نخبة</span>
+      </div>
+      <div class="achievement-badge" id="achievement-5" title="3 جلسات في يوم واحد">
+        <i class="fas fa-calendar-check"></i>
+        <span>منتظم</span>
       </div>
     </div>
   </div>
 </main>
 
 <!-- Theme Toggle -->
-<button id="theme-toggle" aria-label="تبديل السمة">
+<button id="theme-toggle" aria-label="تبديل السمة" class="no-print">
   <i class="fas fa-moon" id="theme-icon"></i>
 </button>
 
 <!-- Toast Container -->
 <div id="toast-container"></div>
 
+<!-- Stats Modal -->
+<div id="stats-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+  <div class="glass-strong rounded-2xl p-6 max-w-md w-full max-h-[80vh] overflow-y-auto transform scale-95 transition-transform duration-300">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-lg font-bold text-blue-400">الإحصائيات المتقدمة</h3>
+      <button onclick="closeStats()" class="text-slate-400 hover:text-white transition-colors">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="space-y-4">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="glass-panel p-4 rounded-xl">
+          <div class="text-xs text-slate-400 mb-1">إجمالي الوقت</div>
+          <div id="total-time" class="text-xl font-bold text-blue-400">0 دقيقة</div>
+        </div>
+        <div class="glass-panel p-4 rounded-xl">
+          <div class="text-xs text-slate-400 mb-1">متوسط السرعة</div>
+          <div id="avg-speed" class="text-xl font-bold text-emerald-400">0/دقيقة</div>
+        </div>
+      </div>
+      
+      <div class="glass-panel p-4 rounded-xl">
+        <div class="text-xs text-slate-400 mb-2">التوزيع حسب الصعوبة</div>
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-red-400">صعب</span>
+            <span id="hard-count" class="font-bold">0</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-orange-400">متوسط</span>
+            <span id="mid-count" class="font-bold">0</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-emerald-400">سهل</span>
+            <span id="easy-count" class="font-bold">0</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="glass-panel p-4 rounded-xl">
+        <div class="text-xs text-slate-400 mb-2">الإنجازات المفتوحة</div>
+        <div id="achievements-list" class="text-sm">
+          <!-- سيتم ملؤها ديناميكياً -->
+        </div>
+      </div>
+      
+      <button onclick="exportData()" class="w-full glass-panel py-3 rounded-xl text-blue-400 hover:bg-blue-500/10 transition-colors">
+        <i class="fas fa-download mr-2"></i>
+        تصدير البيانات
+      </button>
+      
+      <button onclick="resetData()" class="w-full glass-panel py-3 rounded-xl text-red-400 hover:bg-red-500/10 transition-colors">
+        <i class="fas fa-trash-alt mr-2"></i>
+        إعادة تعيين كل البيانات
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Tutorial Overlay -->
+<div id="tutorial-overlay" class="fixed inset-0 z-40 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center p-4 transition-opacity duration-500">
+  <div class="glass-strong rounded-2xl p-8 max-w-md w-full text-center">
+    <h3 class="text-xl font-bold text-blue-400 mb-4">مرحباً بك في تطبيق النخبة PRO</h3>
+    <p class="text-slate-300 mb-6">تعلم المصطلحات التاريخية بطريقة تفاعلية وممتعة</p>
+    
+    <div class="space-y-4 text-right mb-8">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
+          <i class="fas fa-mouse-pointer text-blue-400"></i>
+        </div>
+        <div>
+          <div class="font-bold">انقر على البطاقة</div>
+          <div class="text-xs text-slate-400">لقلبها ورؤية التعريف</div>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
+          <i class="fas fa-star text-emerald-400"></i>
+        </div>
+        <div>
+          <div class="font-bold">قيّم الصعوبة</div>
+          <div class="text-xs text-slate-400">لتحسين تجربة التعلم</div>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center">
+          <i class="fas fa-brain text-purple-400"></i>
+        </div>
+        <div>
+          <div class="font-bold">استخدم ترددات التركيز</div>
+          <div class="text-xs text-slate-400">لتحسين الاستيعاب</div>
+        </div>
+      </div>
+    </div>
+    
+    <button onclick="closeTutorial()" class="bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-blue-500/30 transition-all">
+      <i class="fas fa-play mr-2"></i>
+      بدء التعلم
+    </button>
+    
+    <div class="text-xs text-slate-500 mt-4">تحت إشراف: صفوان</div>
+  </div>
+</div>
+
 <script>
 /* =========================================================
    تطبيق النخبة PRO - النسخة الاحترافية الكاملة
    تحت إشراف: صفوان
-   الإصدار: 3.0.0
+   الإصدار: 4.0.0
 ========================================================= */
 
 // قاعدة البيانات الأساسية للمصطلحات
 const ALL_CARDS = [
-  { t: "الثنائية القطبية", d: "نظام دولي ساد بعد الحرب العالمية الثانية، يعتمد على وجود قطبين متصارعين هما المعسكر الشرقي والغربي." },
-  { t: "الحرب الباردة", d: "صراع إيديولوجي ومصلحي بين المعسكرين استُخدمت فيه جميع الوسائل عدا المواجهة العسكرية المباشرة." },
-  { t: "سياسة الاحتواء", d: "خطة أمريكية تعتمد على محاصرة الاتحاد السوفياتي بسلسلة من الأحلاف والقواعد العسكرية ومنع انتشار الشيوعية." },
-  { t: "مشروع مارشال", d: "مساعدات اقتصادية أمريكية لإعادة بناء أوروبا 1947 بهدف ربط اقتصادها بال المعسكر الغربي." },
-  { t: "مبدأ ترومان", d: "مساعدات مالية وعسكرية قدمتها أمريكا للدول المهددة من الزحف الشيوعي عام 1947." },
-  { t: "الكوميكون", d: "منظمة اقتصادية للمعسكر الشرقي تأسست في 1949 بهدف التعاون الاقتصادي بين دول الكتلة." },
-  { t: "التعايش السلمي", d: "سياسة دعا إليها خروشوف عام 1956 تقوم على قبول فكرة تعدد الأنظمة وتجنب الصدام النووي." },
-  { t: "مؤتمر الصومام", d: "لقاء تنظيمي في 20 أوت 1956 هيكل الثورة عسكرياً وسياسياً وأقر مبدأ أولوية الداخل." },
-  { t: "سياسة الإغراء", d: "مشاريع اقتصادية فرنسية تهدف لعزل الشعب عن الثورة عبر تحسين الظروف المعيشية." },
-  { t: "القوة الثالثة", d: "فئة من الجزائريين الموالين لفرنسا حاولت فرنسا استخدامهم كبديل لجبهة التحرير." },
-  { t: "مشروع قسنطينة", d: "مشروع إغرائي استعماري أعلنه ديغول عام 1958 لإفراغ الثورة من محتواها الاجتماعي." },
-  { t: "سلم الشجعان", d: "مناورة سياسية أطلقها ديغول عام 1958 يطالب فيها الثوار بتسليم أسلحتهم مقابل العفو." },
-  { t: "حق تقرير المصير", d: "مبدأ ينص على حق الشعوب الخاضعة للاستعمار في اختيار نظامها السياسي ومصيرها." },
-  { t: "منظمة الوحدة الإفريقية", d: "منظمة تأسست عام 1963 لتعزيز التعاون بين دول القارة ومحاربة الاستعمار." },
-  { t: "حركة عدم الانحياز", d: "تجمع دولي تأسس عام 1961 تبنى الحياد الإيجابي تجاه صراع الحرب الباردة." },
-  { t: "الاستعمار", d: "سياسة توسعية تقوم بها دولة للسيطرة على شعب آخر وثرواته وفرض ثقافتها عليه." },
-  { t: "الكفاح المسلح", d: "استخدام القوة العسكرية لتحرير الأرض والوطن من الاستعمار." },
-  { t: "الثورة التحريرية", d: "عمل جماعي مسلح منظم يهدف إلى تحرير الأرض واستعادة السيادة الوطنية." },
-  { t: "الاستعمار الاستيطاني", d: "نوع من الاستعمار يقوم على إحلال مستوطنين أجانب محل السكان الأصليين." },
-  { t: "مبدأ فصل السلطات", d: "توزيع وظائف الدولة على هيئات مستقلة عن بعضها لضمان الحريات ومنع الاستبداد." }
+    { t: "الثنائية القطبية", d: "نظام دولي ساد بعد الحرب العالمية الثانية، يعتمد على وجود قطبين متصارعين هما المعسكر الشرقي والغربي." },
+    { t: "الحرب الباردة", d: "صراع إيديولوجي ومصلحي بين المعسكرين استُخدمت فيه جميع الوسائل عدا المواجهة العسكرية المباشرة." },
+    { t: "سياسة الاحتواء", d: "خطة أمريكية تعتمد على محاصرة الاتحاد السوفياتي بسلسلة من الأحلاف والقواعد العسكرية ومنع انتشار الشيوعية." },
+    { t: "مشروع مارشال", d: "مساعدات اقتصادية أمريكية لإعادة بناء أوروبا 1947 بهدف ربط اقتصادها بالمعسكر الغربي." },
+    { t: "مبدأ ترومان", d: "مساعدات مالية وعسكرية قدمتها أمريكا للدول المهددة من الزحف الشيوعي عام 1947." },
+    { t: "الكوميكون", d: "منظمة اقتصادية للمعسكر الشرقي تأسست في 1949 بهدف التعاون الاقتصادي بين دول الكتلة." },
+    { t: "التعايش السلمي", d: "سياسة دعا إليها خروشوف عام 1956 تقوم على قبول فكرة تعدد الأنظمة وتجنب الصدام النووي." },
+    { t: "مؤتمر الصومام", d: "لقاء تنظيمي في 20 أوت 1956 هيكل الثورة عسكرياً وسياسياً وأقر مبدأ أولوية الداخل." },
+    { t: "سياسة الإغراء", d: "مشاريع اقتصادية فرنسية تهدف لعزل الشعب عن الثورة عبر تحسين الظروف المعيشية." },
+    { t: "القوة الثالثة", d: "فئة من الجزائريين الموالين لفرنسا حاولت فرنسا استخدامهم كبديل لجبهة التحرير." },
+    { t: "مشروع قسنطينة", d: "مشروع إغرائي استعماري أعلنه ديغول عام 1958 لإفراغ الثورة من محتواها الاجتماعي." },
+    { t: "سلم الشجعان", d: "مناورة سياسية أطلقها ديغول عام 1958 يطالب فيها الثوار بتسليم أسلحتهم مقابل العفو." },
+    { t: "حق تقرير المصير", d: "مبدأ ينص على حق الشعوب الخاضعة للاستعمار في اختيار نظامها السياسي ومصيرها." },
+    { t: "منظمة الوحدة الإفريقية", d: "منظمة تأسست عام 1963 لتعزيز التعاون بين دول القارة ومحاربة الاستعمار." },
+    { t: "حركة عدم الانحياز", d: "تجمع دولي تأسس عام 1961 تبنى الحياد الإيجابي تجاه صراع الحرب الباردة." },
+    { t: "الاستعمار", d: "سياسة توسعية تقوم بها دولة للسيطرة على شعب آخر وثرواته وفرض ثقافتها عليه." },
+    { t: "الكفاح المسلح", d: "استخدام القوة العسكرية لتحرير الأرض والوطن من الاستعمار." },
+    { t: "الثورة التحريرية", d: "عمل جماعي مسلح منظم يهدف إلى تحرير الأرض واستعادة السيادة الوطنية." },
+    { t: "الاستعمار الاستيطاني", d: "نوع من الاستعمار يقوم على إحلال مستوطنين أجانب محل السكان الأصليين." },
+    { t: "مبدأ فصل السلطات", d: "توزيع وظائف الدولة على هيئات مستقلة عن بعضها لضمان الحريات ومنع الاستبداد." },
+    { t: "الدبلوماسية", d: "فن إدارة العلاقات الدولية والتفاوض بين الدول لحل النزاعات سلمياً." },
+    { t: "العولمة", d: "عملية تعزيز الترابط العالمي في المجالات الاقتصادية والثقافية والتقنية." },
+    { t: "الأمم المتحدة", d: "منظمة دولية تأسست عام 1945 بهدف حفظ السلام والأمن الدوليين." },
+    { t: "حقوق الإنسان", d: "الحقوق الأساسية التي يتمتع بها كل فرد بصفته إنساناً، بغض النظر عن العرق أو الجنسية." },
+    { t: "الديمقراطية", d: "نظام حكم يقوم على مبدأ سيادة الشعب واختيار الحكام عبر انتخابات حرة." }
 ];
 
 // حالة التطبيق المركزية المتقدمة
 window.state = {
-  c: 0,                    // الفهرس الحالي
-  score: 0,                // النقاط الإجمالية
-  count: 0,                // عدد البطاقات المكتملة
-  pTime: 1500,             // وقت البومودورو (ثانية)
-  pOn: false,              // حالة تشغيل البومودورو
-  pInterval: null,         // مؤقت البومودورو
-  ctx: null,               // سياق الصوت
-  osc: null,               // مولد الترددات
-  freq: null,              // التردد النشط
-  analytics: [],           // التحليلات
-  version: "pro-3.0",      // إصدار التطبيق
-  user: null,              // بيانات المستخدم
-  velocity: 0,             // سرعة التعلم
-  focusScore: 0,           // درجة التركيز
-  achievements: [],        // الإنجازات
-  heatmap: [],             // خريطة التفاعل
-  lastCardTime: Date.now(),// وقت آخر بطاقة
-  spacedRepetition: true,  // التعلم المتباعد
-  theme: 'dark',           // السمة الحالية
-  sessionStart: Date.now() // بداية الجلسة
+    c: 0,                    // الفهرس الحالي
+    score: 0,                // النقاط الإجمالية
+    count: 0,                // عدد البطاقات المكتملة
+    pTime: 1500,             // وقت البومودورو (ثانية)
+    pOn: false,              // حالة تشغيل البومودورو
+    pInterval: null,         // مؤقت البومودورو
+    ctx: null,               // سياق الصوت
+    osc: null,               // مولد الترددات
+    freq: null,              // التردد النشط
+    analytics: [],           // التحليلات
+    version: "pro-4.0",      // إصدار التطبيق
+    user: null,              // بيانات المستخدم
+    velocity: 0,             // سرعة التعلم
+    focusScore: 0,           // درجة التركيز
+    achievements: [],        // الإنجازات
+    heatmap: [],             // خريطة التفاعل
+    lastCardTime: Date.now(),// وقت آخر بطاقة
+    spacedRepetition: true,  // التعلم المتباعد
+    theme: 'dark',           // السمة الحالية
+    sessionStart: Date.now(),// بداية الجلسة
+    totalStudyTime: 0,       // إجمالي وقت الدراسة (ثانية)
+    difficultyStats: {       // إحصائيات الصعوبة
+        hard: 0,
+        mid: 0,
+        easy: 0
+    },
+    streaks: {               // سلاسل النجاح
+        daily: 0,
+        weekly: 0,
+        current: 0
+    },
+    settings: {              // الإعدادات
+        sound: true,
+        vibration: true,
+        animations: true,
+        autoFlip: false,
+        showHints: true
+    }
 };
 
 /* ---------- نظام التخزين المحسن ---------- */
 function savePro() {
-  const saveData = {
-    c: state.c,
-    score: state.score,
-    count: state.count,
-    analytics: state.analytics,
-    user: state.user,
-    achievements: state.achievements,
-    theme: state.theme,
-    lastSession: Date.now()
-  };
-  localStorage.setItem("study-pro-v3", JSON.stringify(saveData));
+    const saveData = {
+        c: state.c,
+        score: state.score,
+        count: state.count,
+        analytics: state.analytics,
+        user: state.user,
+        achievements: state.achievements,
+        theme: state.theme,
+        lastSession: Date.now(),
+        totalStudyTime: state.totalStudyTime,
+        difficultyStats: state.difficultyStats,
+        streaks: state.streaks,
+        settings: state.settings
+    };
+    
+    try {
+        localStorage.setItem("study-pro-v4", JSON.stringify(saveData));
+        console.log("تم حفظ البيانات بنجاح");
+    } catch (e) {
+        console.error("خطأ في حفظ البيانات:", e);
+        showToast("خطأ في حفظ البيانات", "error");
+    }
 }
 
 function loadPro() {
-  try {
-    const saved = JSON.parse(localStorage.getItem("study-pro-v3") || "null");
-    if (saved) {
-      Object.assign(state, saved);
-      if (saved.theme) {
-        document.body.classList.toggle('light-theme', saved.theme === 'light');
-        document.getElementById('theme-icon').className = saved.theme === 'light' ? 'fas fa-sun' : 'fas fa-moon';
-      }
+    try {
+        const saved = JSON.parse(localStorage.getItem("study-pro-v4") || "null");
+        
+        if (saved) {
+            // دمج البيانات المحفوظة مع الحالة الافتراضية
+            Object.keys(saved).forEach(key => {
+                if (state[key] !== undefined) {
+                    if (typeof state[key] === 'object' && state[key] !== null && !Array.isArray(state[key])) {
+                        Object.assign(state[key], saved[key]);
+                    } else {
+                        state[key] = saved[key];
+                    }
+                }
+            });
+            
+            // تطبيق السمة المحفوظة
+            if (saved.theme) {
+                document.body.classList.toggle('light-theme', saved.theme === 'light');
+                document.getElementById('theme-icon').className = saved.theme === 'light' ? 'fas fa-sun' : 'fas fa-moon';
+            }
+            
+            console.log("تم تحميل البيانات المحفوظة");
+        }
+        
+        // تهيئة بيانات المستخدم إذا لم تكن موجودة
+        if (!state.user) {
+            state.user = {
+                id: 'user_' + Date.now().toString(36) + Math.random().toString(36).substr(2),
+                created: Date.now(),
+                sessions: 1,
+                cardsMastered: 0,
+                lastActive: Date.now()
+            };
+        } else {
+            state.user.sessions = (state.user.sessions || 0) + 1;
+            state.user.lastActive = Date.now();
+        }
+        
+        // تهيئة الإحصائيات إذا لم تكن موجودة
+        if (!state.difficultyStats) {
+            state.difficultyStats = {
+                hard: 0,
+                mid: 0,
+                easy: 0
+            };
+        }
+        
+        if (!state.streaks) {
+            state.streaks = {
+                daily: 0,
+                weekly: 0,
+                current: 0
+            };
+        }
+        
+        if (!state.settings) {
+            state.settings = {
+                sound: true,
+                vibration: true,
+                animations: true,
+                autoFlip: false,
+                showHints: true
+            };
+        }
+        
+    } catch (e) {
+        console.error("خطأ في تحميل البيانات:", e);
+        showToast("خطأ في تحميل البيانات المحفوظة", "error");
+    }
+}
+
+/* ---------- نظام الصوت المتقدم مع دعم متصفحات متنوعة ---------- */
+const AudioPro = (function() {
+    let ctx = null;
+    let oscillators = new Map();
+    
+    function getContext() {
+        if (!ctx) {
+            try {
+                ctx = new (window.AudioContext || window.webkitAudioContext)();
+                console.log("تم إنشاء سياق الصوت بنجاح");
+            } catch (e) {
+                console.warn("سياق الصوت غير مدعوم:", e);
+                return null;
+            }
+        }
+        
+        if (ctx.state === "suspended") {
+            ctx.resume().then(() => {
+                console.log("تم استئناف سياق الصوت");
+            }).catch(e => {
+                console.warn("فشل في استئناف سياق الصوت:", e);
+            });
+        }
+        
+        return ctx;
     }
     
-    // تهيئة بيانات المستخدم إذا لم تكن موجودة
-    if (!state.user) {
-      state.user = {
-        id: 'user_' + Date.now().toString(36),
-        created: Date.now(),
-        sessions: 1,
-        totalStudyTime: 0,
-        cardsMastered: 0
-      };
-    } else {
-      state.user.sessions = (state.user.sessions || 0) + 1;
+    function play(freq = 300, dur = 150, type = 'sine', id = 'default') {
+        if (!state.settings.sound) return;
+        
+        try {
+            const audioCtx = getContext();
+            if (!audioCtx) return;
+            
+            // إيقاف الصوت السابق بنفس المعرف
+            stop(id);
+            
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            oscillator.type = type;
+            oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            
+            gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (dur / 1000));
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            oscillators.set(id, { oscillator, gainNode });
+            
+            oscillator.start();
+            
+            if (dur < 10000) {
+                setTimeout(() => {
+                    stop(id);
+                }, dur);
+            }
+            
+        } catch (e) {
+            console.warn("خطأ في تشغيل الصوت:", e);
+        }
     }
-  } catch (e) {
-    console.error("خطأ في تحميل البيانات:", e);
-  }
-}
-
-/* ---------- نظام الصوت المتقدم ---------- */
-const AudioPro = (function() {
-  let ctx = null, osc = null, gain = null;
-  
-  function getContext() {
-    if (!ctx) {
-      ctx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    function stop(id = 'default') {
+        const sound = oscillators.get(id);
+        if (sound) {
+            try {
+                sound.oscillator.stop();
+                sound.oscillator.disconnect();
+                sound.gainNode.disconnect();
+            } catch (e) {
+                // تجاهل الأخطاء عند إيقاف الصوت
+            }
+            oscillators.delete(id);
+        }
     }
-    if (ctx.state === "suspended") {
-      ctx.resume();
+    
+    function stopAll() {
+        oscillators.forEach((sound, id) => {
+            stop(id);
+        });
     }
-    return ctx;
-  }
-  
-  function play(freq = 300, dur = 150, type = 'sine') {
-    try {
-      const audioCtx = getContext();
-      stop();
-      
-      osc = audioCtx.createOscillator();
-      gain = audioCtx.createGain();
-      
-      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-      osc.type = type;
-      
-      gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur / 1000);
-      
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      
-      osc.start();
-      osc.stop(audioCtx.currentTime + dur / 1000);
-      
-      setTimeout(stop, dur + 50);
-    } catch (e) {
-      console.warn("الصوت غير متاح:", e);
-    }
-  }
-  
-  function stop() {
-    if (osc) {
-      try {
-        osc.stop();
-        osc.disconnect();
-      } catch (e) {}
-      osc = null;
-    }
-    if (gain) {
-      gain.disconnect();
-      gain = null;
-    }
-  }
-  
-  // إيقاف الصوت عند ترك الصفحة
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) stop();
-  });
-  
-  return { play, stop, getContext };
+    
+    // إيقاف الصوت عند ترك الصفحة
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+            stopAll();
+        }
+    });
+    
+    // إيقاف الصوت عند فقدان التركيز
+    window.addEventListener('blur', () => {
+        if (state.freq) {
+            stop('frequency');
+        }
+    });
+    
+    window.addEventListener('focus', () => {
+        if (state.freq && document.visibilityState === 'visible') {
+            play(state.freq, 999999, 'sine', 'frequency');
+        }
+    });
+    
+    return { play, stop, stopAll, getContext };
 })();
 
-window.playSound = (f, d = 200) => AudioPro.play(f, d);
-  /* ---------- نظام الإشعارات (Toast) ---------- */
+// دالة مساعدة لتشغيل الأصوات
+window.playSound = (f, d = 200, t = 'sine') => {
+    if (state.settings.sound) {
+        AudioPro.play(f, d, t, 'effect');
+    }
+};
+
+// دالة الاهتزاز
+function vibrate(pattern = [50]) {
+    if (state.settings.vibration && navigator.vibrate) {
+        try {
+            navigator.vibrate(pattern);
+        } catch (e) {
+            console.warn("الاهتزاز غير مدعوم:", e);
+        }
+    }
+}
+/* ---------- نظام الإشعارات (Toast) المحسن ---------- */
 function showToast(message, type = 'info', duration = 3000) {
-  const toast = document.createElement('div');
-  toast.className = 'toast';
-  
-  let icon = 'ℹ️';
-  if (type === 'success') icon = '✅';
-  else if (type === 'warning') icon = '⚠️';
-  else if (type === 'error') icon = '❌';
-  else if (type === 'achievement') icon = '🏆';
-  
-  toast.innerHTML = `<span class="mr-2">${icon}</span> ${message}`;
-  document.getElementById('toast-container').appendChild(toast);
-  
-  // إظهار الإشعار
-  setTimeout(() => toast.classList.add('show'), 10);
-  
-  // إخفاء الإشعار بعد المدة المحددة
-  setTimeout(() => {
-    toast.classList.remove('show');
-    setTimeout(() => toast.remove(), 400);
-  }, duration);
+    if (!state.settings.animations && type !== 'error') return;
+    
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    
+    let icon = 'ℹ️';
+    let bgClass = 'bg-blue-500';
+    
+    if (type === 'success') {
+        icon = '✅';
+        bgClass = 'bg-emerald-500';
+    } else if (type === 'warning') {
+        icon = '⚠️';
+        bgClass = 'bg-yellow-500';
+    } else if (type === 'error') {
+        icon = '❌';
+        bgClass = 'bg-red-500';
+    } else if (type === 'achievement') {
+        icon = '🏆';
+        bgClass = 'bg-purple-500';
+    }
+    
+    toast.innerHTML = `
+        <span class="text-base">${icon}</span>
+        <span class="flex-1 text-right">${message}</span>
+    `;
+    
+    document.getElementById('toast-container').appendChild(toast);
+    
+    // إظهار الإشعار بسلاسة
+    requestAnimationFrame(() => {
+        toast.classList.add('show');
+    });
+    
+    // إخفاء الإشعار بعد المدة المحددة
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 400);
+    }, duration);
+    
+    // اهتزاز خفيف للإشعارات المهمة
+    if (type === 'achievement' || type === 'success') {
+        vibrate([100, 50, 100]);
+    }
+    
+    return toast;
 }
 
-/* ---------- نظام الإنجازات ---------- */
+/* ---------- نظام الإنجازات المتقدم ---------- */
 const ACHIEVEMENTS = {
-  firstCard: { name: 'البداية', desc: 'أكمل أول بطاقة', icon: 'fa-star', points: 10 },
-  fastLearner: { name: 'متسارع', desc: 'أكمل 5 بطاقات في أقل من دقيقتين', icon: 'fa-bolt', points: 25 },
-  focusMaster: { name: 'مركز', desc: 'جلسة تركيز لمدة 25 دقيقة', icon: 'fa-brain', points: 50 },
-  eliteLevel: { name: 'نخبة', desc: 'وصل إلى 500 نقطة', icon: 'fa-trophy', points: 100 },
-  consistency: { name: 'منتظم', desc: '3 جلسات في يوم واحد', icon: 'fa-calendar-check', points: 75 }
+    firstCard: { 
+        name: 'البداية', 
+        desc: 'أكمل أول بطاقة', 
+        icon: 'fa-star', 
+        points: 10,
+        condition: (state) => state.count >= 1
+    },
+    fastLearner: { 
+        name: 'متسارع', 
+        desc: 'أكمل 5 بطاقات في أقل من دقيقتين', 
+        icon: 'fa-bolt', 
+        points: 25,
+        condition: (state) => {
+            const recent = state.analytics
+                .filter(a => a.type === 'rate')
+                .slice(-5);
+            if (recent.length < 5) return false;
+            const timeDiff = (recent[4].time - recent[0].time) / 1000;
+            return timeDiff < 120; // أقل من دقيقتين
+        }
+    },
+    focusMaster: { 
+        name: 'مركز', 
+        desc: 'جلسة تركيز لمدة 25 دقيقة', 
+        icon: 'fa-brain', 
+        points: 50,
+        condition: (state) => {
+            const focusSessions = state.analytics.filter(a => a.type === 'focus');
+            return focusSessions.some(session => session.minutes >= 25);
+        }
+    },
+    eliteLevel: { 
+        name: 'نخبة', 
+        desc: 'وصل إلى 500 نقطة', 
+        icon: 'fa-trophy', 
+        points: 100,
+        condition: (state) => state.score >= 500
+    },
+    consistency: { 
+        name: 'منتظم', 
+        desc: '3 جلسات في يوم واحد', 
+        icon: 'fa-calendar-check', 
+        points: 75,
+        condition: (state) => {
+            const sessions = state.analytics.filter(a => a.type === 'session_start');
+            if (sessions.length < 3) return false;
+            
+            const today = new Date().toDateString();
+            const todaySessions = sessions.filter(s => {
+                const sessionDate = new Date(s.time).toDateString();
+                return sessionDate === today;
+            });
+            
+            return todaySessions.length >= 3;
+        }
+    },
+    masterOfAll: {
+        name: 'سيد الجميع',
+        desc: 'أكمل جميع البطاقات',
+        icon: 'fa-crown',
+        points: 200,
+        condition: (state) => state.count >= ALL_CARDS.length
+    },
+    speedDemon: {
+        name: 'سريع جداً',
+        desc: 'سرعة تعلم تزيد عن 2 بطاقة/دقيقة',
+        icon: 'fa-rocket',
+        points: 75,
+        condition: (state) => state.velocity > 2
+    }
 };
 
 function checkAchievements() {
-  const now = Date.now();
-  
-  // إنجاز أول بطاقة
-  if (state.count >= 1 && !state.achievements.includes('firstCard')) {
-    unlockAchievement('firstCard');
-  }
-  
-  // إنجاز النخبة
-  if (state.score >= 500 && !state.achievements.includes('eliteLevel')) {
-    unlockAchievement('eliteLevel');
-  }
-  
-  // إنجاز التركيز
-  if (state.focusScore > 80 && !state.achievements.includes('focusMaster')) {
-    unlockAchievement('focusMaster');
-  }
+    const now = Date.now();
+    let unlockedNew = false;
+    
+    Object.entries(ACHIEVEMENTS).forEach(([id, achievement]) => {
+        if (!state.achievements.includes(id) && achievement.condition(state)) {
+            unlockAchievement(id);
+            unlockedNew = true;
+        }
+    });
+    
+    return unlockedNew;
 }
 
 function unlockAchievement(id) {
-  if (state.achievements.includes(id)) return;
-  
-  state.achievements.push(id);
-  const achievement = ACHIEVEMENTS[id];
-  
-  // تحديث واجهة الإنجازات
-  const badge = document.getElementById(`achievement-${state.achievements.length}`);
-  if (badge) {
-    badge.classList.add('unlocked');
-    badge.innerHTML = `<i class="fas ${achievement.icon}"></i><span>${achievement.name}</span>`;
-  }
-  
-  // إظهار الإشعار
-  showToast(`إنجاز مفتوح: ${achievement.name}! (+${achievement.points} نقطة)`, 'achievement', 4000);
-  
-  // إضافة النقاط
-  state.score += achievement.points;
-  
-  // تشغيل صوت الإنجاز
-  playSound(800, 1000, 'sine');
-  
-  // حفظ البيانات
-  savePro();
-  updateUI();
+    if (state.achievements.includes(id)) return;
+    
+    state.achievements.push(id);
+    const achievement = ACHIEVEMENTS[id];
+    
+    // تحديث واجهة الإنجازات
+    updateAchievementsUI();
+    
+    // إظهار إشعار الإنجاز
+    showToast(`إنجاز مفتوح: ${achievement.name}! (+${achievement.points} نقطة)`, 'achievement', 5000);
+    
+    // إضافة النقاط
+    state.score += achievement.points;
+    
+    // تشغيل صوت الإنجاز
+    playSound(800, 1000, 'sine');
+    playSound(1000, 800, 'sine');
+    
+    // تأثير بصرية للإنجاز
+    const glowFrame = document.getElementById('glow-frame');
+    glowFrame.style.boxShadow = 'inset 0 0 200px rgba(168, 85, 247, 0.5)';
+    setTimeout(() => {
+        glowFrame.style.boxShadow = '';
+    }, 2000);
+    
+    // حفظ البيانات
+    savePro();
+    updateUI();
+}
+
+function updateAchievementsUI() {
+    const container = document.getElementById('achievements-container');
+    if (!container) return;
+    
+    if (state.achievements.length > 0) {
+        container.classList.remove('hidden');
+        
+        // تحديث شارات الإنجازات
+        state.achievements.forEach((id, index) => {
+            const badge = document.getElementById(`achievement-${index + 1}`);
+            if (badge) {
+                const achievement = ACHIEVEMENTS[id];
+                badge.classList.add('unlocked');
+                badge.innerHTML = `
+                    <i class="fas ${achievement.icon}"></i>
+                    <span>${achievement.name}</span>
+                `;
+                badge.title = achievement.desc;
+            }
+        });
+        
+        // إخفاء الشارات غير المفتوحة
+        for (let i = state.achievements.length; i < 5; i++) {
+            const badge = document.getElementById(`achievement-${i + 1}`);
+            if (badge) {
+                badge.classList.remove('unlocked');
+                badge.innerHTML = `
+                    <i class="fas fa-lock"></i>
+                    <span>مقفل</span>
+                `;
+                badge.title = 'إنجاز غير مفتوح بعد';
+            }
+        }
+    }
 }
 
 /* ---------- واجهة المستخدم المحسنة ---------- */
 function updateUI() {
-  const card = ALL_CARDS[state.c] || ALL_CARDS[0];
-  const inner = document.getElementById('main-card');
-  
-  requestAnimationFrame(() => {
-    // تحديث النصوص
-    document.getElementById('c-title').innerText = card.t;
-    document.getElementById('c-desc').innerText = card.d;
-    document.getElementById('c-id').innerText = (state.c + 1).toString().padStart(2, '0');
-    document.getElementById('s-val').innerText = state.score;
+    const card = ALL_CARDS[state.c] || ALL_CARDS[0];
+    const inner = document.getElementById('main-card');
     
-    // حساب النسبة المئوية
-    const percentage = Math.round((state.count / ALL_CARDS.length) * 100);
-    document.getElementById('p-val').innerText = percentage + "%";
-    
-    // تحديث حلقة التقدم
+    requestAnimationFrame(() => {
+        // تحديث النصوص
+        document.getElementById('c-title').textContent = card.t;
+        document.getElementById('c-desc').textContent = card.d;
+        document.getElementById('c-id').textContent = (state.c + 1).toString().padStart(2, '0');
+        document.getElementById('s-val').textContent = state.score;
+        
+        // حساب النسبة المئوية
+        const percentage = Math.round((state.count / ALL_CARDS.length) * 100);
+        document.getElementById('p-val').textContent = percentage + "%";
+        
+        // تحديث حلقة التقدم
+        updateProgressRing(percentage);
+        
+        // تحديث البطاقات المتبقية
+        document.getElementById('r-val').textContent = ALL_CARDS.length - state.count;
+        
+        // تحديث المستوى
+        updateLevel();
+        
+        // إعادة تعيين حالة القلب
+        inner.classList.remove('is-flipped');
+        
+        // تحديث سرعة التعلم
+        state.velocity = calculateVelocity();
+        
+        // تحديث درجة التركيز
+        updateFocusScore();
+        
+        // إضافة تأثير الدخول
+        if (state.settings.animations) {
+            inner.classList.add('card-entrance');
+            setTimeout(() => {
+                inner.classList.remove('card-entrance');
+            }, 600);
+        }
+    });
+}
+
+function updateProgressRing(percentage) {
     const progressCircle = document.getElementById('progress-circle');
     const progressText = document.getElementById('progress-text');
+    
+    if (!progressCircle || !progressText) return;
+    
     const circumference = 2 * Math.PI * 70;
     const offset = circumference - (percentage / 100) * circumference;
     
-    if (progressCircle) {
-      progressCircle.style.strokeDasharray = `${circumference} ${circumference}`;
-      progressCircle.style.strokeDashoffset = offset;
-    }
-    if (progressText) {
-      progressText.innerText = percentage + "%";
-    }
+    progressCircle.style.strokeDasharray = `${circumference} ${circumference}`;
+    progressCircle.style.strokeDashoffset = offset;
+    progressText.textContent = percentage + "%";
     
-    // تحديث البطاقات المتبقية
-    document.getElementById('r-val').innerText = ALL_CARDS.length - state.count;
+    // تحديث لون الحلقة بناءً على النسبة
+    let color = '#ef4444'; // أحمر
+    if (percentage >= 25) color = '#f59e0b'; // برتقالي
+    if (percentage >= 50) color = '#3b82f6'; // أزرق
+    if (percentage >= 75) color = '#10b981'; // أخضر
     
-    // تحديث المستوى
+    progressCircle.style.stroke = color;
+}
+
+function updateLevel() {
     let level = "مبتدئ";
-    if (state.score >= 1000) level = "خبير";
-    else if (state.score >= 500) level = "متقدم";
-    else if (state.score >= 200) level = "متوسط";
-    document.getElementById('level-val').innerText = level;
+    let color = "#ef4444";
     
-    // إعادة تعيين حالة القلب
-    inner.classList.remove('is-flipped');
-    
-    // تحديث سرعة التعلم
-    state.velocity = calculateVelocity();
-    
-    // إظهار قسم الإنجازات إذا تم فتح أي إنجاز
-    if (state.achievements.length > 0) {
-      document.getElementById('achievements-container').classList.remove('hidden');
+    if (state.score >= 1000) {
+        level = "خبير";
+        color = "#8b5cf6";
+    } else if (state.score >= 500) {
+        level = "متقدم";
+        color = "#3b82f6";
+    } else if (state.score >= 200) {
+        level = "متوسط";
+        color = "#10b981";
+    } else if (state.score >= 50) {
+        level = "مبتدئ";
+        color = "#f59e0b";
     }
-  });
+    
+    document.getElementById('level-val').textContent = level;
+    document.getElementById('level-val').style.color = color;
 }
 
 function calculateVelocity() {
-  if (state.analytics.length < 2) return 1;
-  
-  const recentMarks = state.analytics
-    .filter(a => a.type === 'rate')
-    .slice(-5);
-  
-  if (recentMarks.length < 2) return 1;
-  
-  const timeDiff = (recentMarks[recentMarks.length - 1].time - recentMarks[0].time) / 1000;
-  const cardsPerMinute = (recentMarks.length / timeDiff) * 60;
-  
-  return Math.min(cardsPerMinute / 2, 3); // تطبيع بين 0 و3
+    if (state.analytics.length < 2) return 0;
+    
+    const recentMarks = state.analytics
+        .filter(a => a.type === 'rate')
+        .slice(-10);
+    
+    if (recentMarks.length < 2) return 0;
+    
+    const timeDiff = (recentMarks[recentMarks.length - 1].time - recentMarks[0].time) / 1000;
+    if (timeDiff === 0) return 0;
+    
+    const cardsPerMinute = (recentMarks.length / timeDiff) * 60;
+    return Math.min(cardsPerMinute, 5); // تطبيع بين 0 و5
 }
 
-/* ---------- نظام البطاقات التفاعلي ---------- */
+function updateFocusScore() {
+    if (state.analytics.length < 5) {
+        state.focusScore = 0;
+        return;
+    }
+    
+    const recentActivity = state.analytics.slice(-10);
+    const flipCount = recentActivity.filter(a => a.type === 'flip').length;
+    const rateCount = recentActivity.filter(a => a.type === 'rate').length;
+    
+    // حساب درجة التركيز بناءً على النشاط
+    state.focusScore = Math.min(100, (flipCount * 10) + (rateCount * 15) + (state.velocity * 20));
+}
+
+/* ---------- نظام البطاقات التفاعلي المحسن ---------- */
 function flip() {
-  const inner = document.getElementById('main-card');
-  const isFlipped = inner.classList.contains('is-flipped');
-  
-  // تأثير الرفع
-  inner.style.transform += ' translateZ(20px)';
-  setTimeout(() => {
-    inner.style.transform = inner.style.transform.replace(' translateZ(20px)', '');
-  }, 200);
-  
-  // تشغيل صوت
-  playSound(isFlipped ? 320 : 280, 150);
-  
-  // قلب البطاقة
-  inner.classList.toggle('is-flipped');
-  
-  // تتبع التحليلات
-  state.analytics.push({
-    type: "flip",
-    card: state.c,
-    time: Date.now(),
-    wasFlipped: isFlipped
-  });
+    const inner = document.getElementById('main-card');
+    const isFlipped = inner.classList.contains('is-flipped');
+    
+    // تأثير الرفع إذا كانت الرسوميات مفعلة
+    if (state.settings.animations) {
+        inner.style.transform += ' translateZ(20px)';
+        setTimeout(() => {
+            inner.style.transform = inner.style.transform.replace(' translateZ(20px)', '');
+        }, 200);
+    }
+    
+    // تشغيل صوت
+    playSound(isFlipped ? 320 : 280, 150);
+    
+    // اهتزاز خفيف
+    vibrate([30]);
+    
+    // قلب البطاقة
+    inner.classList.toggle('is-flipped');
+    
+    // تتبع التحليلات
+    state.analytics.push({
+        type: "flip",
+        card: state.c,
+        cardTitle: ALL_CARDS[state.c].t,
+        time: Date.now(),
+        wasFlipped: isFlipped
+    });
+    
+    // إذا كان الوضع التلقائي مفعلاً، الانتقال تلقائياً بعد قلـب البطاقة
+    if (state.settings.autoFlip && !isFlipped) {
+        setTimeout(() => {
+            const rating = getAutoRating();
+            if (rating) {
+                mark(rating);
+            }
+        }, 2000);
+    }
+}
+
+// دالة لتقدير التقييم التلقائي بناءً على الوقت
+function getAutoRating() {
+    const lastFlip = state.analytics
+        .filter(a => a.type === 'flip' && a.card === state.c)
+        .pop();
+    
+    if (!lastFlip) return null;
+    
+    const timeSpent = (Date.now() - lastFlip.time) / 1000;
+    
+    if (timeSpent < 5) return 'easy';
+    if (timeSpent < 15) return 'mid';
+    return 'hard';
 }
 
 function stepCard(direction) {
-  // تأثير انتقال سينمائي
-  document.body.style.filter = 'blur(5px)';
-  setTimeout(() => {
-    document.body.style.filter = '';
-  }, 200);
-  
-  // تحديث الفهرس
-  state.c = (state.c + direction + ALL_CARDS.length) % ALL_CARDS.length;
-  
-  // تشغيل صوت التنقل
-  playSound(direction > 0 ? 350 : 300, 100);
-  
-  // تحديث الواجهة
-  updateUI();
-  
-  // تتبع التحليلات
-  state.analytics.push({
-    type: "navigate",
-    direction: direction > 0 ? "next" : "prev",
-    card: state.c,
-    time: Date.now()
-  });
-  
-  // حفظ الحالة
-  savePro();
+    // تأثير انتقال إذا كانت الرسوميات مفعلة
+    if (state.settings.animations) {
+        document.body.style.filter = 'blur(3px)';
+        setTimeout(() => {
+            document.body.style.filter = '';
+        }, 200);
+    }
+    
+    // تحديث الفهرس
+    state.c = (state.c + direction + ALL_CARDS.length) % ALL_CARDS.length;
+    
+    // تشغيل صوت التنقل
+    playSound(direction > 0 ? 350 : 300, 100);
+    
+    // اهتزاز خفيف
+    vibrate([20]);
+    
+    // تحديث الواجهة
+    updateUI();
+    
+    // تتبع التحليلات
+    state.analytics.push({
+        type: "navigate",
+        direction: direction > 0 ? "next" : "prev",
+        card: state.c,
+        cardTitle: ALL_CARDS[state.c].t,
+        time: Date.now()
+    });
+    
+    // حفظ الحالة
+    savePro();
 }
 
-/* ---------- نظام التقييم الذكي ---------- */
+/* ---------- نظام التقييم الذكي المحسن ---------- */
 function mark(difficulty) {
-  const now = Date.now();
-  const card = ALL_CARDS[state.c];
-  
-  // تسجيل التقييم
-  state.analytics.push({
-    type: "rate",
-    difficulty: difficulty,
-    card: state.c,
-    cardTitle: card.t,
-    time: now,
-    responseTime: now - state.lastCardTime
-  });
-  
-  // تحديث وقت البطاقة الأخير
-  state.lastCardTime = now;
-  
-  // تأثيرات بصرية حسب الصعوبة
-  const glowFrame = document.getElementById('glow-frame');
-  let color, points, soundFreq;
-  
-  switch (difficulty) {
-    case 'easy':
-      color = 'rgba(16, 185, 129, 0.4)';
-      points = 40;
-      soundFreq = 600;
-      state.count++;
-      state.score += points;
-      showToast('ممتاز! +40 نقطة', 'success', 1500);
-      break;
-    case 'mid':
-      color = 'rgba(245, 158, 11, 0.3)';
-      points = 15;
-      soundFreq = 450;
-      state.score += points;
-      showToast('جيد! +15 نقطة', 'warning', 1500);
-      break;
-    case 'hard':
-      color = 'rgba(239, 68, 68, 0.3)';
-      points = 5;
-      soundFreq = 300;
-      state.score += points;
-      showToast('صعب! +5 نقاط', 'error', 1500);
-      break;
-  }
-  
-  // تطبيق التأثير البصري
-  glowFrame.style.boxShadow = `inset 0 0 180px ${color}`;
-  setTimeout(() => glowFrame.style.boxShadow = '', 600);
-  
-  // تشغيل الصوت
-  playSound(soundFreq, 300);
-  
-  // تأثير الاهتزاز على الأجهزة المدعومة
-  if (navigator.vibrate) navigator.vibrate(50);
-  
-  // التحقق من الإنجازات
-  checkAchievements();
-  
-  // الانتقال للبطاقة التالية بعد تأخير
-  setTimeout(() => {
-    stepCard(1);
-    savePro();
-  }, 300);
-  }
-  /* ---------- أدوات التركيز المتقدمة ---------- */
+    const now = Date.now();
+    const card = ALL_CARDS[state.c];
+    
+    // تسجيل التقييم في الإحصائيات
+    state.difficultyStats[difficulty] = (state.difficultyStats[difficulty] || 0) + 1;
+    
+    // تسجيل التقييم في التحليلات
+    state.analytics.push({
+        type: "rate",
+        difficulty: difficulty,
+        card: state.c,
+        cardTitle: card.t,
+        time: now,
+        responseTime: now - state.lastCardTime
+    });
+    
+    // تحديث وقت البطاقة الأخير
+    state.lastCardTime = now;
+    
+    // تأثيرات بصرية حسب الصعوبة
+    const glowFrame = document.getElementById('glow-frame');
+    let color, points, soundFreq, icon;
+    
+    switch (difficulty) {
+        case 'easy':
+            color = 'rgba(16, 185, 129, 0.4)';
+            points = 40;
+            soundFreq = 600;
+            icon = '✅';
+            state.count++;
+            state.score += points;
+            showToast(`${icon} ممتاز! +40 نقطة`, 'success', 1500);
+            
+            // زيادة سلسلة النجاح
+            state.streaks.current++;
+            if (state.streaks.current > state.streaks.daily) {
+                state.streaks.daily = state.streaks.current;
+            }
+            break;
+            
+        case 'mid':
+            color = 'rgba(245, 158, 11, 0.3)';
+            points = 15;
+            soundFreq = 450;
+            icon = '⚠️';
+            state.score += points;
+            showToast(`${icon} جيد! +15 نقطة`, 'warning', 1500);
+            
+            // إعادة تعيين سلسلة النجاح
+            state.streaks.current = 0;
+            break;
+            
+        case 'hard':
+            color = 'rgba(239, 68, 68, 0.3)';
+            points = 5;
+            soundFreq = 300;
+            icon = '❌';
+            state.score += points;
+            showToast(`${icon} صعب! +5 نقاط`, 'error', 1500);
+            
+            // إعادة تعيين سلسلة النجاح
+            state.streaks.current = 0;
+            break;
+    }
+    
+    // تطبيق التأثير البصري
+    if (state.settings.animations) {
+        glowFrame.style.boxShadow = `inset 0 0 180px ${color}`;
+        setTimeout(() => {
+            glowFrame.style.boxShadow = '';
+        }, 600);
+    }
+    
+    // تشغيل الصوت
+    playSound(soundFreq, 300);
+    
+    // تأثير الاهتزاز
+    vibrate([50]);
+    
+    // التحقق من الإنجازات
+    checkAchievements();
+    
+    // الانتقال للبطاقة التالية بعد تأخير
+    setTimeout(() => {
+        stepCard(1);
+        savePro();
+    }, 300);
+}
+
+/* ---------- أدوات التركيز المتقدمة المحسنة ---------- */
 function toggleFreq(hz, btn) {
-  const chips = document.querySelectorAll('.freq-chip');
-  
-  if (state.freq === hz) {
-    // إيقاف التردد الحالي
-    AudioPro.stop();
-    state.freq = null;
-    chips.forEach(b => b.classList.remove('active'));
-    showToast(`تم إيقاف تردد ${hz}Hz`, 'info');
-  } else {
-    // تشغيل التردد الجديد
-    AudioPro.play(hz, 9999999, 'sine');
-    state.freq = hz;
-    chips.forEach(b => b.classList.toggle('active', b === btn));
-    showToast(`تفعيل تردد ${hz}Hz للتركيز`, 'success');
-  }
+    const chips = document.querySelectorAll('.freq-chip');
+    
+    if (state.freq === hz) {
+        // إيقاف التردد الحالي
+        AudioPro.stop('frequency');
+        state.freq = null;
+        chips.forEach(b => b.classList.remove('active'));
+        showToast(`تم إيقاف تردد ${hz}Hz`, 'info');
+    } else {
+        // إيقاف أي ترددات أخرى
+        AudioPro.stop('frequency');
+        
+        // تشغيل التردد الجديد
+        AudioPro.play(hz, 999999, 'sine', 'frequency');
+        state.freq = hz;
+        
+        // تحديث الأزرار
+        chips.forEach(b => b.classList.toggle('active', b === btn));
+        
+        // إظهار رسالة
+        let freqName = '';
+        switch(hz) {
+            case 45: freqName = 'غاما (إبداع)'; break;
+            case 8: freqName = 'ثيتا (استرخاء)'; break;
+            case 432: freqName = 'موسيقي (تناغم)'; break;
+            default: freqName = `${hz}Hz`;
+        }
+        
+        showToast(`تفعيل تردد ${freqName} للتركيز`, 'success');
+    }
+    
+    savePro();
 }
 
 let pomoStart = null;
 let pomoTotalSeconds = 0;
+let pomoBreak = false;
 
 function togglePomo() {
-  const btn = document.getElementById('pomo-btn');
-  const clock = document.getElementById('pomo-clock');
-  
-  if (state.pOn) {
-    // إيقاف المؤقت
-    clearInterval(state.pInterval);
-    state.pOn = false;
-    btn.innerHTML = '<i class="fas fa-play mr-1"></i> ابدأ';
-    btn.classList.remove('bg-red-600');
-    btn.classList.add('bg-gradient-to-r', 'from-blue-600', 'to-blue-500');
+    const btn = document.getElementById('pomo-btn');
+    const clock = document.getElementById('pomo-clock');
     
-    // حساب وقت الجلسة
-    if (pomoStart) {
-      const sessionSeconds = Math.floor((Date.now() - pomoStart) / 1000);
-      pomoTotalSeconds += sessionSeconds;
-      state.analytics.push({
-        type: "focus",
-        minutes: Math.floor(sessionSeconds / 60),
-        totalSeconds: sessionSeconds,
-        time: Date.now()
-      });
-      
-      // تحديث إجمالي وقت الدراسة للمستخدم
-      if (state.user) {
-        state.user.totalStudyTime = (state.user.totalStudyTime || 0) + sessionSeconds;
-      }
-      
-      pomoStart = null;
+    if (state.pOn) {
+        // إيقاف المؤقت
+        clearInterval(state.pInterval);
+        state.pOn = false;
+        btn.innerHTML = '<i class="fas fa-play mr-1"></i> ابدأ';
+        btn.classList.remove('bg-red-600');
+        btn.classList.add('bg-gradient-to-r', 'from-blue-600', 'to-blue-500');
+        
+        // حساب وقت الجلسة
+        if (pomoStart) {
+            const sessionSeconds = Math.floor((Date.now() - pomoStart) / 1000);
+            pomoTotalSeconds += sessionSeconds;
+            state.totalStudyTime += sessionSeconds;
+            
+            state.analytics.push({
+                type: "focus",
+                minutes: Math.floor(sessionSeconds / 60),
+                totalSeconds: sessionSeconds,
+                time: Date.now(),
+                wasBreak: pomoBreak
+            });
+            
+            pomoStart = null;
+        }
+        
+        showToast('تم إيقاف جلسة التركيز', 'info');
+    } else {
+        // بدء المؤقت
+        state.pOn = true;
+        pomoStart = Date.now();
+        btn.innerHTML = '<i class="fas fa-pause mr-1"></i> إيقاف';
+        btn.classList.remove('bg-gradient-to-r', 'from-blue-600', 'to-blue-500');
+        btn.classList.add('bg-red-600');
+        
+        state.pInterval = setInterval(() => {
+            state.pTime--;
+            
+            const minutes = Math.floor(state.pTime / 60);
+            const seconds = state.pTime % 60;
+            clock.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            
+            // تغيير اللون حسب الحالة
+            if (pomoBreak) {
+                // وقت الاستراحة
+                clock.classList.remove('text-red-400', 'text-blue-400');
+                clock.classList.add('text-emerald-400');
+                
+                if (state.pTime <= 0) {
+                    // انتهاء الاستراحة
+                    clearInterval(state.pInterval);
+                    playSound(600, 1000);
+                    showToast('انتهت الاستراحة! عد للعمل', 'success', 4000);
+                    pomoBreak = false;
+                    state.pTime = 1500; // 25 دقيقة
+                    clock.textContent = '25:00';
+                    state.pOn = false;
+                    btn.innerHTML = '<i class="fas fa-play mr-1"></i> ابدأ';
+                    btn.classList.remove('bg-red-600');
+                    btn.classList.add('bg-gradient-to-r', 'from-blue-600', 'to-blue-500');
+                }
+            } else {
+                // وقت العمل
+                if (state.pTime <= 0) {
+                    // انتهاء وقت العمل
+                    clearInterval(state.pInterval);
+                    playSound(800, 1000);
+                    showToast('انتهت جلسة التركيز! خذ استراحة', 'achievement', 5000);
+                    pomoBreak = true;
+                    state.pTime = 300; // 5 دقائق استراحة
+                    clock.textContent = '05:00';
+                    clock.classList.remove('text-blue-400');
+                    clock.classList.add('text-emerald-400');
+                } else if (state.pTime <= 60) {
+                    // آخر دقيقة
+                    clock.classList.add('text-red-400');
+                    clock.classList.remove('text-blue-400');
+                } else {
+                    clock.classList.remove('text-red-400');
+                    clock.classList.add('text-blue-400');
+                }
+            }
+        }, 1000);
+        
+        showToast(pomoBreak ? 'بدء استراحة (5 دقائق)' : 'بدء جلسة تركيز (25 دقيقة)', 'success');
     }
     
-    showToast('تم إيقاف جلسة التركيز', 'info');
-  } else {
-    // بدء المؤقت
-    state.pOn = true;
-    pomoStart = Date.now();
-    btn.innerHTML = '<i class="fas fa-pause mr-1"></i> وقف';
-    btn.classList.remove('bg-gradient-to-r', 'from-blue-600', 'to-blue-500');
-    btn.classList.add('bg-red-600');
-    
-    state.pInterval = setInterval(() => {
-      state.pTime--;
-      
-      const minutes = Math.floor(state.pTime / 60);
-      const seconds = state.pTime % 60;
-      clock.innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-      
-      // تغيير اللون عند انتهاء الوقت
-      if (state.pTime <= 0) {
-        clearInterval(state.pInterval);
-        playSound(800, 1000);
-        showToast('انتهت جلسة التركيز! خذ استراحة', 'achievement', 5000);
-        
-        // إعادة تعيين المؤقت
-        setTimeout(() => {
-          state.pTime = 1500;
-          clock.innerText = '25:00';
-          state.pOn = false;
-          btn.innerHTML = '<i class="fas fa-play mr-1"></i> ابدأ';
-          btn.classList.remove('bg-red-600');
-          btn.classList.add('bg-gradient-to-r', 'from-blue-600', 'to-blue-500');
-        }, 2000);
-      } else if (state.pTime <= 60) {
-        // آخر دقيقة
-        clock.classList.add('text-red-400');
-        clock.classList.remove('text-blue-400');
-      }
-    }, 1000);
-    
-    showToast('بدء جلسة تركيز (25 دقيقة)', 'success');
-  }
-  
-  savePro();
+    savePro();
 }
 
 function resetPomo() {
-  state.pTime = 1500;
-  document.getElementById('pomo-clock').innerText = '25:00';
-  document.getElementById('pomo-clock').classList.remove('text-red-400');
-  document.getElementById('pomo-clock').classList.add('text-blue-400');
-  
-  if (state.pOn) {
-    clearInterval(state.pInterval);
-    state.pOn = false;
-    document.getElementById('pomo-btn').innerHTML = '<i class="fas fa-play mr-1"></i> ابدأ';
-    document.getElementById('pomo-btn').classList.remove('bg-red-600');
-    document.getElementById('pomo-btn').classList.add('bg-gradient-to-r', 'from-blue-600', 'to-blue-500');
-  }
-  
-  showToast('تم إعادة تعيين المؤقت', 'info');
-}
-
-/* ---------- نظام السمة (الوضع المظلم/الفاتح) ---------- */
+    state.pTime = 1500;
+    pomoBreak = false;
+    document.getElementById('pomo-clock').textContent = '25:00';
+    document.getElementById('pomo-clock').classList.remove('text-red-400', 'text-emerald-400');
+    document.getElem
+/* ---------- نظام السمة (الوضع المظلم/الفاتح) المحسن ---------- */
 function toggleTheme() {
-  const isLight = document.body.classList.toggle('light-theme');
-  const icon = document.getElementById('theme-icon');
-  
-  state.theme = isLight ? 'light' : 'dark';
-  icon.className = isLight ? 'fas fa-sun' : 'fas fa-moon';
-  
-  // تأثير دوران
-  icon.style.transform = 'rotate(360deg)';
-  setTimeout(() => {
-    icon.style.transform = '';
-  }, 300);
-  
-  showToast(`تم التبديل إلى الوضع ${isLight ? 'الفاتح' : 'المظلم'}`, 'info');
-  savePro();
-}
-
-/* ---------- نظام التفاعل مع الخلفية (Parallax) ---------- */
-function initParallax() {
-  const bgCanvas = document.getElementById('bgCanvas');
-  const gridOverlay = document.getElementById('gridOverlay');
-  
-  if (!bgCanvas || !gridOverlay) return;
-  
-  document.addEventListener('mousemove', (e) => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const isLight = document.body.classList.toggle('light-theme');
+    const icon = document.getElementById('theme-icon');
     
-    const x = (e.clientX / window.innerWidth - 0.5) * 20;
-    const y = (e.clientY / window.innerHeight - 0.5) * 20;
+    state.theme = isLight ? 'light' : 'dark';
+    icon.className = isLight ? 'fas fa-sun' : 'fas fa-moon';
     
-    bgCanvas.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-    gridOverlay.style.backgroundPosition = `${50 - x / 10}% ${50 - y / 10}%`;
-  });
-}
-
-/* ---------- نظام تأثيرات اللمس (Ripple) ---------- */
-function initRippleEffects() {
-  document.querySelectorAll('.ripple').forEach(button => {
-    button.addEventListener('click', function(e) {
-      const rect = this.getBoundingClientRect();
-      const circle = document.createElement('span');
-      circle.className = 'ripple-circle';
-      
-      const size = Math.max(rect.width, rect.height);
-      circle.style.width = circle.style.height = size + 'px';
-      circle.style.left = e.clientX - rect.left - size / 2 + 'px';
-      circle.style.top = e.clientY - rect.top - size / 2 + 'px';
-      
-      this.appendChild(circle);
-      
-      circle.addEventListener('animationend', () => {
-        circle.remove();
-      }, { once: true });
-    });
-  });
-}
-
-/* ---------- نظام التوجيه بالأصابع (Swipe) ---------- */
-function initSwipeGestures() {
-  let startX = 0;
-  let startY = 0;
-  
-  document.addEventListener('touchstart', (e) => {
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-  }, { passive: true });
-  
-  document.addEventListener('touchend', (e) => {
-    if (!startX || !startY) return;
-    
-    const endX = e.changedTouches[0].clientX;
-    const endY = e.changedTouches[0].clientY;
-    
-    const diffX = startX - endX;
-    const diffY = startY - endY;
-    
-    // تجاهل الحركات الرأسية الكبيرة
-    if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 50) return;
-    
-    if (Math.abs(diffX) > 50) {
-      if (diffX > 0) {
-        stepCard(1); // سحب لليسار = التالي
-      } else {
-        stepCard(-1); // سحب لليمين = السابق
-      }
+    // تأثير دوران إذا كانت الرسوميات مفعلة
+    if (state.settings.animations) {
+        icon.style.transform = 'rotate(360deg)';
+        setTimeout(() => {
+            icon.style.transform = '';
+        }, 300);
     }
     
-    startX = 0;
-    startY = 0;
-  }, { passive: true });
+    showToast(`تم التبديل إلى الوضع ${isLight ? 'الفاتح' : 'المظلم'}`, 'info');
+    savePro();
 }
 
-/* ---------- نظام التلميحات (Hints) ---------- */
+/* ---------- نظام التفاعل مع الخلفية (Parallax) المحسن ---------- */
+function initParallax() {
+    const bgCanvas = document.getElementById('bgCanvas');
+    const gridOverlay = document.getElementById('gridOverlay');
+    
+    if (!bgCanvas || !gridOverlay || !state.settings.animations) return;
+    
+    let rafId = null;
+    let mouseX = 0;
+    let mouseY = 0;
+    let targetX = 0;
+    let targetY = 0;
+    
+    function onMouseMove(e) {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        
+        targetX = (e.clientX / window.innerWidth - 0.5) * 20;
+        targetY = (e.clientY / window.innerHeight - 0.5) * 20;
+        
+        if (!rafId) {
+            rafId = requestAnimationFrame(updateParallax);
+        }
+    }
+    
+    function updateParallax() {
+        // تتبع سلس للماوس
+        mouseX += (targetX - mouseX) * 0.1;
+        mouseY += (targetY - mouseY) * 0.1;
+        
+        bgCanvas.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+        gridOverlay.style.backgroundPosition = `${50 - mouseX / 10}% ${50 - mouseY / 10}%`;
+        
+        if (Math.abs(targetX - mouseX) > 0.1 || Math.abs(targetY - mouseY) > 0.1) {
+            rafId = requestAnimationFrame(updateParallax);
+        } else {
+            rafId = null;
+        }
+    }
+    
+    // إضافة تأثير للهواتف أيضاً
+    function onTouchMove(e) {
+        if (e.touches.length === 1) {
+            onMouseMove(e.touches[0]);
+        }
+    }
+    
+    // إضافة أحداث الماوس واللمس
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
+    
+    // تنظيف عند إلغاء التفعيل
+    return () => {
+        window.removeEventListener('mousemove', onMouseMove);
+        window.removeEventListener('touchmove', onTouchMove);
+        if (rafId) cancelAnimationFrame(rafId);
+    };
+}
+
+/* ---------- نظام تأثيرات اللمس (Ripple) المحسن ---------- */
+function initRippleEffects() {
+    if (!state.settings.animations) return;
+    
+    document.querySelectorAll('.ripple').forEach(button => {
+        button.addEventListener('click', function(e) {
+            // التأكد من أن العنصر قابل للنقر
+            if (this.disabled) return;
+            
+            const rect = this.getBoundingClientRect();
+            const circle = document.createElement('span');
+            circle.className = 'ripple-circle';
+            
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            circle.style.width = circle.style.height = size + 'px';
+            circle.style.left = x - size / 2 + 'px';
+            circle.style.top = y - size / 2 + 'px';
+            
+            this.appendChild(circle);
+            
+            // إزالة العنصر بعد انتهاء التحريك
+            circle.addEventListener('animationend', () => {
+                if (circle.parentNode === this) {
+                    this.removeChild(circle);
+                }
+            }, { once: true });
+        });
+    });
+}
+
+/* ---------- نظام التوجيه بالأصابع (Swipe) المحسن ---------- */
+function initSwipeGestures() {
+    let startX = 0;
+    let startY = 0;
+    let startTime = 0;
+    let isSwiping = false;
+    
+    function onTouchStart(e) {
+        if (e.touches.length !== 1) return;
+        
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        startTime = Date.now();
+        isSwiping = true;
+    }
+    
+    function onTouchMove(e) {
+        if (!isSwiping || e.touches.length !== 1) return;
+        
+        const currentX = e.touches[0].clientX;
+        const currentY = e.touches[0].clientY;
+        
+        const diffX = startX - currentX;
+        const diffY = startY - currentY;
+        
+        // تجاهل الحركات الرأسية الكبيرة
+        if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 30) {
+            isSwiping = false;
+        }
+    }
+    
+    function onTouchEnd(e) {
+        if (!isSwiping) return;
+        
+        const endX = e.changedTouches[0].clientX;
+        const endY = e.changedTouches[0].clientY;
+        const endTime = Date.now();
+        
+        const diffX = startX - endX;
+        const diffY = startY - endY;
+        const timeDiff = endTime - startTime;
+        
+        // سرعة السحب
+        const velocity = Math.abs(diffX) / timeDiff;
+        
+        // تجاهل الحركات البطيئة جداً
+        if (velocity < 0.3) {
+            isSwiping = false;
+            return;
+        }
+        
+        // تجاهل الحركات الرأسية الكبيرة
+        if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 50) {
+            isSwiping = false;
+            return;
+        }
+        
+        if (Math.abs(diffX) > 50) {
+            if (diffX > 0) {
+                stepCard(1); // سحب لليسار = التالي
+            } else {
+                stepCard(-1); // سحب لليمين = السابق
+            }
+            
+            // اهتزاز خفيف للتأكيد
+            vibrate([30]);
+        }
+        
+        isSwiping = false;
+    }
+    
+    // إضافة أحداث اللمس
+    document.addEventListener('touchstart', onTouchStart, { passive: true });
+    document.addEventListener('touchmove', onTouchMove, { passive: true });
+    document.addEventListener('touchend', onTouchEnd, { passive: true });
+    
+    // تنظيف عند إلغاء التفعيل
+    return () => {
+        document.removeEventListener('touchstart', onTouchStart);
+        document.removeEventListener('touchmove', onTouchMove);
+        document.removeEventListener('touchend', onTouchEnd);
+    };
+}
+
+/* ---------- نظام التلميحات (Hints) المحسن ---------- */
 function showHints() {
-  // تظهر تلميحات للمستخدم الجديد
-  if (!localStorage.getItem('hintShown')) {
+    if (!state.settings.showHints || localStorage.getItem('hintShown') === 'true') return;
+    
+    // تأخير عرض التلميحات
     setTimeout(() => {
-      showToast('💡 تلميح: اسحب البطاقة لليمين أو لليسار للتنقل', 'info', 5000);
+        showToast('💡 تلميح: اسحب البطاقة لليمين أو لليسار للتنقل', 'info', 5000);
     }, 3000);
     
     setTimeout(() => {
-      showToast('🎯 اضغط على البطاقة لقلبها ورؤية التعريف', 'info', 5000);
+        showToast('🎯 اضغط على البطاقة لقلبها ورؤية التعريف', 'info', 5000);
     }, 10000);
     
+    setTimeout(() => {
+        showToast('⭐ قيّم صعوبة كل بطاقة لتحسين تجربة التعلم', 'info', 5000);
+    }, 15000);
+    
     localStorage.setItem('hintShown', 'true');
-  }
 }
 
-/* ---------- نظام التصدير والاستيراد ---------- */
+/* ---------- نظام التصدير والاستيراد المحسن ---------- */
 function exportData() {
-  const dataStr = JSON.stringify({
-    state: state,
-    cards: ALL_CARDS,
-    version: state.version,
-    exportDate: new Date().toISOString()
-  }, null, 2);
-  
-  const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-  const exportFileDefaultName = `study-progress-${new Date().toISOString().split('T')[0]}.json`;
-  
-  const linkElement = document.createElement('a');
-  linkElement.setAttribute('href', dataUri);
-  linkElement.setAttribute('download', exportFileDefaultName);
-  linkElement.click();
-  
-  showToast('تم تصدير بيانات التقدم بنجاح', 'success');
+    try {
+        const exportData = {
+            state: {
+                score: state.score,
+                count: state.count,
+                achievements: state.achievements,
+                totalStudyTime: state.totalStudyTime,
+                difficultyStats: state.difficultyStats,
+                streaks: state.streaks,
+                analytics: state.analytics.slice(-100) // آخر 100 سجل فقط
+            },
+            cards: ALL_CARDS.map((card, index) => ({
+                id: index + 1,
+                term: card.t,
+                description: card.d,
+                reviewed: index < state.count
+            })),
+            version: state.version,
+            exportDate: new Date().toISOString(),
+            exportTimestamp: Date.now(),
+            user: state.user
+        };
+        
+        const dataStr = JSON.stringify(exportData, null, 2);
+        const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+        const exportFileName = `study-progress-${state.user.id}-${new Date().toISOString().split('T')[0]}.json`;
+        
+        const linkElement = document.createElement('a');
+        linkElement.setAttribute('href', dataUri);
+        linkElement.setAttribute('download', exportFileName);
+        linkElement.style.display = 'none';
+        document.body.appendChild(linkElement);
+        linkElement.click();
+        document.body.removeChild(linkElement);
+        
+        showToast('تم تصدير بيانات التقدم بنجاح', 'success');
+        
+    } catch (err) {
+        console.error('خطأ في تصدير البيانات:', err);
+        showToast('خطأ في تصدير البيانات', 'error');
+    }
 }
 
 function importData() {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = 'application/json';
-  
-  input.onchange = e => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'application/json';
+    input.style.display = 'none';
     
-    reader.onload = event => {
-      try {
-        const importedData = JSON.parse(event.target.result);
+    input.onchange = e => {
+        const file = e.target.files[0];
+        if (!file) return;
         
-        // التحقق من التوافق
-        if (importedData.version && importedData.version.startsWith('pro-')) {
-          Object.assign(state, importedData.state);
-          savePro();
-          updateUI();
-          showToast('تم استيراد البيانات بنجاح', 'success');
-          location.reload();
-        } else {
-          showToast('ملف غير متوافق مع هذا الإصدار', 'error');
-        }
-      } catch (err) {
-        showToast('خطأ في قراءة الملف', 'error');
-      }
+        const reader = new FileReader();
+        
+        reader.onload = event => {
+            try {
+                const importedData = JSON.parse(event.target.result);
+                
+                // التحقق من التوافق
+                if (!importedData.version || !importedData.version.startsWith('pro-')) {
+                    showToast('ملف غير متوافق مع هذا الإصدار', 'error');
+                    return;
+                }
+                
+                // طلب التأكيد
+                if (!confirm('هل تريد استيراد البيانات؟ سيتم استبدال بياناتك الحالية.')) {
+                    return;
+                }
+                
+                // استيراد البيانات
+                if (importedData.state) {
+                    Object.assign(state, importedData.state);
+                }
+                
+                // إعادة تعيين بعض البيانات
+                state.c = 0;
+                state.pTime = 1500;
+                state.pOn = false;
+                state.freq = null;
+                state.lastCardTime = Date.now();
+                state.sessionStart = Date.now();
+                
+                // حفظ وتحديث الواجهة
+                savePro();
+                updateUI();
+                updateAchievementsUI();
+                showToast('تم استيراد البيانات بنجاح', 'success');
+                
+                // إعادة تحميل الصفحة بعد تأخير
+                setTimeout(() => {
+                    location.reload();
+                }, 1500);
+                
+            } catch (err) {
+                console.error('خطأ في قراءة الملف:', err);
+                showToast('خطأ في قراءة الملف', 'error');
+            }
+        };
+        
+        reader.readAsText(file);
     };
     
-    reader.readAsText(file);
-  };
-  
-  input.click();
+    document.body.appendChild(input);
+    input.click();
+    document.body.removeChild(input);
 }
 
-/* ---------- نظام المفاتيح السريعة ---------- */
-document.addEventListener("keydown", e => {
-  // منع السلوك الافتراضي للمفاتيح المستخدمة
-  if ([" ", "ArrowRight", "ArrowLeft", "1", "2", "3"].includes(e.key)) {
-    e.preventDefault();
-  }
-  
-  // المفاتيح السريعة
-  switch(e.key) {
-    case " ":
-    case "Enter":
-      flip();
-      break;
-    case "ArrowRight":
-      stepCard(1);
-      break;
-    case "ArrowLeft":
-      stepCard(-1);
-      break;
-    case "1":
-      mark('hard');
-      break;
-    case "2":
-      mark('mid');
-      break;
-    case "3":
-      mark('easy');
-      break;
-    case "t":
-    case "T":
-      toggleTheme();
-      break;
-    case "Escape":
-      if (state.pOn) togglePomo();
-      break;
-    case "r":
-    case "R":
-      if (e.ctrlKey) resetPomo();
-      break;
-  }
-});
+/* ---------- نظام المفاتيح السريعة المحسن ---------- */
+function initKeyboardShortcuts() {
+    document.addEventListener("keydown", e => {
+        // تجاهل إذا كان المستخدم يكتب في حقل نصي
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) {
+            return;
+        }
+        
+        // منع السلوك الافتراضي للمفاتيح المستخدمة
+        if ([" ", "ArrowRight", "ArrowLeft", "1", "2", "3", "t", "T", "Escape", "r", "R"].includes(e.key)) {
+            e.preventDefault();
+        }
+        
+        // المفاتيح السريعة
+        switch(e.key) {
+            case " ":
+            case "Enter":
+                flip();
+                break;
+            case "ArrowRight":
+                stepCard(1);
+                break;
+            case "ArrowLeft":
+                stepCard(-1);
+                break;
+            case "1":
+            case "ن": // للوحة المفاتيح العربية
+                mark('hard');
+                break;
+            case "2":
+            case "ت": // للوحة المفاتيح العربية
+                mark('mid');
+                break;
+            case "3":
+            case "ث": // للوحة المفاتيح العربية
+                mark('easy');
+                break;
+            case "t":
+            case "T":
+            case "ط": // للوحة المفاتيح العربية
+                toggleTheme();
+                break;
+            case "Escape":
+                if (state.pOn) togglePomo();
+                break;
+            case "r":
+            case "R":
+            case "ر": // للوحة المفاتيح العربية
+                if (e.ctrlKey || e.metaKey) resetPomo();
+                break;
+            case "h":
+            case "H":
+            case "ح": // للوحة المفاتيح العربية
+                if (e.ctrlKey) showTutorial();
+                break;
+            case "s":
+            case "S":
+            case "س": // للوحة المفاتيح العربية
+                if (e.ctrlKey) showStatsModal();
+                break;
+        }
+    });
+}
 
-/* ---------- نظام التركيز التلقائي ---------- */
-let idleTimer;
-document.addEventListener('mousemove', () => {
-  document.body.classList.remove('dim-ui');
-  clearTimeout(idleTimer);
-  
-  idleTimer = setTimeout(() => {
-    document.body.classList.add('dim-ui');
-  }, 10000); // 10 ثوانٍ من عدم النشاط
-});
+/* ---------- نظام التركيز التلقائي المحسن ---------- */
+function initAutoFocus() {
+    let idleTimer;
+    let isDimmed = false;
+    
+    function resetIdleTimer() {
+        if (isDimmed) {
+            document.body.classList.remove('dim-ui');
+            isDimmed = false;
+        }
+        
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => {
+            if (!state.pOn && document.visibilityState === 'visible') {
+                document.body.classList.add('dim-ui');
+                isDimmed = true;
+            }
+        }, 30000); // 30 ثانية من عدم النشاط
+    }
+    
+    // أحداث لإعادة تعيين المؤقت
+    const events = ['mousemove', 'mousedown', 'keypress', 'touchstart', 'touchmove', 'scroll'];
+    events.forEach(event => {
+        document.addEventListener(event, resetIdleTimer, { passive: true });
+    });
+    
+    // التعامل مع تغيير رؤية الصفحة
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            clearTimeout(idleTimer);
+        } else {
+            resetIdleTimer();
+        }
+    });
+    
+    // تهيئة المؤقت
+    resetIdleTimer();
+}
 
-/* ---------- تهيئة التطبيق ---------- */
+/* ---------- نظام تحميل التطبيق المحسن ---------- */
+function initApp() {
+    console.log("جاري تهيئة تطبيق النخبة PRO...");
+    
+    // إخفاء شاشة التحميل بعد التأخير
+    setTimeout(() => {
+        const loadingScreen = document.getElementById('loading-screen');
+        const loadingBar = document.getElementById('loading-bar');
+        const loadingText = document.getElementById('loading-text');
+        
+        // محاكاة تقدم التحميل
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += 10;
+            loadingBar.style.width = progress + '%';
+            
+            if (progress <= 30) loadingText.textContent = 'جاري تحميل البيانات...';
+            else if (progress <= 60) loadingText.textContent = 'جاري تحميل الواجهة...';
+            else if (progress <= 90) loadingText.textContent = 'جاري التهيئة النهائية...';
+            else loadingText.textContent = 'جاهز!';
+            
+            if (progress >= 100) {
+                clearInterval(interval);
+                
+                // إخفاء شاشة التحميل بسلاسة
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                    
+                    // عرض التطبيق
+                    document.body.style.visibility = 'visible';
+                    
+                    // عرض التوجيهات إذا كان أول استخدام
+                    if (!localStorage.getItem('appInitialized')) {
+                        setTimeout(() => {
+                            showTutorial();
+                            localStorage.setItem('appInitialized', 'true');
+                        }, 500);
+                    }
+                    
+                    // رسالة ترحيب
+                    showToast(`مرحباً بك في تطبيق النخبة PRO! ${state.score > 0 ? `لديك ${state.score} نقطة` : 'ابدأ رحلة التعلم الآن!'}`, 'success', 4000);
+                    
+                }, 500);
+            }
+        }, 100);
+    }, 500);
+    
+    // تحميل البيانات
+    loadPro();
+    
+    // إعداد الأحداث
+    setupEventListeners();
+    
+    // تهيئة الأنظمة
+    initSystems();
+    
+    // تحديث الواجهة
+    updateUI();
+    updateAchievementsUI();
+    
+    // تسجيل بداية الجلسة
+    state.sessionStart = Date.now();
+    state.analytics.push({
+        type: "session_start",
+        time: state.sessionStart,
+        user: state.user.id,
+        version: state.version
+    });
+    
+    // حفظ تلقائي كل دقيقة
+    setInterval(savePro, 60000);
+    
+    // نسخ احتياطي كل 5 دقائق
+    setInterval(() => {
+        localStorage.setItem(`study-backup-${Date.now()}`, JSON.stringify(state));
+        
+        // الحفاظ على 5 نسخ احتياطية فقط
+        const backups = Object.keys(localStorage)
+            .filter(key => key.startsWith('study-backup-'))
+            .sort()
+            .reverse()
+            .slice(5);
+        
+        backups.forEach(key => localStorage.removeItem(key));
+    }, 300000);
+    
+    console.log("تم تهيئة التطبيق بنجاح!");
+}
+
+function setupEventListeners() {
+    // زر تبديل السمة
+    document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+    
+    // زر التصدير
+    document.getElementById('export-btn').addEventListener('click', exportData);
+    
+    // زر الإحصائيات
+    document.getElementById('stats-btn').addEventListener('click', showStatsModal);
+    
+    // تحديث حجم الشاشة
+    window.addEventListener('resize', () => {
+        updateUI();
+    });
+    
+    // التعامل مع انقطاع الإنترنت
+    window.addEventListener('online', () => {
+        showToast('تم استعادة الاتصال بالإنترنت', 'success');
+    });
+    
+    window.addEventListener('offline', () => {
+        showToast('فقدان الاتصال بالإنترنت', 'warning');
+    });
+}
+
+function initSystems() {
+    // تهيئة أنظمة التفاعل
+    initParallax();
+    initRippleEffects();
+    initSwipeGestures();
+    initKeyboardShortcuts();
+    initAutoFocus();
+    
+    // عرض التلميحات
+    if (state.settings.showHints) {
+        showHints();
+    }
+}
+
+/* ---------- نظام النافذة المنبثقة للإحصائيات ---------- */
+function showStatsModal() {
+    const modal = document.getElementById('stats-modal');
+    modal.style.opacity = '1';
+    modal.style.pointerEvents = 'auto';
+    
+    // حساب الإحصائيات
+    calculateAndDisplayStats();
+    
+    // تأثير الظهور
+    requestAnimationFrame(() => {
+        modal.querySelector('.glass-strong').style.transform = 'scale(1)';
+    });
+}
+
+function closeStats() {
+    const modal = document.getElementById('stats-modal');
+    modal.style.opacity = '0';
+    modal.style.pointerEvents = 'none';
+    modal.querySelector('.glass-strong').style.transform = 'scale(0.95)';
+}
+
+function calculateAndDisplayStats() {
+    // إجمالي وقت الدراسة
+    const totalMinutes = Math.floor(state.totalStudyTime / 60);
+    document.getElementById('total-time').textContent = `${totalMinutes} دقيقة`;
+    
+    // متوسط السرعة
+    const avgSpeed = state.velocity.toFixed(1);
+    document.getElementById('avg-speed').textContent = `${avgSpeed} بطاقة/دقيقة`;
+    
+    // توزيع الصعوبة
+    document.getElementById('hard-count').textContent = state.difficultyStats.hard || 0;
+    document.getElementById('mid-count').textContent = state.difficultyStats.mid || 0;
+    document.getElementById('easy-count').textContent = state.difficultyStats.easy || 0;
+    
+    // قائمة الإنجازات
+    const achievementsList = document.getElementById('achievements-list');
+    if (achievementsList) {
+        if (state.achievements.length > 0) {
+            achievementsList.innerHTML = state.achievements.map(id => {
+                const achievement = ACHIEVEMENTS[id];
+                return `
+                    <div class="flex items-center gap-2 mb-2">
+                        <i class="fas ${achievement.icon} text-yellow-400"></i>
+                        <span>${achievement.name}</span>
+                        <span class="text-xs text-slate-400 flex-1 text-left">${achievement.desc}</span>
+                    </div>
+                `;
+            }).join('');
+        } else {
+            achievementsList.innerHTML = '<div class="text-slate-400 text-center py-2">لا توجد إنجازات مفتوحة بعد</div>';
+        }
+    }
+}
+
+function resetData() {
+    if (confirm('هل تريد فعلاً إعادة تعيين 
+  /* ---------- تهيئة التطبيق عند تحميل الصفحة ---------- */
 window.addEventListener('DOMContentLoaded', () => {
-  // تحميل البيانات
-  loadPro();
-  
-  // إعداد حدث تبديل السمة
-  document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
-  
-  // تهيئة الواجهة
-  updateUI();
-  
-  // تهيئة الأنظمة
-  initParallax();
-  initRippleEffects();
-  initSwipeGestures();
-  showHints();
-  
-  // تسجيل بداية الجلسة
-  state.sessionStart = Date.now();
-  state.analytics.push({
-    type: "session_start",
-    time: state.sessionStart,
-    user: state.user.id
-  });
-  
-  // حفظ تلقائي كل 30 ثانية
-  setInterval(savePro, 30000);
-  
-  // رسالة بدء التشغيل
-  setTimeout(() => {
-    showToast(`مرحباً بك في تطبيق النخبة PRO! لديك ${state.score} نقطة`, 'success', 4000);
-  }, 1000);
-  
-  console.log("تطبيق النخبة PRO - النسخة الاحترافية جاهز للعمل!");
-  console.log("تحت إشراف: صفوان");
-  console.log("الإصدار:", state.version);
+    // إخفاء الجسم حتى يكتمل التحميل
+    document.body.style.visibility = 'hidden';
+    
+    // التحقق من دعم المتصفح
+    if (!('localStorage' in window)) {
+        alert('عذراً، متصفحك لا يدعم خاصية التخزين المحلي. يرجى استخدام متصفح حديث.');
+        return;
+    }
+    
+    // تهيئة التطبيق
+    initApp();
+    
+    // تسجيل زيارة الصفحة
+    console.log(`
+╔══════════════════════════════════════════════════╗
+║        تطبيق النخبة PRO - النسخة الاحترافية       ║
+║              تحت إشراف: صفوان                    ║
+║              الإصدار: ${state.version}                  ║
+║    تاريخ البناء: ${new Date().toLocaleDateString('ar-SA')}          ║
+╚══════════════════════════════════════════════════╝
+    `);
 });
 
 /* ---------- التنظيف قبل إغلاق الصفحة ---------- */
-window.addEventListener('beforeunload', () => {
-  // تسجيل نهاية الجلسة
-  const sessionDuration = Math.floor((Date.now() - state.sessionStart) / 1000);
-  state.analytics.push({
-    type: "session_end",
-    time: Date.now(),
-    duration: sessionDuration,
-    cardsReviewed: state.count
-  });
-  
-  // إيقاف الصوت
-  AudioPro.stop();
-  
-  // حفظ البيانات النهائية
-  savePro();
+window.addEventListener('beforeunload', (e) => {
+    // تسجيل نهاية الجلسة
+    const sessionDuration = Math.floor((Date.now() - state.sessionStart) / 1000);
+    state.totalStudyTime += sessionDuration;
+    
+    state.analytics.push({
+        type: "session_end",
+        time: Date.now(),
+        duration: sessionDuration,
+        cardsReviewed: state.count,
+        finalScore: state.score,
+        user: state.user.id
+    });
+    
+    // إيقاف جميع الأصوات
+    AudioPro.stopAll();
+    
+    // حفظ البيانات النهائية
+    savePro();
+    
+    // تحديث وقت النشاط الأخير
+    if (state.user) {
+        state.user.lastActive = Date.now();
+    }
+    
+    // عرض رسالة تأكيد إذا كانت هناك جلسة تركيز نشطة
+    if (state.pOn) {
+        e.preventDefault();
+        e.returnValue = 'لديك جلسة تركيز نشطة. هل تريد حقاً المغادرة؟';
+        return e.returnValue;
+    }
 });
 
-/* ---------- واجهات التصحيح ---------- */
-window.showStats = () => {
-  console.table({
-    'البطاقة الحالية': state.c + 1,
-    'النقاط': state.score,
-    'البطاقات المكتملة': state.count,
-    'سرعة التعلم': state.velocity.toFixed(2),
-    'درجة التركيز': state.focusScore,
-    'عدد الإنجازات': state.achievements.length,
-    'طول الجلسة': Math.floor((Date.now() - state.sessionStart) / 60000) + ' دقيقة'
-  });
-};
+/* ---------- نظام الاستعادة من النسخ الاحتياطية ---------- */
+function restoreFromBackup() {
+    const backups = Object.keys(localStorage)
+        .filter(key => key.startsWith('study-backup-'))
+        .sort()
+        .reverse();
+    
+    if (backups.length === 0) {
+        showToast('لا توجد نسخ احتياطية متاحة', 'warning');
+        return;
+    }
+    
+    if (confirm(`يوجد ${backups.length} نسخة احتياطية. هل تريد استعادة أحدث نسخة؟`)) {
+        const latestBackup = localStorage.getItem(backups[0]);
+        try {
+            const backupData = JSON.parse(latestBackup);
+            Object.assign(state, backupData);
+            savePro();
+            updateUI();
+            updateAchievementsUI();
+            showToast('تم استعادة النسخة الاحتياطية بنجاح', 'success');
+            setTimeout(() => location.reload(), 1000);
+        } catch (e) {
+            showToast('خطأ في استعادة النسخة الاحتياطية', 'error');
+        }
+    }
+}
 
-window.resetProgress = () => {
-  if (confirm('هل تريد فعلاً إعادة تعيين كل التقدم؟')) {
-    localStorage.removeItem("study-pro-v3");
-    location.reload();
-  }
+/* ---------- نظام المشاركة ---------- */
+function shareProgress() {
+    const shareText = `حصلت على ${state.score} نقطة في تطبيق النخبة PRO! 🚀\nتعلمت ${state.count} مصطلحاً تاريخياً.\nجرب التطبيق الآن!`;
+    
+    if (navigator.share) {
+        navigator.share({
+            title: 'تطبيق النخبة PRO - تحت إشراف صفوان',
+            text: shareText,
+            url: window.location.href
+        }).then(() => {
+            showToast('تم المشاركة بنجاح!', 'success');
+        }).catch(err => {
+            console.log('تم إلغاء المشاركة:', err);
+        });
+    } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(shareText).then(() => {
+            showToast('تم نسخ النتائج إلى الحافظة!', 'success');
+        }).catch(err => {
+            console.error('فشل النسخ إلى الحافظة:', err);
+            fallbackCopy(shareText);
+        });
+    } else {
+        fallbackCopy(shareText);
+    }
+}
+
+function fallbackCopy(text) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+    try {
+        document.execCommand('copy');
+        showToast('تم نسخ النتائج إلى الحافظة!', 'success');
+    } catch (err) {
+        console.error('فشل النسخ:', err);
+        showToast('تعذر نسخ النتائج', 'error');
+    }
+    document.body.removeChild(textArea);
+}
+
+/* ---------- واجهات التصحيح والتطوير ---------- */
+window.studyApp = {
+    // عرض حالة التطبيق
+    showState: () => {
+        console.table({
+            'البطاقة الحالية': state.c + 1,
+            'النقاط': state.score,
+            'البطاقات المكتملة': state.count,
+            'سرعة التعلم': state.velocity.toFixed(2),
+            'درجة التركيز': state.focusScore,
+            'عدد الإنجازات': state.achievements.length,
+            'طول الجلسة': Math.floor((Date.now() - state.sessionStart) / 60000) + ' دقيقة',
+            'إجمالي وقت الدراسة': Math.floor(state.totalStudyTime / 60) + ' دقيقة',
+            'سلسلة النجاح الحالية': state.streaks.current
+        });
+        return state;
+    },
+    
+    // عرض التحليلات
+    showAnalytics: () => {
+        console.log('التحليلات:', state.analytics);
+        const summary = {
+            totalSessions: state.analytics.filter(a => a.type === 'session_start').length,
+            totalFlips: state.analytics.filter(a => a.type === 'flip').length,
+            totalRatings: state.analytics.filter(a => a.type === 'rate').length,
+            totalFocusSessions: state.analytics.filter(a => a.type === 'focus').length,
+            lastActivity: new Date(state.lastCardTime).toLocaleString('ar-SA')
+        };
+        console.table(summary);
+        return summary;
+    },
+    
+    // إعادة تعيين التقدم
+    resetProgress: () => {
+        if (confirm('هل تريد فعلاً إعادة تعيين كل التقدم؟ هذا الإجراء لا يمكن التراجع عنه.')) {
+            localStorage.removeItem("study-pro-v4");
+            location.reload();
+        }
+    },
+    
+    // اختبار الإنجازات
+    testAchievements: () => {
+        console.log('اختبار جميع الإنجازات:');
+        Object.entries(ACHIEVEMENTS).forEach(([id, achievement]) => {
+            const isUnlocked = state.achievements.includes(id);
+            console.log(`${id}: ${achievement.name} - ${isUnlocked ? 'مفتوح' : 'مقفل'} - ${achievement.condition(state) ? 'الشروط محققة' : 'الشروط غير محققة'}`);
+        });
+    },
+    
+    // محاكاة النشاط
+    simulateActivity: (count = 5) => {
+        console.log(`محاكاة ${count} نشاط...`);
+        for (let i = 0; i < count; i++) {
+            state.count++;
+            state.score += Math.floor(Math.random() * 40) + 5;
+            state.analytics.push({
+                type: "rate",
+                difficulty: ['easy', 'mid', 'hard'][Math.floor(Math.random() * 3)],
+                card: Math.floor(Math.random() * ALL_CARDS.length),
+                time: Date.now() - Math.random() * 3600000,
+                responseTime: Math.random() * 10000
+            });
+        }
+        updateUI();
+        savePro();
+        showToast(`تمت محاكاة ${count} نشاط`, 'info');
+    },
+    
+    // تصدير البيانات المتقدمة
+    exportAdvanced: () => {
+        exportData();
+    },
+    
+    // استيراد البيانات
+    importAdvanced: () => {
+        importData();
+    },
+    
+    // استعادة من النسخ الاحتياطية
+    restoreBackup: () => {
+        restoreFromBackup();
+    },
+    
+    // مشاركة النتائج
+    share: () => {
+        shareProgress();
+    },
+    
+    // عرض الإحصائيات
+    showStats: () => {
+        showStatsModal();
+    },
+    
+    // عرض التوجيهات
+    showTutorial: () => {
+        showTutorial();
+    },
+    
+    // تبديل الإعدادات
+    toggleSetting: (setting) => {
+        if (state.settings[setting] !== undefined) {
+            state.settings[setting] = !state.settings[setting];
+            showToast(`${setting}: ${state.settings[setting] ? 'مفعل' : 'معطل'}`, 'info');
+            savePro();
+        } else {
+            console.log('الإعداد غير موجود:', setting);
+        }
+    },
+    
+    // إضافة نقاط
+    addPoints: (points) => {
+        state.score += parseInt(points) || 100;
+        updateUI();
+        savePro();
+        showToast(`تمت إضافة ${points} نقطة`, 'success');
+    }
 };
 
 // جعل الدوال متاحة عالمياً
 window.exportData = exportData;
 window.importData = importData;
+window.shareProgress = shareProgress;
+window.showStatsModal = showStatsModal;
+window.resetData = resetData;
+window.restoreFromBackup = restoreFromBackup;
+
+// إضافة زر المشاركة في الواجهة إذا كان المستخدم على هاتف
+if ('share' in navigator || 'clipboard' in navigator) {
+    const shareBtn = document.createElement('button');
+    shareBtn.innerHTML = '<i class="fas fa-share-alt"></i>';
+    shareBtn.className = 'fixed bottom-25 left-25 z-120 w-12 h-12 rounded-xl glass-panel flex items-center justify-center text-slate-400 hover:text-blue-400 transition-colors';
+    shareBtn.title = 'مشاركة النتائج';
+    shareBtn.onclick = shareProgress;
+    document.body.appendChild(shareBtn);
+}
+
+// التعامل مع وضع عدم الاتصال
+if (!navigator.onLine) {
+    showToast('أنت تعمل في وضع عدم الاتصال', 'warning');
+}
+
+// دعم PWA (تطبيق الويب التقدمي)
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').then(registration => {
+            console.log('ServiceWorker registered:', registration);
+        }).catch(error => {
+            console.log('ServiceWorker registration failed:', error);
+        });
+    });
+}
+
+// إضافة زر التثبيت للتطبيق
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    
+    const installBtn = document.createElement('button');
+    installBtn.innerHTML = '<i class="fas fa-download"></i>';
+    installBtn.className = 'fixed bottom-25 right-25 z-120 w-12 h-12 rounded-xl glass-panel flex items-center justify-center text-slate-400 hover:text-emerald-400 transition-colors';
+    installBtn.title = 'تثبيت التطبيق';
+    installBtn.onclick = () => {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(choiceResult => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+                installBtn.remove();
+            }
+            deferredPrompt = null;
+        });
+    };
+    document.body.appendChild(installBtn);
+});
+
+// التحكم في العرض على الشاشات الكبيرة
+function handleLargeScreens() {
+    if (window.innerWidth > 1200) {
+        document.body.classList.add('large-screen');
+        // تعديلات إضافية للشاشات الكبيرة
+        const cardWrapper = document.querySelector('.card-wrapper');
+        if (cardWrapper) {
+            cardWrapper.style.maxWidth = '900px';
+            cardWrapper.style.height = '420px';
+        }
+    } else {
+        document.body.classList.remove('large-screen');
+    }
+}
+
+window.addEventListener('resize', handleLargeScreens);
+handleLargeScreens(); // استدعاء أولي
+
+// تحسين الأداء
+let isTabActive = true;
+window.addEventListener('blur', () => {
+    isTabActive = false;
+    if (state.freq) {
+        AudioPro.stop('frequency');
+    }
+});
+window.addEventListener('focus', () => {
+    isTabActive = true;
+    if (state.freq && document.visibilityState === 'visible') {
+        AudioPro.play(state.freq, 999999, 'sine', 'frequency');
+    }
+});
+
+// تحسين استهلاك الذاكرة
+setInterval(() => {
+    if (!isTabActive) {
+        // تقليل دقة التحليلات عندما تكون الصفحة غير نشطة
+        if (state.analytics.length > 1000) {
+            state.analytics = state.analytics.slice(-500);
+        }
+    }
+}, 60000);
+
+// دعم الطباعة
+function setupPrintSupport() {
+    const style = document.createElement('style');
+    style.textContent = `
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white !important; color: black !important; }
+            .glass-panel { background: white !important; border: 1px solid #ddd !important; }
+            .card-face { box-shadow: none !important; border: 1px solid #ddd !important; }
+            #theme-toggle, #export-btn, #stats-btn { display: none !important; }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+setupPrintSupport();
+
+// إضافة معلومات الإصدار في ال console
+console.log(`%cتطبيق النخبة PRO v${state.version}`, 'color: #3b82f6; font-size: 16px; font-weight: bold;');
+console.log(`%cتحت إشراف: صفوان`, 'color: #8b5cf6; font-size: 14px;');
+console.log(`%cجميع الحقوق محفوظة © ${new Date().getFullYear()}`, 'color: #64748b; font-size: 12px;');
+
+// رسالة النجاح النهائية
+window.addEventListener('load', () => {
+    console.log('%c✅ التطبيق جاهز للاستخدام!', 'color: #10b981; font-size: 14px; font-weight: bold;');
+});
+
+// كود خدمة Worker الأساسي (PWA)
+if ('serviceWorker' in navigator) {
+    const swCode = `
+        self.addEventListener('install', event => {
+            event.waitUntil(
+                caches.open('study-pro-v1').then(cache => {
+                    return cache.addAll([
+                        '/',
+                        '/index.html',
+                        '/manifest.json'
+                    ]);
+                })
+            );
+        });
+        
+        self.addEventListener('fetch', event => {
+            event.respondWith(
+                caches.match(event.request).then(response => {
+                    return response || fetch(event.request);
+                })
+            );
+        });
+    `;
+    
+    // إنشاء ملف service worker افتراضي
+    const blob = new Blob([swCode], { type: 'application/javascript' });
+    const swUrl = URL.createObjectURL(blob);
+    
+    navigator.serviceWorker.register(swUrl).then(() => {
+        console.log('Service Worker registered successfully');
+    }).catch(error => {
+        console.log('Service Worker registration failed:', error);
+    });
+}
+
+// إنشاء ملف manifest ل PWA
+const manifest = {
+    "name": "تطبيق النخبة PRO",
+    "short_name": "النخبة",
+    "description": "تطبيق لتعلم المصطلحات التاريخية تحت إشراف صفوان",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#020617",
+    "theme_color": "#3b82f6",
+    "icons": [
+        {
+            "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        }
+    ],
+    "lang": "ar",
+    "dir": "rtl"
+};
+
+// إضافة manifest ديناميكياً
+const manifestLink = document.createElement('link');
+manifestLink.rel = 'manifest';
+manifestLink.href = 'data:application/json,' + encodeURIComponent(JSON.stringify(manifest));
+document.head.appendChild(manifestLink);
+
+// إضافة meta tags ل PWA
+const metaTheme = document.createElement('meta');
+metaTheme.name = 'theme-color';
+metaTheme.content = '#020617';
+document.head.appendChild(metaTheme);
+
+const metaApple = document.createElement('meta');
+metaApple.name = 'apple-mobile-web-app-capable';
+metaApple.content = 'yes';
+document.head.appendChild(metaApple);
+
+const metaStatusBar = document.createElement('meta');
+metaStatusBar.name = 'apple-mobile-web-app-status-bar-style';
+metaStatusBar.content = 'black-translucent';
+document.head.appendChild(metaStatusBar);
+
+// تحسين SEO
+const metaDescription = document.createElement('meta');
+metaDescription.name = 'description';
+metaDescription.content = 'تطبيق النخبة PRO لتعلم المصطلحات التاريخية بطريقة تفاعلية واحترافية تحت إشراف صفوان';
+document.head.appendChild(metaDescription);
+
+const metaKeywords = document.createElement('meta');
+metaKeywords.name = 'keywords';
+metaKeywords.content = 'تعلم, تاريخ, مصطلحات, بطاقات, تعليم, تفاعلي, عربي, صفوان';
+document.head.appendChild(metaKeywords);
+
+const metaAuthor = document.createElement('meta');
+metaAuthor.name = 'author';
+metaAuthor.content = 'صفوان';
+document.head.appendChild(metaAuthor);
+
+// إضافة favicon
+const favicon = document.createElement('link');
+favicon.rel = 'icon';
+favicon.href = 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>';
+document.head.appendChild(favicon);
+
+// إضافة دعم للوحة اللمس على أجهزة الكمبيوتر المحمولة
+document.addEventListener('wheel', (e) => {
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+        e.preventDefault();
+        if (e.deltaX > 0) {
+            stepCard(1); // تمرير لليسار = التالي
+        } else {
+            stepCard(-1); // تمرير لليمين = السابق
+        }
+    }
+}, { passive: false });
+
+// تحسين الأداء على الهواتف القديمة
+if ('hardwareConcurrency' in navigator && navigator.hardwareConcurrency < 4) {
+    console.log('جهاز منخفض الموارد، تقليل التأثيرات');
+    state.settings.animations = false;
+    document.documentElement.style.setProperty('--motion', '0');
+}
+
+// دعم اللمس المتعدد (لتجنب التصرفات غير المقصودة)
+let touchCount = 0;
+document.addEventListener('touchstart', (e) => {
+    touchCount = e.touches.length;
+    if (touchCount > 2) {
+        // منع التصرفات عند اللمس بأكثر من إصبعين
+        e.preventDefault();
+    }
+}, { passive: false });
+
+// نظام الإشعارات المحلية
+function checkForNotifications() {
+    // إشعار التقدم
+    if (state.count > 0 && state.count % 5 === 0) {
+        if (Notification.permission === 'granted') {
+            new Notification('تطبيق النخبة PRO', {
+                body: `ممتاز! لقد أكملت ${state.count} بطاقة. استمر في التقدم!`,
+                icon: favicon.href
+            });
+        }
+    }
+    
+    // إشعار المكافآت اليومية
+    const lastReward = localStorage.getItem('lastDailyReward');
+    const today = new Date().toDateString();
+    
+    if (lastReward !== today) {
+        state.score += 50;
+        localStorage.setItem('lastDailyReward', today);
+        showToast('🎁 مكافأة يومية: +50 نقطة! عد غداً لمزيد', 'achievement');
+        savePro();
+    }
+}
+
+// طلب إذن الإشعارات
+if ('Notification' in window && Notification.permission === 'default') {
+    setTimeout(() => {
+        if (confirm('هل تريد تفعيل الإشعارات للحصول على تحديثات وتذكيرات؟')) {
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    checkForNotifications();
+                }
+            });
+        }
+    }, 10000);
+}
+
+// تحديث الواجهة كل ثانية للعناصر الديناميكية
+setInterval(() => {
+    // تحديث وقت الجلسة إذا كان معروضاً
+    const sessionTime = document.getElementById('session-time');
+    if (sessionTime) {
+        const minutes = Math.floor((Date.now() - state.sessionStart) / 60000);
+        sessionTime.textContent = `${minutes} دقيقة`;
+    }
+    
+    // تحديث درجة التركيز الديناميكية
+    if (state.focusScore > 0) {
+        const focusElement = document.getElementById('focus-score');
+        if (focusElement) {
+            focusElement.textContent = Math.round(state.focusScore) + '%';
+            focusElement.style.color = state.focusScore > 70 ? '#10b981' : 
+                                     state.focusScore > 40 ? '#f59e0b' : '#ef4444';
+        }
+    }
+}, 1000);
+
+// تهيئة نهائية
+console.log('تهيئة التطبيق اكتملت بنجاح!');
 </script>
 </body>
 </html>
